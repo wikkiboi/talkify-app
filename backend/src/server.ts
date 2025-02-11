@@ -1,6 +1,9 @@
 import app from "./app";
+import connectDB from "./config/connectDB";
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3001;
+
+connectDB();
 
 app.listen(PORT, function () {
   console.log(`Server listening on PORT ${PORT}`);
