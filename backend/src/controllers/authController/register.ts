@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { getUser, getUserEmail } from "../../utils/db/user";
 import createUser from "../../utils/db/user/createUser";
 import { hashPassword } from "../../utils/hashPassword";
-import generateToken from "../../utils/auth/generateToken";
+import { generateToken } from "../../utils/auth";
 
 export default async function register(
   req: Request,
