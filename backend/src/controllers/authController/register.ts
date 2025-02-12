@@ -8,7 +8,7 @@ export default async function register(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<any> {
   try {
     const { username, email, password } = req.body;
 

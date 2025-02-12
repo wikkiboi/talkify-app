@@ -8,7 +8,7 @@ export default async function login(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<any> {
   try {
     const { usernameOrEmail, password } = req.body;
 

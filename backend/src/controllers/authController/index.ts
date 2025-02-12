@@ -1,3 +1,3 @@
-export { default as getUser } from "./getUser";
-export { default as loginUser } from "./loginUser";
-export { default as registerUser } from "./registerUser";
+export { default as userGet } from "./userGet";
+export { default as login } from "./login";
+export { default as register } from "./register";
