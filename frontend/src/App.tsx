@@ -1,19 +1,19 @@
-function App() {
-  return <div>Hi This is Talkigfy asdfkjhasdfjkasdh</div>;
-}
+// function App() {
+//   return <div>Hi This is Talkigfy asdfkjhasdfjkasdh</div>;
+// }
 
-export default App;
+// export default App;
 
 import "./globals.css"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import type React from "react" // Import React
+import { Inter } from 'next/font/google'
+import React from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Discord-like Chat",
-  description: "A Discord-like chat application using Next.js and AI SDK",
+  title: "Talkify App",
+  description: "A Discord-like chat application with music implementations.",
 }
 
 export default function RootLayout({

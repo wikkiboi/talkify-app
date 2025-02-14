@@ -1,7 +1,7 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
+// import type React from "react"
+import React, { useState } from "react"
 import { Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,7 +16,7 @@ type ChannelMessages = {
   [key: string]: Message[]
 }
 
-export default function ChatArea({ channel }: { channel: string }) {
+export default function ChatArea({ channel = "general" }: { channel?: string }) {
   const [input, setInput] = useState("")
   const [channelMessages, setChannelMessages] = useState<ChannelMessages>({})
 

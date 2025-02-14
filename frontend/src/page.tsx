@@ -1,17 +1,18 @@
 "use client"
-
-import { useState } from "react"
-import Sidebar from "./components/Sidebar"
-import ChatArea from "./components/ChatArea"
+import React from 'react'
+import sideBar from "./layouts/sideBar"
+import chatArea from "./layouts/chatArea"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 export default function Home() {
-  const [activeChannel, setActiveChannel] = useState("general")
-
   return (
-    <div className="flex h-screen bg-gray-800 text-white">
-      <Sidebar activeChannel={activeChannel} setActiveChannel={setActiveChannel} />
-      <ChatArea channel={activeChannel} />
-    </div>
+    <main>
+      <h1>Hi This is Talkify</h1>
+      <sideBar />
+      <chatArea />
+      <Button>Click me</Button>
+      <Input placeholder="Type something..." />
+    </main>
   )
 }
-
