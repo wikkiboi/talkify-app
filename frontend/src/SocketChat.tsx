@@ -21,6 +21,7 @@ export default function SocketChat() {
     console.log(`You connected with id: ${socket.id}`);
   });
 
+  // This is where the sent message data is received from the backend. Comes in an object {}.
   socket.on("receive-message", (msgData: Chatter) => {
     setReceivedMsg(msgData);
     if (receivedMsg.msg !== "") {
@@ -46,11 +47,13 @@ export default function SocketChat() {
     }
   }, [receivedMsg]);
 
+  // sends input message to the backend
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     if (msg === "") return;
     socket.emit("send-message", { msg, sender: socket.id });
+    setMsg("");
   }
 
   const msgElements = displayedMsgs.map((message) => {
@@ -64,13 +67,16 @@ export default function SocketChat() {
 
   return (
     <>
-      <input
-        name="msg"
-        type="text"
-        onChange={(e) => setMsg(e.target.value)}
-        value={msg}
-      />
-      <button onClick={handleSubmit}>Send</button>
+      <div>
+        <input
+          name="msg"
+          type="text"
+          placeholder="Enter text"
+          onChange={(e) => setMsg(e.target.value)}
+          value={msg}
+        />
+        <button onClick={handleSubmit}>Send</button>
+      </div>
       <div>{msgElements}</div>
     </>
   );
