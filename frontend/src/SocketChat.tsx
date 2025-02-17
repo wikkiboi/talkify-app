@@ -1,37 +1,77 @@
-import { ChangeEvent, useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import socket from "./socket";
 
+type Chatter = {
+  sender: string;
+  msg: string;
+  timeStamp: string;
+};
+
+// Test implementation for now so might look messy
 export default function SocketChat() {
-  const [message, setMessage] = useState("");
+  const [msg, setMsg] = useState("");
+  const [receivedMsg, setReceivedMsg] = useState<Chatter>({
+    sender: "",
+    msg: "",
+    timeStamp: "",
+  });
+  const [displayedMsgs, setDisplayedMsgs] = useState<Chatter[]>([]);
 
   socket.on("connect", () => {
     console.log(`You connected with id: ${socket.id}`);
   });
 
-  function handleChange(
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) {
-    setMessage(e.target.value);
-    console.log(message);
-  }
+  socket.on("receive-message", (msgData: Chatter) => {
+    setReceivedMsg(msgData);
+    if (receivedMsg.msg !== "") {
+      console.log(receivedMsg);
+    }
+  });
+
+  useEffect(() => {
+    if (receivedMsg.msg !== "") {
+      setDisplayedMsgs((prev) => [
+        ...prev,
+        {
+          sender: receivedMsg.sender,
+          msg: receivedMsg.msg,
+          timeStamp: receivedMsg.timeStamp,
+        },
+      ]);
+      setReceivedMsg({
+        sender: "",
+        msg: "",
+        timeStamp: "",
+      });
+    }
+  }, [receivedMsg]);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-    if (message === "") return;
-    socket.emit("send-message", message);
+    if (msg === "") return;
+    socket.emit("send-message", { msg, sender: socket.id });
   }
+
+  const msgElements = displayedMsgs.map((message) => {
+    const key = `${message.sender}-${message.timeStamp}`;
+    return (
+      <p key={key}>
+        {message.sender}: {message.msg}, {message.timeStamp}
+      </p>
+    );
+  });
 
   return (
     <>
       <input
-        name="message"
+        name="msg"
         type="text"
-        onChange={handleChange}
-        value={message}
+        onChange={(e) => setMsg(e.target.value)}
+        value={msg}
       />
       <button onClick={handleSubmit}>Send</button>
-      <div>test</div>
+      <div>{msgElements}</div>
     </>
   );
 }

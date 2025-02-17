@@ -15,8 +15,14 @@ io.on("connection", (socket) => {
     console.log(`User with ID: ${socket.id} joined room: ${data}`);
   });
 
-  socket.on("send-message", (message) => {
-    console.log(message);
+  socket.on("send-message", ({ msg, sender }) => {
+    const msgWithTime = {
+      sender,
+      msg,
+      timeStamp: new Date().toLocaleTimeString(),
+    };
+    io.emit("receive-message", msgWithTime);
+    console.log(msgWithTime);
   });
 
   socket.on("disconnect", () => {

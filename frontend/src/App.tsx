@@ -5,7 +5,7 @@ function App() {
   socket.connect();
   return (
     <>
-      <div>Hi This is Talkigfy asdfkjhasdfjkasdh</div>
+      <div>Hi This is Talkify</div>
       <SocketChat />
     </>
   );
