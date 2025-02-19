@@ -2,7 +2,7 @@ import { Hash } from "lucide-react"
 
 const channels = ["general", "random", "introductions", "announcements"]
 
-export default function Sidebar({
+export default function SideBar({
   activeChannel,
   setActiveChannel,
 }: { activeChannel: string; setActiveChannel: (channel: string) => void }) {
