@@ -10,7 +10,7 @@ const SpaceSchema = new Schema<Space>(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Please add a name"],
     },
     channels: [
       {

@@ -17,6 +17,7 @@ export const userSchema = new mongoose.Schema<User>(
     email: {
       type: String,
       required: [true, "Please add an email"],
+      match: [/\S+@\S+\.\S+/, "is invalid"],
       unique: true,
     },
     password: {
