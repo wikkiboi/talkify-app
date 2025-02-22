@@ -5,7 +5,7 @@ export default async function spaceCreate(
   req: Request,
   res: Response,
   next: NextFunction
-) {
+): Promise<any> {
   const { name } = req.body;
   try {
     if (!name) {
@@ -14,7 +14,7 @@ export default async function spaceCreate(
 
     const space = createSpace(name);
 
-    res.status(201).json(space);
+    return res.status(201).json(space);
   } catch (error) {
     return next(error);
   }

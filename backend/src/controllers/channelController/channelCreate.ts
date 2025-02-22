@@ -3,10 +3,10 @@ import { createChannel } from "../../utils/db/channel";
 import { getSpace } from "../../utils/db/space";
 
 export default async function channelCreate(
-  res: Response,
   req: Request,
+  res: Response,
   next: NextFunction
-) {
+): Promise<any> {
   const { spaceId } = req.params;
   const { name } = req.body;
   try {
@@ -15,11 +15,14 @@ export default async function channelCreate(
       throw new Error("Please add a name to channel");
     }
     const space = await getSpace(spaceId);
-    if (!space) return res.status(404).json({ error: "Space not found" });
+    if (!space) {
+      res.status(404);
+      throw new Error("Space not found");
+    }
 
     const channel = createChannel(name, spaceId);
 
-    res.status(201).json(channel);
+    return res.status(201).json(channel);
   } catch (error) {
     return next(error);
   }
