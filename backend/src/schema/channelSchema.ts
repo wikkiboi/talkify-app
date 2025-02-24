@@ -1,11 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { IChannel } from "./types";
 
-interface Channel extends Document {
-  name: string;
-  spaceId: mongoose.Types.ObjectId;
-}
-
-export const ChannelSchema = new Schema<Channel>(
+export const ChannelSchema = new Schema<IChannel>(
   {
     name: {
       type: String,
@@ -20,4 +16,4 @@ export const ChannelSchema = new Schema<Channel>(
   { timestamps: true }
 );
 
-export const Channel = mongoose.model<Channel>("Channel", ChannelSchema);
+export const Channel = mongoose.model<IChannel>("Channel", ChannelSchema);

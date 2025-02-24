@@ -1,12 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { ISpace } from "./types";
 
-interface Space extends Document {
-  name: string;
-  channels: mongoose.Types.ObjectId[];
-  createdAt: Date;
-}
-
-const SpaceSchema = new Schema<Space>(
+const SpaceSchema = new Schema<ISpace>(
   {
     name: {
       type: String,
@@ -23,4 +18,4 @@ const SpaceSchema = new Schema<Space>(
   { timestamps: true }
 );
 
-export const Space = mongoose.model<Space>("Space", SpaceSchema);
+export const Space = mongoose.model<ISpace>("Space", SpaceSchema);
