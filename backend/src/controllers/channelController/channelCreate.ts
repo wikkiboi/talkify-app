@@ -13,6 +13,7 @@ export default async function channelCreate(
       res.status(400);
       throw new Error("Please add a name to channel");
     }
+    console.log(req.params);
     const space = await getSpace(spaceId);
     if (!space) {
       res.status(404);
