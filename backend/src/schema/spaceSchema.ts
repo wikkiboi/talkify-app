@@ -7,11 +7,23 @@ const SpaceSchema = new Schema<ISpace>(
       type: String,
       required: [true, "Please add a name"],
     },
-    channels: [
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    admins: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Channel",
-        default: null,
+        ref: "User",
+        default: [],
+      },
+    ],
+    members: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
       },
     ],
   },
