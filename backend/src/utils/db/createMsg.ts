@@ -2,7 +2,7 @@ import { Message } from "../../schema/messageSchema";
 import mongoose, { InferSchemaType } from "mongoose";
 
 export default async function createMsg(
-  sender: string,
+  sender: mongoose.Types.ObjectId,
   text: string,
   channel?: string,
   group?: string,

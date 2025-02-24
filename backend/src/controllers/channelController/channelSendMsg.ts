@@ -1,6 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
+import { Request } from "express-jwt";
 import createMsg from "../../utils/db/createMsg";
-import { findChannel } from "../../utils/db/channel";
+import { findChannelById } from "../../utils/db/channel";
+import { getUser } from "../../utils/db/user";
 
 export default async function channelSendMsg(
   req: Request,
@@ -8,9 +10,11 @@ export default async function channelSendMsg(
   next: NextFunction
 ): Promise<any> {
   const { channelId } = req.params;
-  const { user, text } = req.body;
+  const { text } = req.body;
+  const { username } = req.auth?.user;
 
   try {
+    const user = await getUser(username);
     if (!user) {
       res.status(404);
       throw new Error("Channel Msg Send Error: User not found");
@@ -20,13 +24,13 @@ export default async function channelSendMsg(
       throw new Error("Channel Msg Send Error: No text body");
     }
 
-    const channelExists = await findChannel(channelId);
+    const channelExists = await findChannelById(channelId);
     if (!channelExists) {
       res.status(404);
       throw new Error("Channel Error: Channel not found");
     }
 
-    const newMsg = createMsg(user, text, channelId);
+    const newMsg = createMsg(user.id, text, channelId);
 
     return res.status(201).json(newMsg);
   } catch (error) {

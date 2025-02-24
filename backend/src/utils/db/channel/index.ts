@@ -1,2 +1,3 @@
 export { default as createChannel } from "./createChannel";
-export { default as findChannel } from "./findChannel";
+export { default as findChannelById } from "./findChannelById";
+export { default as findChannelByName } from "./findChannelByName";
