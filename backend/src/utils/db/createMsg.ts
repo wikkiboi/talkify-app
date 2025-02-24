@@ -1,8 +1,5 @@
 import { Message } from "../../schema/messageSchema";
-import { userSchema } from "../../schema/userSchema";
 import mongoose, { InferSchemaType } from "mongoose";
-
-type User = InferSchemaType<typeof userSchema>;
 
 export default async function createMsg(
   sender: string,
