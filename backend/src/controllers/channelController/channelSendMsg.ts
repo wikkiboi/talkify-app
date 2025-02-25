@@ -3,6 +3,7 @@ import { Request } from "express-jwt";
 import createMsg from "../../utils/db/createMsg";
 import { findChannelById } from "../../utils/db/channel";
 import { getUser } from "../../utils/db/user";
+import parseTimestamp from "../../utils/parseTimestamp";
 
 export default async function channelSendMsg(
   req: Request,
@@ -30,10 +31,16 @@ export default async function channelSendMsg(
       throw new Error("Channel Error: Channel not found");
     }
 
-    const newMsg = createMsg(user.id, text, channelId);
+    const newMsg = await createMsg(user.id, text, channelId);
+    if (!newMsg) {
+      res.status(401);
+      throw new Error("Message Error: Failed to create message");
+    }
+
+    const timestamp = await parseTimestamp(newMsg.id);
 
     const io = req.app.get("io");
-    io.to(channelId).emit("newMessage", newMsg);
+    io.to(channelId).emit("newMessage", user.username, newMsg.text, timestamp);
 
     return res.status(201).json(newMsg);
   } catch (error) {

@@ -9,9 +9,4 @@ export default function handleChannels(io: Server, socket: Socket) {
     socket.leave(channelId);
     console.log(`User ${socket.id} joined channel ${channelId}`);
   });
-
-  socket.on("createChannel", ({ guildId, channelName }) => {
-    io.emit("channelCreated", { guildId, channelName });
-    console.log(`New channel ${channelName} created in guild ${guildId}`);
-  });
 }

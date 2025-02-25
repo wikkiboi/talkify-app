@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import createMsg from "../utils/db/createMsg";
 import parseTimestamp from "../utils/parseTimestamp";
+import pushMsgToChannel from "../utils/db/channel/pushMsgToChannel";
 export default function handleMessages(io: Server, socket: Socket) {
   socket.on(
     "sendMessage",
@@ -16,6 +17,13 @@ export default function handleMessages(io: Server, socket: Socket) {
 
         if (!newMsg) {
           throw new Error("Failed to create message");
+        }
+
+        if (channelId) {
+          const channel = await pushMsgToChannel(channelId, newMsg.id);
+          if (!channel) {
+            throw new Error("Failed to update DB with message");
+          }
         }
 
         const targetRoom = channelId || groupId || dmUsers?.join("_");
