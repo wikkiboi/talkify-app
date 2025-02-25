@@ -1,11 +1,14 @@
 import { Server } from "socket.io";
 import { createServer } from "http";
 import app from "./app";
+import socketAuth from "./socket/socketAuth";
 
 const server = createServer(app);
 const io = new Server(server, {
   cors: { origin: "http://localhost:5173" },
 });
+
+io.use(socketAuth);
 
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.id}`);
