@@ -1,4 +1,4 @@
-import { server } from "./socket";
+import { server } from "./app";
 import connectDB from "./config/connectDB";
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3001;
