@@ -11,5 +11,5 @@ function App() {
         <AppRoutes />
     </Router>
 );
-
+}
 export default App;
