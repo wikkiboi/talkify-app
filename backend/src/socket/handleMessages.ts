@@ -4,7 +4,7 @@ import parseTimestamp from "../utils/parseTimestamp";
 import pushMsgToChannel from "../utils/db/channel/pushMsgToChannel";
 export default function handleMessages(io: Server, socket: Socket) {
   socket.on(
-    "sendMessage",
+    "send-message",
     async ({ sender, text, channelId, groupId, dmUsers }) => {
       try {
         const newMsg = await createMsg(
@@ -32,7 +32,7 @@ export default function handleMessages(io: Server, socket: Socket) {
 
         if (targetRoom) {
           io.to(targetRoom).emit(
-            "receiveMessage",
+            "receive-message",
             socket.user.username,
             text,
             timestamp

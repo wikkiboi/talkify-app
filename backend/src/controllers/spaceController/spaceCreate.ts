@@ -2,6 +2,8 @@ import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { createSpace } from "../../utils/db/space";
 import { getUser } from "../../utils/db/user";
+import updateUserSpaces from "../../utils/db/user/updateUserSpaces";
+import createChannel from "../../utils/db/channel/createChannel";
 
 export default async function spaceCreate(
   req: Request,
@@ -22,12 +24,20 @@ export default async function spaceCreate(
     }
 
     console.log(user);
-    const space = createSpace(name, user.id);
+    const space = await createSpace(name, user.id);
     if (!space) {
       res.status(401);
       throw new Error("Create Space Error: User ID not found");
     }
-    return res.status(201).json(space);
+
+    const channel = await createChannel("general", space.id);
+    if (!channel) {
+      res.status(401);
+      throw new Error(`Create Channel Error`);
+    }
+    await updateUserSpaces(user.id, space.id, space.name);
+
+    return res.status(201).json({ space, user });
   } catch (error) {
     return next(error);
   }

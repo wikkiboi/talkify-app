@@ -19,6 +19,13 @@ export const userSchema = new mongoose.Schema<IUser>(
       required: [true, "Please add a password"],
     },
     friends: [{ type: Schema.Types.ObjectId }],
+    spaces: [
+      {
+        name: {
+          type: String,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

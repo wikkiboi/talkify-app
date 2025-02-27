@@ -1,7 +1,5 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { Socket } from "socket.io";
-import { User } from "../schema/userSchema";
-import { NextFunction } from "express";
 import getUserById from "../utils/db/user/getUserById";
 
 export default async function socketAuth(

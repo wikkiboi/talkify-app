@@ -5,4 +5,5 @@ export default interface IUser extends Document {
   email: string;
   password: string;
   friends: mongoose.Types.ObjectId[];
+  spaces: mongoose.Types.ObjectId[];
 }

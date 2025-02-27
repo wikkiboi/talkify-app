@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Space } from "../../../schema/spaceSchema";
+import createChannel from "../channel/createChannel";
 
 export default async function createSpace(
   name: string,
