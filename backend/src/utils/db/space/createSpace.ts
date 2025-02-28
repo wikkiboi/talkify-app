@@ -4,14 +4,16 @@ import createChannel from "../channel/createChannel";
 
 export default async function createSpace(
   name: string,
-  ownerId: mongoose.Types.ObjectId
+  ownerId: mongoose.Types.ObjectId,
+  ownerName: string
 ) {
   if (!name || !ownerId) return null;
+  console.log(ownerName);
   const space = await Space.create({
     name,
     owner: ownerId,
-    admins: [ownerId],
-    members: [ownerId],
+    admins: [{ userId: ownerId, username: ownerName }],
+    members: [{ userId: ownerId, username: ownerName }],
   });
 
   return space;

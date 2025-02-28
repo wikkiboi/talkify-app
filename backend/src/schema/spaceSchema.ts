@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ISpace } from "./types";
 
 const SpaceSchema = new Schema<ISpace>(
@@ -14,16 +14,29 @@ const SpaceSchema = new Schema<ISpace>(
     },
     admins: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        default: [],
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+          unique: true,
+        },
+        username: {
+          type: String,
+          required: true,
+        },
       },
     ],
     members: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        default: [],
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        username: {
+          type: String,
+          required: true,
+        },
       },
     ],
   },
