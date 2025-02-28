@@ -12,19 +12,9 @@ export const initializeSocket = (server: HTTPServer) => {
   io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
-    socket.on("join_room", (data) => {
+    socket.on("join-room", (data) => {
       socket.join(data);
       console.log(`User with ID: ${socket.id} joined room: ${data}`);
-    });
-
-    socket.on("send-message", ({ msg, sender }) => {
-      const msgWithTime = {
-        sender,
-        msg,
-        timeStamp: new Date().toLocaleTimeString(),
-      };
-      io.emit("receive-message", msgWithTime);
-      console.log(msgWithTime);
     });
 
     socket.on("disconnect", () => {

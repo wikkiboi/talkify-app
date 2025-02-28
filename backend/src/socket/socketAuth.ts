@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Socket } from "socket.io";
 import getUserById from "../utils/db/user/getUserById";
+import getUserEmail from "../utils/db/user/getUserEmail";
 
 export default async function socketAuth(
   socket: Socket,
@@ -15,7 +16,7 @@ export default async function socketAuth(
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET || "abc123");
 
-    const user = await getUserById(decoded?.id);
+    const user = await getUserEmail(decoded?.user.email);
 
     if (!user) {
       next(new Error("Authentication error: User not found"));
