@@ -4,14 +4,10 @@ export default async function login(usernameOrEmail: string, password: string) {
   const API_URL = "api/auth/login";
 
   try {
-    const loginToken = await axios.post(
-      `http://localhost:3000/${API_URL}`,
-      {
-        usernameOrEmail,
-        password,
-      },
-      { withCredentials: true }
-    );
+    const loginToken = await axios.post(`http://localhost:3000/${API_URL}`, {
+      usernameOrEmail,
+      password,
+    });
 
     const { token } = loginToken.data;
 

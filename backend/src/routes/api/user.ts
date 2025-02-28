@@ -5,6 +5,6 @@ import userGetSpaces from "../../controllers/userController/userGetSpaces";
 
 const userRouter = Router();
 
-userRouter.get("/:userId", authenticate, userGetSpaces);
+userRouter.get("/spaces", authenticate, userGetSpaces);
 
 export default userRouter;

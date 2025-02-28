@@ -31,8 +31,8 @@ export default function LoginPage() {
     <form onSubmit={handleSubmit}>
       <input
         type="text"
-        id="user-email"
-        name="user-email"
+        id="usernameOrEmail"
+        name="usernameOrEmail"
         value={loginInfo.usernameOrEmail}
         onChange={handleChange}
       />

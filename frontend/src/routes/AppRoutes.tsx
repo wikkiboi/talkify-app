@@ -1,14 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import CreateServer from "../pages/createServer";
-import WelcomePage from "../pages/welcomePage";
 import LoginPage from "../pages/LoginPage";
-import SocketChat from "../SocketChat";
+import Dashboard from "../pages/SpaceList";
 
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<LoginPage />} />
     <Route path="/create-server" element={<CreateServer />} />
-    <Route path="/dashboard" element={<SocketChat />} />
+    <Route path="/dashboard" element={<Dashboard />} />
   </Routes>
 );
 
