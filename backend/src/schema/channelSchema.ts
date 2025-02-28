@@ -6,11 +6,13 @@ export const ChannelSchema = new Schema<IChannel>(
     name: {
       type: String,
       required: true,
+      unique: false,
     },
     spaceId: {
       type: Schema.Types.ObjectId,
       ref: "Space",
       required: true,
+      unique: false,
     },
   },
   { timestamps: true }

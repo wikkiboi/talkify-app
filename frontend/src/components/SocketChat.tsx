@@ -1,5 +1,5 @@
 import { useState, FormEvent, useEffect } from "react";
-import socket from "./socket";
+import socket from "../socket";
 
 type Chatter = {
   sender: string;

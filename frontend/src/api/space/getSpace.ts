@@ -1,12 +1,13 @@
 import axios from "axios";
+import { Channel, Space } from "../../types/types";
 
-export default async function createSpace(name: string) {
-  const API_URL = "api/space/create";
+export default async function getSpace(spaceId: string) {
+  const API_URL = `api/space/${spaceId}`;
   const token = localStorage.getItem("token");
+
   try {
-    const createdSpace = await axios.post(
+    const space = await axios.get<{ space: Space; channels: Channel[] }>(
       `http://localhost:3000/${API_URL}`,
-      { name },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -15,11 +16,11 @@ export default async function createSpace(name: string) {
       }
     );
 
-    return createdSpace.data;
+    return space.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Create Space failed:",
+        "Get Space failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

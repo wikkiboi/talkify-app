@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 import { ISpace } from "./types";
 
 const SpaceSchema = new Schema<ISpace>(
@@ -18,7 +18,6 @@ const SpaceSchema = new Schema<ISpace>(
           type: Schema.Types.ObjectId,
           ref: "User",
           required: true,
-          unique: true,
         },
         username: {
           type: String,

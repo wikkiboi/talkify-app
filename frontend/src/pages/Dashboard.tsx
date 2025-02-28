@@ -1,4 +1,4 @@
-import SpaceList from "./SpaceList";
+import SpaceList from "../components/SpaceList";
 
 export default function Dashboard() {
   return (

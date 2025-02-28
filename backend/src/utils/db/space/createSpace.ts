@@ -8,7 +8,7 @@ export default async function createSpace(
   ownerName: string
 ) {
   if (!name || !ownerId) return null;
-  console.log(ownerName);
+
   const space = await Space.create({
     name,
     owner: ownerId,

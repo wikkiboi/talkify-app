@@ -24,6 +24,11 @@ export const userSchema = new mongoose.Schema<IUser>(
         name: {
           type: String,
         },
+        spaceId: {
+          type: Schema.Types.ObjectId,
+          ref: "Space",
+          required: true,
+        },
       },
     ],
   },

@@ -23,8 +23,7 @@ export default async function spaceCreate(
       throw new Error("Create Space Error: User not found");
     }
 
-    console.log(user);
-    const space = await createSpace(name, user.id, user.username);
+    const space = await createSpace(name, user._id, user.username);
     if (!space) {
       res.status(401);
       throw new Error("Create Space Error: User ID not found");
