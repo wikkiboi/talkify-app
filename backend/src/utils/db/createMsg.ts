@@ -2,7 +2,8 @@ import { Message } from "../../schema/messageSchema";
 import mongoose, { InferSchemaType } from "mongoose";
 
 export default async function createMsg(
-  sender: mongoose.Types.ObjectId,
+  username: string,
+  userId: mongoose.Types.ObjectId,
   text: string,
   channel?: string,
   group?: string,
@@ -16,7 +17,13 @@ export default async function createMsg(
 
   if (!channelId && !groupId && !dmUsers) return null;
 
-  const message = Message.create({ sender, text, channelId, groupId, dmUsers });
+  const message = Message.create({
+    sender: { userId, username },
+    text,
+    channelId,
+    groupId,
+    dmUsers,
+  });
 
   return message;
 }

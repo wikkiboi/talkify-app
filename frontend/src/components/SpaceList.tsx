@@ -18,10 +18,12 @@ export default function SpaceList() {
     }
   };
 
+  // Fetch the user's spaces on page load & store in userSpace state
   useEffect(() => {
     fetchSpaces();
   }, []);
 
+  // Click submit button link to <form> element to pass in newSpaceName.
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const newSpace = await createSpace(newSpaceName);
@@ -36,7 +38,7 @@ export default function SpaceList() {
       <div>Space List</div>
       <ul>
         {userSpaces.map((space) => (
-          <Link key={space.spaceId} to={`/${space.spaceId}`}>
+          <Link key={space.spaceId} to={`/channels/${space.spaceId}`}>
             {space.name}
           </Link>
         ))}

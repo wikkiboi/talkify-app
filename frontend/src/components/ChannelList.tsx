@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Channel } from "../types/types";
 
 interface ChannelProps {
@@ -6,7 +7,9 @@ interface ChannelProps {
 
 export default function ChannelList({ channels }: ChannelProps) {
   const channelElements = channels?.map((channel) => (
-    <li key={channel._id}>{channel.name}</li>
+    <Link key={channel._id} to={`./${channel._id}`}>
+      {channel.name}
+    </Link>
   ));
   return (
     <div>

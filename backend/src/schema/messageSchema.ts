@@ -4,9 +4,15 @@ import { IMessage } from "./types";
 export const MessageSchema = new Schema<IMessage>(
   {
     sender: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      username: {
+        type: String,
+        required: true,
+      },
     },
     text: {
       type: String,

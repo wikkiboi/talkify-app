@@ -49,7 +49,7 @@ export default function SpacePage() {
 
   return (
     <div>
-      Space Page
+      {spaceInfo?.space.name}
       {spaceInfo && <ChannelList channels={spaceInfo.channels} />}
       <form onSubmit={handleSubmit}>
         <input
