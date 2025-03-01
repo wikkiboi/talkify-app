@@ -1,29 +1,23 @@
 // Authentication logic for user, making sure that the user is logged in before they perform any actions
-import { Request, Response, NextFunction} from "express";
-import jwt from "jsonwebtoken"
+import { Request } from "express";
+import { expressjwt as jwt } from "express-jwt";
 
 const JWT_SECRET = "abc123"; // TODO: Move to .env when implemented
 
-export default function authenticator(
-    req: Request,
-    res: Response,
-    next: NextFunction
-) {
-    // Get token from Authorization
-    const authHeader = req.headers.authorization;
+export function getTokenInHeader(req: Request): string | undefined {
+  // Get token from Authorization
+  const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res.status(401).json({ message: "No token provided." });
-    }
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return;
+  }
 
-    const token = authHeader.split(" ")[1]; 
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-
-        req.user = decoded;
-        next();
-    } catch (error) {
-        return res.status(403).json({ message: "Invalid token" });
-    }
+  const token = authHeader.split(" ")[1];
+  return token;
 }
+
+export const authenticate = jwt({
+  algorithms: ["HS256"],
+  secret: process.env.JWT_SECRET || JWT_SECRET,
+  getToken: getTokenInHeader,
+});

@@ -18,11 +18,13 @@ export default async function login(
       ? getUserEmail(usernameOrEmail)
       : getUser(usernameOrEmail));
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      res.status(404);
+      throw new Error("User not found");
     }
 
     if (!compareWithHash(password, user.password)) {
-      return res.sendStatus(403);
+      res.sendStatus(403);
+      throw new Error("Incorrect username or password");
     }
 
     const token = generateToken(user);
