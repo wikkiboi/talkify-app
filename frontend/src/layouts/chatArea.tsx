@@ -1,7 +1,8 @@
 "use client"
 
-// import type React from "react"
-import React, { useState } from "react"
+// import React, { useState } from "react"
+import type React from "react"
+import { useState } from "react"
 import { Send } from "lucide-react"
 import { Button } from "../components/button"
 import { Input } from "../components/input"
@@ -26,7 +27,7 @@ export default function ChatArea({ channel = "general" }: { channel?: string }) 
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (input.trim()) {
+    if(input.trim()) {
       const newMessage: Message = {
         id: Date.now().toString(),
         content: input,
