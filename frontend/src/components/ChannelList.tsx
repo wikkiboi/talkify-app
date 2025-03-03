@@ -13,7 +13,7 @@ export default function ChannelList({ channels }: ChannelProps) {
   ));
   return (
     <div>
-      ChannelList
+      Channel List
       <ul>{channelElements}</ul>
     </div>
   );

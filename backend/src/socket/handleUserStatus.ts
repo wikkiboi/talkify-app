@@ -9,11 +9,13 @@ export default function handleUserStatus(io: Server, socket: Socket) {
   if (!username) return;
 
   async function updateUserStatus(status: "online" | "idle" | "offline") {
-    if (socket.user.status === status) return;
+    if (socket.user.status == status) return;
     const spaces = await Space.find({ "members.username": username }).select(
       "_id"
     );
     const spaceIds = spaces.map((space) => space._id.toString());
+
+    console.log(spaceIds);
 
     console.log(`User went ${status}`);
 
@@ -48,7 +50,6 @@ export default function handleUserStatus(io: Server, socket: Socket) {
       updateUserStatus("offline");
       disconnectTimers.delete(username);
     }, 5000);
-
     disconnectTimers.set(username, disconnectTimer);
   });
 
@@ -57,9 +58,9 @@ export default function handleUserStatus(io: Server, socket: Socket) {
   });
 
   socket.on("userActive", () => {
-    console.log("User is now active");
     clearTimeout(idleTimeout);
     clearTimeout(reconnectTimer);
+    disconnectTimers.delete(username);
     updateUserStatus("online");
   });
 }

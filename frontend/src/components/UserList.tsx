@@ -1,20 +1,21 @@
-import { useEffect, useState } from "react";
-import socket from "../socket";
+import { Members } from "../types/types";
 
-export default function UserList({ users }) {
-  const [userStatuses, setUserStatuses] = useState<{ [key: string]: string }>(
-    {}
+interface UserListProps {
+  users: Members[];
+}
+
+export default function UserList({ users }: UserListProps) {
+  const userList = users.map((user) => {
+    return (
+      <li key={user.userId}>
+        {user.username}: {user.status}
+      </li>
+    );
+  });
+  return (
+    <div>
+      Members List
+      <ul>{userList}</ul>
+    </div>
   );
-
-  useEffect(() => {
-    socket.on("userStatusUpdate", ({ userId, status }) => {
-      setUserStatuses((prev) => ({ ...prev, [userId]: status }));
-    });
-
-    return () => {
-      socket.off("userStatusUpdate");
-    };
-  }, []);
-
-  return <ul></ul>;
 }

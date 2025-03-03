@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import getSpace from "../api/space/getSpace";
 import { Channel, Space } from "../types/types";
 import createChannel from "../api/channel/createChannel";
+import UserList from "../components/UserList";
+import UserStatus from "../components/UserStatus";
 
 export default function SpacePage() {
   const [spaceInfo, setSpaceInfo] = useState<{
@@ -50,7 +52,13 @@ export default function SpacePage() {
   return (
     <div>
       {spaceInfo?.space.name}
-      {spaceInfo && <ChannelList channels={spaceInfo.channels} />}
+      {spaceInfo && (
+        <>
+          <ChannelList channels={spaceInfo.channels} />{" "}
+          <UserList users={spaceInfo.space.members} />
+        </>
+      )}
+
       <form onSubmit={handleSubmit}>
         <input
           id="channel-name"
@@ -60,6 +68,7 @@ export default function SpacePage() {
         />
         <button>Create New Channel</button>
       </form>
+      <UserStatus />
     </div>
   );
 }
