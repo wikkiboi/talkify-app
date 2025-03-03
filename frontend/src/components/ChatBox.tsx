@@ -64,6 +64,7 @@ export default function ChatChannel() {
 
   return (
     <div className="max-w-lg mx-auto p-4 border rounded-lg shadow-lg bg-white">
+      Chat
       <div className="h-64 overflow-y-auto border-b p-2 mb-2">
         {messages.map((msg, index) => (
           <div key={index} className="p-1 border-b">
