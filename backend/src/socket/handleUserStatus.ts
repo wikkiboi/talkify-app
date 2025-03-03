@@ -1,33 +1,65 @@
 import { Server, Socket } from "socket.io";
+import { Space } from "../schema/spaceSchema";
+import { User } from "../schema/userSchema";
 
-const onlineUsers = new Map<
-  string,
-  { status: "online" | "idle" | "offline"; lastActive: number }
->();
+const disconnectTimers = new Map<string, NodeJS.Timeout>();
 
 export default function handleUserStatus(io: Server, socket: Socket) {
-  const userId = socket.handshake.auth.userId;
+  const { username } = socket.user;
+  if (!username) return;
 
-  if (!userId) return;
+  async function updateUserStatus(status: "online" | "idle" | "offline") {
+    if (socket.user.status === status) return;
+    const spaces = await Space.find({ "members.username": username }).select(
+      "_id"
+    );
+    const spaceIds = spaces.map((space) => space._id.toString());
 
-  onlineUsers.set(userId, { status: "online", lastActive: Date.now() });
-  io.emit("userStatusUpdate", { userId, status: "online" });
+    console.log(`User went ${status}`);
 
-  const idleTimeout = setTimeout(() => {
-    if (onlineUsers.has(userId)) {
-      onlineUsers.set(userId, { status: "idle", lastActive: Date.now() });
+    await User.updateOne({ username }, { $set: { status } });
+
+    await Space.updateMany(
+      { "members.username": username },
+      { $set: { "members.$.status": status } }
+    );
+
+    spaceIds.forEach((spaceId) => {
+      io.to(spaceId).emit("userStatusUpdate", { username, status });
+    });
+
+    io.to(socket.id).emit("userStatusUpdate", { username, status });
+  }
+
+  updateUserStatus("online");
+
+  const idleTimeout = setTimeout(() => updateUserStatus("idle"), 5 * 60 * 1000);
+  const reconnectTimer = setTimeout(() => {
+    if (disconnectTimers.has(username)) {
+      clearTimeout(disconnectTimers.get(username));
+      disconnectTimers.delete(username);
     }
-  }, 5 * 60 * 1000);
+  }, 3000);
 
-  socket.on("disconnect", () => {
-    onlineUsers.delete(userId);
-    io.emit("userStatusUpdate", { userId, status: "offline" });
+  socket.on("disconnect", async () => {
     clearTimeout(idleTimeout);
+
+    const disconnectTimer = setTimeout(() => {
+      updateUserStatus("offline");
+      disconnectTimers.delete(username);
+    }, 5000);
+
+    disconnectTimers.set(username, disconnectTimer);
+  });
+
+  socket.on("reconnect", () => {
+    updateUserStatus("online");
   });
 
   socket.on("userActive", () => {
+    console.log("User is now active");
     clearTimeout(idleTimeout);
-    onlineUsers.set(userId, { status: "online", lastActive: Date.now() });
-    io.emit("userStatusUpdate", { userId, status: "online" });
+    clearTimeout(reconnectTimer);
+    updateUserStatus("online");
   });
 }

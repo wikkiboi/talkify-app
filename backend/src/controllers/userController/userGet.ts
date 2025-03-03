@@ -14,5 +14,5 @@ export default async function userGet(
     throw new Error("Current user not found");
   }
 
-  return res.status(201).json({ user });
+  return res.status(201).json(user);
 }

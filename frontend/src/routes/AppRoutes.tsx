@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import CreateServer from "../pages/createServer";
 import LoginPage from "../pages/LoginPage";
-import Dashboard from "../components/SpaceList";
 import SpacePage from "../pages/SpacePage";
 import ChatBox from "../components/ChatBox";
+import Dashboard from "../pages/Dashboard";
 
 const AppRoutes = () => (
   <Routes>
