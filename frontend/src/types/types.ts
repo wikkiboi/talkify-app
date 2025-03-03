@@ -30,4 +30,5 @@ export type Members = {
   _id: string;
   userId: string;
   username: string;
+  status: "online" | "idle" | "offline";
 };

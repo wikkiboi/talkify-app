@@ -36,6 +36,11 @@ const SpaceSchema = new Schema<ISpace>(
           type: String,
           required: true,
         },
+        status: {
+          type: String,
+          enum: ["online", "idle", "offline"],
+          default: "offline",
+        },
       },
     ],
   },
