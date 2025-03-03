@@ -18,7 +18,24 @@ export const userSchema = new mongoose.Schema<IUser>(
       type: String,
       required: [true, "Please add a password"],
     },
-    friends: [{ type: Schema.Types.ObjectId }],
+    friends: [
+      {
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        username: {
+          type: String,
+          required: true,
+        },
+        status: {
+          type: String,
+          enum: ["online", "idle", "offline"],
+          default: "offline",
+        },
+      },
+    ],
     spaces: [
       {
         name: {
@@ -31,6 +48,11 @@ export const userSchema = new mongoose.Schema<IUser>(
         },
       },
     ],
+    status: {
+      type: String,
+      enum: ["online", "idle", "offline"],
+      default: "offline",
+    },
   },
   {
     timestamps: true,
