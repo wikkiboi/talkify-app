@@ -1,24 +1,51 @@
-import "./globals.css"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+"use client"
+
 import type React from "react"
+import { useState } from "react"
+import Sidebar from "../components/sideBar"
+import ChatArea from "../components/chatArea"
+import "@/assets/styles/chatStyle.css"
 
-const inter = Inter({ subsets: ["latin"] })
-
-export const metadata: Metadata = {
-  title: "Talkify",
-  description: "A Discord-like chat application using Next.js and AI SDK",
+type Channel = {
+  id: string
+  name: string
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+const ChatAreaLayout: React.FC = () => {
+  const [activeChannel, setActiveChannel] = useState("general")
+  const [textChannels, setTextChannels] = useState<Channel[]>([
+    { id: "general", name: "general" },
+    { id: "random", name: "random" },
+  ])
+  const [voiceChannels, setVoiceChannels] = useState<Channel[]>([
+    { id: "General", name: "General" },
+    { id: "Gaming", name: "Gaming" },
+  ])
+
+  const addTextChannel = (name: string) => {
+    const newChannel = { id: name.toLowerCase().replace(/\s+/g, "-"), name }
+    setTextChannels([...textChannels, newChannel])
+  }
+
+  const addVoiceChannel = (name: string) => {
+    const newChannel = { id: name.toLowerCase().replace(/\s+/g, "-"), name }
+    setVoiceChannels([...voiceChannels, newChannel])
+  }
+
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <div className="chat-container">
+      <Sidebar
+        activeChannel={activeChannel}
+        setActiveChannel={setActiveChannel}
+        textChannels={textChannels}
+        voiceChannels={voiceChannels}
+        onAddTextChannel={addTextChannel}
+        onAddVoiceChannel={addVoiceChannel}
+      />
+      <ChatArea channel={textChannels.find((c) => c.id === activeChannel)?.name || ""} />
+    </div>
   )
 }
+
+export default ChatAreaLayout
 
