@@ -5,6 +5,7 @@ import { useState } from "react"
 import Sidebar from "../components/sideBar"
 import ChatArea from "../components/chatArea"
 import "@/assets/styles/chatStyle.css"
+import "@/assets/styles/chatColors.css"
 
 type Channel = {
   id: string
