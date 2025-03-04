@@ -15,6 +15,7 @@ export type Channel = {
 export type Space = {
   _id: string;
   name: string;
+  icon: string;
   owner: string;
   admins: Admins[];
   members: Members[];
