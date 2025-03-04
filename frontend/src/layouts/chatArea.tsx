@@ -17,7 +17,7 @@ type ChannelMessages = {
   [key: string]: Message[]
 }
 
-export default function ChatArea({ channel = "general" }: { channel?: string }) {
+export default function ChatArea({ channel }: { channel: string }) {
   const [input, setInput] = useState("")
   const [channelMessages, setChannelMessages] = useState<ChannelMessages>({})
 
@@ -42,14 +42,14 @@ export default function ChatArea({ channel = "general" }: { channel?: string }) 
   }
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 flex flex-col bg-green-950">
       <div className="p-4 border-b border-gray-700">
-        <h2 className="text-xl font-semibold">#{channel}</h2>
+        <h2 className="text-xl font-semibold text-gray-500">#{channel}</h2>
       </div>
       <div className="flex-1 overflow-y-auto p-4">
         {channelMessages[channel]?.map((m) => (
           <div key={m.id} className="mb-4">
-            <span className="inline-block p-2 rounded-lg bg-gray-700">
+            <span className="inline-block p-2 rounded-lg bg-gray-700 text-white">
               <strong>{m.sender}:</strong> {m.content}
             </span>
           </div>
@@ -71,4 +71,3 @@ export default function ChatArea({ channel = "general" }: { channel?: string }) 
     </div>
   )
 }
-
