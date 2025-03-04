@@ -1,0 +1,86 @@
+:root {
+    --color-green-300: #4ade80;
+    --color-green-600: #16a34a;
+    --color-green-700: #15803d;
+    --color-green-800: #166534;
+    --color-green-900: #14532d;
+    --color-green-950: #052e16;
+    --color-black: #000000;
+    --color-white: #ffffff;
+  }
+  
+  .bg-green-300 {
+    background-color: var(--color-green-300);
+  }
+  .bg-green-600 {
+    background-color: var(--color-green-600);
+  }
+  .bg-green-700 {
+    background-color: var(--color-green-700);
+  }
+  .bg-green-800 {
+    background-color: var(--color-green-800);
+  }
+  .bg-green-900 {
+    background-color: var(--color-green-900);
+  }
+  .bg-green-950 {
+    background-color: var(--color-green-950);
+  }
+  .bg-black {
+    background-color: var(--color-black);
+  }
+  .bg-white {
+    background-color: var(--color-white);
+  }
+  
+  .text-green-300 {
+    color: var(--color-green-300);
+  }
+  .text-green-600 {
+    color: var(--color-green-600);
+  }
+  .text-green-700 {
+    color: var(--color-green-700);
+  }
+  .text-green-800 {
+    color: var(--color-green-800);
+  }
+  .text-green-900 {
+    color: var(--color-green-900);
+  }
+  .text-green-950 {
+    color: var(--color-green-950);
+  }
+  .text-black {
+    color: var(--color-black);
+  }
+  .text-white {
+    color: var(--color-white);
+  }
+  
+  .border-green-600 {
+    border-color: var(--color-green-600);
+  }
+  .border-green-700 {
+    border-color: var(--color-green-700);
+  }
+  .border-green-900 {
+    border-color: var(--color-green-900);
+  }
+  
+  .hover\:bg-green-600:hover {
+    background-color: var(--color-green-600);
+  }
+  .hover\:bg-green-700:hover {
+    background-color: var(--color-green-700);
+  }
+  .hover\:bg-green-900:hover {
+    background-color: var(--color-green-900);
+  }
+  
+  .hover\:text-white:hover {
+    color: var(--color-white);
+  }
+  
+  
