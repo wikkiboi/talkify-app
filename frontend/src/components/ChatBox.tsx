@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import socket from "../socket";
 import getChannelMsgs from "../api/channel/getChannelMsgs";
 import parseTimestamp from "../helper/parseTimestamp";
+import "@/assets/styles/chatStyle.css"
+import "@/assets/styles/chatColors.css"
 
 interface Message {
   id: string;
@@ -23,7 +25,7 @@ export default function ChatChannel() {
 
       console.log(response);
 
-      const channelMsgs = response.map((msg) => {
+      const channelMsgs = response.map((msg: any) => {
         return {
           id: msg._id,
           username: msg.sender.username,
@@ -92,3 +94,23 @@ export default function ChatChannel() {
     </div>
   );
 }
+
+// import type React from "react"
+// import "@/assets/styles/chatStyle.css"
+// import "@/assets/styles/chatColors.css"
+
+// const ChatBox: React.FC = () => {
+//   return (
+//     <div className="chat-area">
+//       <div className="chat-header">#general</div>
+//       <div className="chat-messages">{/* Messages will be displayed here */}</div>
+//       <div className="message-input-container">
+//         <input type="text" className="message-input" placeholder="Message #general" />
+//         <button className="send-button">➤</button>
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default ChatBox
+
