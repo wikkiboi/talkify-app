@@ -1,14 +1,19 @@
 import { useState } from "react";
 import createSpace from "../api/space/createSpace"; // Import createSpace from the space directory
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 
 interface CreateSpaceModalProps {
   setShowModal: (show: boolean) => void;
+  navigate: NavigateFunction; // Add navigate prop
+  setShowOptionsModal: React.Dispatch<React.SetStateAction<boolean>>; // Add setShowOptionsModal prop to close the options modal
 }
 
-export default function CreateSpaceModal({ setShowModal }: CreateSpaceModalProps) {
+export default function CreateSpaceModal({
+  setShowModal,
+  navigate,
+  setShowOptionsModal,
+}: CreateSpaceModalProps) {
   const [spaceName, setSpaceName] = useState("");
-  const navigate = useNavigate();
 
   const handleCreateSpace = async () => {
     if (!spaceName) {
@@ -20,8 +25,9 @@ export default function CreateSpaceModal({ setShowModal }: CreateSpaceModalProps
       // Assuming the createSpace API returns the newly created space
       const newSpace = await createSpace(spaceName);
       if (newSpace) {
-       navigate(`/space/${newSpace._id}`); // Navigate to the newly created space's page
-        setShowModal(false); // Close the modal
+        setShowModal(false); // Close the create/join options modal
+        setShowOptionsModal(false); // Close the right-side options tab
+        navigate(`/dashboard`); // Navigate to the newly created space's page (or the dashboard)
       }
     } catch (error) {
       console.error("Error creating space:", error);

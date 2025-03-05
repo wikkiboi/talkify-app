@@ -11,18 +11,23 @@ export default function LoginPage() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const action = (e.nativeEvent as SubmitEvent).submitter?.value;
-
+    
+    // Ensure submitter is an HTMLButtonElement before accessing value
+    const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
+    const action = submitter?.value; 
+  
+    if (!action) return; // Prevent errors if submitter is null
+  
     const isLogin = action === "login";
     const token = isLogin
       ? await login(loginInfo.usernameOrEmail, loginInfo.password)
       : await register(registerInfo.username, registerInfo.email, registerInfo.registerPassword);
-
+  
     if (token) {
       localStorage.setItem("token", token);
       navigate("/dashboard");
     }
-  }
+  }  
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
