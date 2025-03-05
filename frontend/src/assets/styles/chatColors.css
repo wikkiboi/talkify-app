@@ -1,4 +1,4 @@
-/* Reset default margins and paddings */
+Reset default margins and paddings
 * {
     margin: 0;
     padding: 0;
@@ -125,5 +125,3 @@
   .message-input::placeholder {
     color: #949494;
   }
-  
-  

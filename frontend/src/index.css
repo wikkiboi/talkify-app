@@ -1,15 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 body {
     background-color: #1e1e1e;
     font-family: 'Anonymous Pro', monospace;
-  }
+    margin: 0;
+    padding: 0;
+}
+
 * {
     color: white;
     font-family: 'Anonymous Pro', monospace;
     margin: 0;
     padding: 0;
-  }
+}
 
 button {
     padding: 12px 24px;
@@ -20,36 +22,280 @@ button {
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
+}
+
+button:hover {
     background-color: #10b981;
-  }
+}
 
-  .login_register {
+/* Styles for the login/register layout */
+.welcome_page {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    align-items: center;     
     height: 100vh;
+    background-color: #1e1e1e; /* Dark background */
+}
+
+/* Remove the border and adjust background */
+.form-container {
+  background-color: #1e1e1e; /* Dark background to match the overall theme */
+  padding: 1.5rem;
+  border-radius: 8px;
+  width: 300px;
+  text-align: center;
+  margin-bottom: 1.5rem; /* Space between sections */
+  border: none; /* Remove any border */
+}
+
+/* Adjust the space between forms and position them side by side */
+.login_register {
+  display: flex;
+  justify-content: space-between; /* Ensures the forms are side by side */
+  gap: 1rem; /* Space between the two forms */
+  width: 100%;
+  align-items: flex-start; /* Align the forms to the top of the container */
+}
+
+/* Adjust form containers to remove the gap between them */
+.form-container {
+  margin-right: 1rem; /* Space between forms */
+  flex: 1; /* Allow forms to stretch and align side by side */
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: white; /* White text for form title */
+}
+
+/* Input field styles */
+.input-field {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #444; /* Dark background for inputs */
+    color: white;
+}
+
+/* Button styling for login and register */
+.centered-button {
+    width: 100%;
+    background-color: #007bff; /* Blue color */
+    color: white;
+    padding: 0.75rem 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.centered-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Divider styling */
+.divider {
+    width: 80%;
+    height: 1px;
+    background-color: #ddd;
+    margin: 0rem auto;
+}
+
+/* Image styling */
+img {
+    width: 20rem;
+    height: auto;
+    margin-bottom: 0.5rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+    .form-container {
+        width: 90%;
+    }
+}
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 70px;
+  height: 100vh;
+  background-color: #2c2f33;
+  /* padding: 10px 0; */
+  position: fixed;
+  overflow-y: static;
+  z-index: 10;
+}
+
+.sidebar-header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  background-color: #2c2f33;
+}
+
+.sidebar-logo {
+  width: 70px;
+  height: auto;
+  margin-bottom: 10px;
+  position: static;
+}
+
+.space-list-container {
+  width: 100%;
+  flex: 1;
+  overflow-y: auto; /* Enable vertical scrolling */
+
+  &::-webkit-scrollbar {
+    width: 4px;
   }
-  
-  .centered-button {
-    padding: 10px 20px;
-    font-size: 16px;
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: transparent;
   }
 
-  .welcome_page {
-    display: flex;
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center;     
-    height: 100vh;           
-    margin: 0;
-    padding: 0;
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #202225;
+    border-radius: 4px;
   }
 
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #202225 transparent;
+}
 
-  
-  
-  
+.sidebar h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Space list with circular buttons */
+.space-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+}
+
+/* Circular button for each space */
+.space-item {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  flex-shrink: 0;
+}
+
+.space-item:hover {
+  background-color: #45a049;
+}
+
+.create-space-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 30px;
+  font-weight: bold;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px; /* Push to the bottom */
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.create-space-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.content {
+  flex-grow: 1;
+  background-color: #1f1f1f;
+  color: #fff;
+  padding: 20px;
+  margin-left: 90px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: #333;
+  color: white;
+  padding: 30px;
+  border-radius: 8px;
+  width: 400px;
+  text-align: center;
+}
+
+.modal input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #222;
+  color: white;
+  border: 1px solid #4CAF50;
+  border-radius: 5px;
+}
+
+.modal button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.modal button:hover {
+  background-color: #45a049;
+}
