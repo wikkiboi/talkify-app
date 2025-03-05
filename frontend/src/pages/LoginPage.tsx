@@ -7,6 +7,8 @@ import logo from "../assets/logo.png";
 export default function LoginPage() {
   const [loginInfo, setLoginInfo] = useState({ usernameOrEmail: "", password: "" });
   const [registerInfo, setRegisterInfo] = useState({ username: "", email: "", registerPassword: "" });
+  const [successMessage, setSuccessMessage] = useState<string | null>(null); // Success message state
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state
   const navigate = useNavigate();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -25,9 +27,27 @@ export default function LoginPage() {
   
     if (token) {
       localStorage.setItem("token", token);
-      navigate("/dashboard");
+      
+      // Show success message
+      setSuccessMessage("Login Successful!");
+      setErrorMessage(null); // Clear error message, if any
+
+      // Hide the success message after 2 seconds and navigate
+      setTimeout(() => {
+        setSuccessMessage(null);
+        navigate("/dashboard");
+      }, 2000);
+    } else {
+      // Show error message if login fails
+      setErrorMessage("Username and password are incorrect, please try again.");
+      setSuccessMessage(null); // Clear success message, if any
+
+      // Clear the error message after 5 seconds
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
-  }  
+  }
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
@@ -55,6 +75,42 @@ export default function LoginPage() {
       <h1 className="text-3xl font-bold" style={{ textAlign: "center", marginBottom: "1.5rem" }}>
         Welcome to Talkify
       </h1>
+
+      {/* Success message popup */}
+      {successMessage && (
+        <div
+          style={{
+            position: "fixed",
+            top: "1rem",
+            left: "1rem",
+            backgroundColor: "green",
+            color: "white",
+            padding: "0.5rem 1rem",
+            borderRadius: "8px",
+            fontSize: "1rem",
+          }}
+        >
+          {successMessage}
+        </div>
+      )}
+
+      {/* Error message popup */}
+      {errorMessage && (
+        <div
+          style={{
+            position: "fixed",
+            top: "1rem",
+            left: "1rem",
+            backgroundColor: "red",
+            color: "white",
+            padding: "0.5rem 1rem",
+            borderRadius: "8px",
+            fontSize: "1rem",
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
 
       <div className="login_register" style={{ width: "100%", gap: "1rem", textAlign: "center" }}>
         {/* Login Form */}
@@ -112,17 +168,6 @@ export default function LoginPage() {
             Register
           </button>
         </form>
-
-        {/* Temporary bypass button
-        <button
-          onClick={() => {
-            localStorage.setItem("token", "mocked-token"); // Set a mocked token
-            navigate("/dashboard"); // Navigate directly to the dashboard
-          }}
-          className="centered-button"
-        >
-          Bypass Login (Temp)
-        </button>*/}
       </div>
     </div>
   );
