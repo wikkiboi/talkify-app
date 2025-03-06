@@ -1,24 +1,33 @@
 import axios from "axios";
-import { UserSpace } from "../../types/types";
+import { Space, UserSpace } from "../../types/types";
 
-export default async function getUserSpaces() {
-  const API_URL = "api/user/spaces";
+export default async function updateSpace(
+  spaceId: string,
+  name: string,
+  color: string
+) {
+  const API_URL = `api/space/${spaceId}/update`;
   const token = localStorage.getItem("token");
   try {
-    const userSpaces = await axios.get<{ spaces: UserSpace[] }>(
+    const updatedSpace = await axios.put<{
+      userSpaces: UserSpace[];
+      spaces: Space;
+    }>(
       `http://localhost:3000/${API_URL}`,
+      { name, color },
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       }
     );
 
-    return userSpaces.data.spaces;
+    return updatedSpace.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Login failed:",
+        "Create Space failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

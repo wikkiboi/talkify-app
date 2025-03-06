@@ -1,15 +1,14 @@
-export type Spaces = {
+export type UserSpace = {
   name: string;
   spaceId: string;
 };
-
-export type UserSpaces = Spaces[];
 
 export type Channel = {
   _id: string;
   createdAt: Date;
   name: string;
   updatedAt: Date;
+  spaceId: string;
 };
 
 export type Space = {
