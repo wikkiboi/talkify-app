@@ -9,6 +9,6 @@ export default interface IUser extends Document {
     username: mongoose.Types.ObjectId;
     status: "online" | "idle" | "offline";
   }[];
-  spaces: { name: string; spaceId: mongoose.Types.ObjectId }[];
+  spaces: { name: string; spaceId: mongoose.Types.ObjectId; color: string }[];
   status: "online" | "idle" | "offline";
 }

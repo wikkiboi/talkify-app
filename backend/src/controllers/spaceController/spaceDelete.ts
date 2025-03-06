@@ -1,6 +1,5 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
-import { createSpace } from "../../utils/db/space";
 import { getUser } from "../../utils/db/user";
 import getSpaceOwner from "../../utils/db/space/getSpaceOwner";
 import deleteUserSpace from "../../utils/db/user/deleteUserSpace";
@@ -28,9 +27,13 @@ export default async function spaceDelete(
 
     await space.deleteOne();
     await deleteSpaceChannels(spaceId);
-    await deleteUserSpace(spaceId, user.id);
+    const updatedUser = await deleteUserSpace(spaceId, user.id);
+    if (!updatedUser) {
+      res.status(500);
+      throw new Error("Failed to delete space in User object");
+    }
 
-    return res.status(201).json({ message: "Successfully deleted space" });
+    return res.status(201).json({ spaces: updatedUser.spaces });
   } catch (error) {
     return next(error);
   }
