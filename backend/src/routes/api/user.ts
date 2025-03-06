@@ -1,8 +1,7 @@
 // User profile, settings, bio, etc. routes
 import { Router } from "express";
 import { authenticate } from "../../middleware/auth/authenticator";
-import userGetSpaces from "../../controllers/userController/userGetSpaces";
-import userGet from "../../controllers/userController/userGet";
+import { userGet, userGetSpaces } from "../../controllers/userController";
 
 const userRouter = Router();
 

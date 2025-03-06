@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
-import getUser from "../../utils/db/user/getUser";
+import { getUser } from "../../utils/db/user";
 
 export default async function userGet(
   req: Request,

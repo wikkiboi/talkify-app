@@ -1,11 +1,7 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
-import createMsg from "../../utils/db/createMsg";
-import { findChannelById } from "../../utils/db/channel";
-import { getUser } from "../../utils/db/user";
-import parseTimestamp from "../../utils/parseTimestamp";
-import getSpace from "../../utils/db/space/getSpace";
-import getChannelMsgs from "../../utils/db/channel/getChannelMsgs";
+import { getSpace } from "../../utils/db/space";
+import { getChannelMsgs } from "../../utils/db/channel";
 
 export default async function channelGetMsgs(
   req: Request,

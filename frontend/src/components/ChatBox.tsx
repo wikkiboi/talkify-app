@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import socket from "../socket";
 import getChannelMsgs from "../api/channel/getChannelMsgs";
 import parseTimestamp from "../helper/parseTimestamp";
-import "@/assets/styles/chatStyle.css"
-import "@/assets/styles/chatColors.css"
+import "@/assets/styles/chatStyle.css";
+import "@/assets/styles/chatColors.css";
 
 interface Message {
   id: string;
@@ -13,7 +13,7 @@ interface Message {
   timestamp: string;
 }
 
-export default function ChatChannel() {
+export default function ChatBox() {
   const { spaceId, channelId, groupId } = useParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
@@ -113,4 +113,3 @@ export default function ChatChannel() {
 // }
 
 // export default ChatBox
-

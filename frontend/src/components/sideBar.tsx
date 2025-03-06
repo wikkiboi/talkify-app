@@ -1,18 +1,18 @@
-import type React from "react"
-import "@/assets/styles/chatStyle.css"
+import type React from "react";
+import "@/assets/styles/chatStyle.css";
 
 type Channel = {
-  id: string
-  name: string
-}
+  id: string;
+  name: string;
+};
 
 interface SidebarProps {
-  activeChannel: string
-  setActiveChannel: (channelId: string) => void
-  textChannels: Channel[]
-  voiceChannels: Channel[]
-  onAddTextChannel: (name: string) => void
-  onAddVoiceChannel: (name: string) => void
+  activeChannel: string;
+  setActiveChannel: (channelId: string) => void;
+  textChannels: Channel[];
+  voiceChannels: Channel[];
+  onAddTextChannel: (name: string) => void;
+  onAddVoiceChannel: (name: string) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -24,15 +24,17 @@ const Sidebar: React.FC<SidebarProps> = ({
   onAddVoiceChannel,
 }) => {
   const handleAddChannel = (isVoice: boolean) => {
-    const channelName = prompt(`Enter new ${isVoice ? "voice" : "text"} channel name:`)
+    const channelName = prompt(
+      `Enter new ${isVoice ? "voice" : "text"} channel name:`
+    );
     if (channelName) {
       if (isVoice) {
-        onAddVoiceChannel(channelName)
+        onAddVoiceChannel(channelName);
       } else {
-        onAddTextChannel(channelName)
+        onAddTextChannel(channelName);
       }
     }
-  }
+  };
 
   return (
     <div className="sidebar">
@@ -41,7 +43,10 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="channel-section">
         <div className="section-header">
           <span>Text Channels</span>
-          <button className="add-button" onClick={() => handleAddChannel(false)}>
+          <button
+            className="add-button"
+            onClick={() => handleAddChannel(false)}
+          >
             +
           </button>
         </div>
@@ -49,7 +54,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           {textChannels.map((channel) => (
             <li
               key={channel.id}
-              className={`channel-item ${activeChannel === channel.id ? "active" : ""}`}
+              className={`channel-item ${
+                activeChannel === channel.id ? "active" : ""
+              }`}
               onClick={() => setActiveChannel(channel.id)}
             >
               <span className="channel-icon">#</span>
@@ -80,8 +87,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         <span>Username</span>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
-
+export default Sidebar;

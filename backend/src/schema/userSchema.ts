@@ -46,6 +46,17 @@ export const userSchema = new mongoose.Schema<IUser>(
           ref: "Space",
           required: true,
         },
+        color: {
+          type: String,
+          validate: {
+            validator: function (value: string) {
+              return /^#([0-9A-Fa-f]{6})$/.test(value);
+            },
+            message: (props) => `${props.value} is not a valid hex color!`,
+          },
+          default: "#95a5a6",
+          required: [true, "Please add a color"],
+        },
       },
     ],
     status: {

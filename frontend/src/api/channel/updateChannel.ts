@@ -1,24 +1,31 @@
 import axios from "axios";
-import { UserSpace } from "../../types/types";
+import { Channel } from "../../types/types";
 
-export default async function getUserSpaces() {
-  const API_URL = "api/user/spaces";
+export default async function deleteChannel(
+  spaceId: string,
+  channelId: string,
+  name: string
+) {
+  const API_URL = `api/channel/${spaceId}/${channelId}/update`;
   const token = localStorage.getItem("token");
+
   try {
-    const userSpaces = await axios.get<{ spaces: UserSpace[] }>(
+    const updatedChannel = await axios.put<{ channel: Channel }>(
       `http://localhost:3000/${API_URL}`,
+      { name },
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       }
     );
 
-    return userSpaces.data.spaces;
+    return updatedChannel.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Login failed:",
+        "Delete Channel failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

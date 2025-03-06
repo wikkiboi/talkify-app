@@ -1,7 +1,7 @@
 import { Response, NextFunction } from "express";
 import { Request } from "express-jwt";
 import { findChannelByName, createChannel } from "../../utils/db/channel";
-import getSpace from "../../utils/db/space/getSpace";
+import { getSpace } from "../../utils/db/space";
 export default async function channelCreate(
   req: Request,
   res: Response,

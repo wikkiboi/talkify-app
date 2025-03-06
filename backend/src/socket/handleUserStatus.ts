@@ -15,8 +15,6 @@ export default function handleUserStatus(io: Server, socket: Socket) {
     );
     const spaceIds = spaces.map((space) => space._id.toString());
 
-    console.log(spaceIds);
-
     console.log(`User went ${status}`);
 
     await User.updateOne({ username }, { $set: { status } });
