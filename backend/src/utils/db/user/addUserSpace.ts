@@ -1,6 +1,6 @@
 import { User } from "../../../schema/userSchema";
 
-export default async function updateUserSpaces(
+export default async function addUserSpace(
   userId: string,
   spaceId: string,
   name: string

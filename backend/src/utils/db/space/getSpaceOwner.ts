@@ -1,10 +1,10 @@
 import { Space } from "../../../schema/spaceSchema";
-export default async function getSpace(spaceId: string, username: string) {
-  if (!spaceId || !username) return;
+export default async function getSpaceOwner(spaceId: string, userId: string) {
+  if (!spaceId || !userId) return;
   const space = await Space.findOne(
     {
       _id: spaceId,
-      members: { $elemMatch: { username } },
+      owner: userId,
     },
     { createdAt: 0, updatedAt: 0 }
   );

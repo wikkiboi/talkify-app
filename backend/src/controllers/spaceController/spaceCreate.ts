@@ -2,8 +2,8 @@ import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { createSpace } from "../../utils/db/space";
 import { getUser } from "../../utils/db/user";
-import updateUserSpaces from "../../utils/db/user/updateUserSpaces";
 import createChannel from "../../utils/db/channel/createChannel";
+import addUserSpace from "../../utils/db/user/addUserSpace";
 
 export default async function spaceCreate(
   req: Request,
@@ -34,7 +34,7 @@ export default async function spaceCreate(
       res.status(401);
       throw new Error(`Create Channel Error`);
     }
-    await updateUserSpaces(user.id, space.id, space.name);
+    await addUserSpace(user.id, space.id, space.name);
 
     return res.status(201).json({ space, user });
   } catch (error) {

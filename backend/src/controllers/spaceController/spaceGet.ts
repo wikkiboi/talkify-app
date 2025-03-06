@@ -9,6 +9,7 @@ export default async function spaceGet(
 ): Promise<any> {
   const { spaceId } = req.params;
   const { username } = req.auth?.user;
+
   try {
     const space = await getSpace(spaceId, username);
     if (!space) {
