@@ -1,8 +1,8 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { getUser } from "../../utils/db/user";
-import getSpaceAdmin from "../../utils/db/space/getSpaceAdmin";
-import deleteChannel from "../../utils/db/channel/deleteChannel";
+import { getSpaceAdmin } from "../../utils/db/space";
+import { deleteChannel } from "../../utils/db/channel";
 
 export default async function channelDelete(
   req: Request,

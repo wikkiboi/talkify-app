@@ -1,9 +1,11 @@
 import { Router } from "express";
-import { spaceCreate } from "../../controllers/spaceController";
+import {
+  spaceCreate,
+  spaceGet,
+  spaceDelete,
+  spaceUpdate,
+} from "../../controllers/spaceController";
 import { authenticate } from "../../middleware/auth/authenticator";
-import spaceGet from "../../controllers/spaceController/spaceGet";
-import spaceDelete from "../../controllers/spaceController/spaceDelete";
-import spaceUpdate from "../../controllers/spaceController/spaceUpdate";
 
 const spaceRouter = Router();
 

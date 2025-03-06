@@ -2,9 +2,9 @@ import { Router } from "express";
 import {
   channelCreate,
   channelSendMsg,
+  channelGetMsgs,
 } from "../../controllers/channelController";
 import { authenticate } from "../../middleware/auth/authenticator";
-import channelGetMsgs from "../../controllers/channelController/channelGetMsgs";
 
 const channelRouter = Router();
 

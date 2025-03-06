@@ -1,9 +1,7 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
-import { getUser } from "../../utils/db/user";
-import getSpaceOwner from "../../utils/db/space/getSpaceOwner";
-import deleteUserSpace from "../../utils/db/user/deleteUserSpace";
-import deleteSpaceChannels from "../../utils/db/space/deleteSpaceChannels";
+import { getUser, deleteUserSpace } from "../../utils/db/user";
+import { getSpaceOwner, deleteSpaceChannels } from "../../utils/db/space";
 
 export default async function spaceDelete(
   req: Request,

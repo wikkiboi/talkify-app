@@ -1,9 +1,8 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { createSpace } from "../../utils/db/space";
-import { getUser } from "../../utils/db/user";
-import createChannel from "../../utils/db/channel/createChannel";
-import addUserSpace from "../../utils/db/user/addUserSpace";
+import { getUser, addUserSpace } from "../../utils/db/user";
+import { createChannel } from "../../utils/db/channel";
 
 export default async function spaceCreate(
   req: Request,

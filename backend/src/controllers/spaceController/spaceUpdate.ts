@@ -1,12 +1,8 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
-import { getUser } from "../../utils/db/user";
-import deleteUserSpace from "../../utils/db/user/deleteUserSpace";
-import deleteSpaceChannels from "../../utils/db/space/deleteSpaceChannels";
-import getSpaceAdmin from "../../utils/db/space/getSpaceAdmin";
-import updateSpace from "../../utils/db/space/updateSpace";
+import { getUser, updateUserSpace } from "../../utils/db/user";
+import { getSpaceAdmin, updateSpace } from "../../utils/db/space";
 import isHexColor from "../../utils/isHexColor";
-import updateUserSpace from "../../utils/db/user/updateUserSpace";
 
 export default async function spaceUpdate(
   req: Request,
