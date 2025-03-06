@@ -38,7 +38,11 @@ export default async function spaceUpdate(
     const spaceName = name ?? space.name;
     const spaceColor = color ?? space.color;
 
-    await updateSpace(space.id, spaceName, spaceColor);
+    const updatedSpace = await updateSpace(space.id, spaceName, spaceColor);
+    if (!updatedSpace) {
+      res.status(500);
+      throw new Error("Failed to update space name");
+    }
     const updatedUser = await updateUserSpace(
       user.id,
       space.id,
@@ -47,10 +51,12 @@ export default async function spaceUpdate(
     );
     if (!updatedUser) {
       res.status(401);
-      throw new Error("Failed to updated space name in User object");
+      throw new Error("Failed to update space name in User object");
     }
 
-    return res.status(201).json({ spaces: updatedUser.spaces });
+    return res
+      .status(201)
+      .json({ userSpaces: updatedUser.spaces, space: updatedSpace });
   } catch (error) {
     return next(error);
   }

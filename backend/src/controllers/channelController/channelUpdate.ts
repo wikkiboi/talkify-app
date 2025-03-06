@@ -2,7 +2,7 @@ import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { getUser } from "../../utils/db/user";
 import { getSpaceAdmin } from "../../utils/db/space";
-import { deleteChannel } from "../../utils/db/channel";
+import { updateChannel } from "../../utils/db/channel";
 
 export default async function channelDelete(
   req: Request,
@@ -10,12 +10,18 @@ export default async function channelDelete(
   next: NextFunction
 ): Promise<any> {
   const { spaceId, channelId } = req.params;
+  const { name } = req.body;
   const { username } = req.auth?.user;
   try {
     if (!spaceId || !channelId) {
       res.status(401);
       throw new Error("No space or channel id found in params");
     }
+    if (!name) {
+      res.status(401);
+      throw new Error("Please pass in a name");
+    }
+
     const user = await getUser(username);
     if (!user) {
       res.status(404);
@@ -28,10 +34,10 @@ export default async function channelDelete(
       throw new Error("User is not the admin of this space");
     }
 
-    const channel = await deleteChannel(spaceId, channelId);
+    const channel = await updateChannel(spaceId, channelId, name);
     if (!channel) {
       res.status(500);
-      throw new Error("Failed to delete channel");
+      throw new Error("Failed to update channel");
     }
 
     return res.status(201).json({ channel });
