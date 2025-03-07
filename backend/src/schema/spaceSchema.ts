@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { ISpace } from "./types";
 
 const SpaceSchema = new Schema<ISpace>(
@@ -11,6 +11,17 @@ const SpaceSchema = new Schema<ISpace>(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+    color: {
+      type: String,
+      validate: {
+        validator: function (value: string) {
+          return /^#([0-9A-Fa-f]{6})$/.test(value);
+        },
+        message: (props) => `${props.value} is not a valid hex color!`,
+      },
+      default: "#95a5a6",
+      required: [true, "Please add a color"],
     },
     admins: [
       {
@@ -41,6 +52,14 @@ const SpaceSchema = new Schema<ISpace>(
           enum: ["online", "idle", "offline"],
           default: "offline",
         },
+      },
+    ],
+    invites: [
+      {
+        code: { type: String, required: true, unique: true },
+        expiresAt: { type: Date, required: true },
+        maxUses: { type: Number },
+        uses: { type: Number, default: 0 },
       },
     ],
   },

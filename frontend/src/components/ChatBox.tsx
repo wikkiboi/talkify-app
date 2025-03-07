@@ -1,24 +1,38 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { UserSpace } from "../types/types";
 import getUserSpaces from "../api/user/getUserSpaces";
-import { Spaces } from "../types/types";
+import getSpace from "../api/space/getSpace";
+import createChannel from "../api/channel/createChannel";
+import getChannelMsgs from "../api/channel/getChannelMsgs";
 import logo from "../assets/logo.png";
 import CreateSpaceModal from "../components/CreateSpaceModal";
 import JoinSpaceModal from "../components/JoinSpaceModal";
+import socket from "../socket";
+import parseTimestamp from "../helper/parseTimestamp";
 // import getChannelMsgs from "../api/channel/getChannelMsgs";
-import createChannel from "../api/channel/createChannel";
-import getSpace from "../api/space/getSpace";
 // import createSpace from "../api/space/createSpace";
+// import "@/assets/styles/chatStyle.css";
+// import "@/assets/styles/chatColors.css";
+
+interface Message {
+  id: string;
+  username: string;
+  text: string;
+  timestamp: string;
+}
 
 export default function ChatInterface() {
-  const { spaceId } = useParams<{ spaceId: string }>();
-  const [spaces, setSpaces] = useState<Spaces[]>([]);
+  const { spaceId, channelId } = useParams<{ spaceId: string; channelId: string }>();
+  const [spaces, setSpaces] = useState<UserSpace[]>([]);
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   const [modalType, setModalType] = useState<"create" | "join" | null>(null);
   const [channels, setChannels] = useState<string[]>([]);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [newChannelName, setNewChannelName] = useState("");
   const [spaceName, setSpaceName] = useState<string>("");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,15 +42,7 @@ export default function ChatInterface() {
         setSpaces(spacesData);
       }
     };
-  
-    // const fetchChannels = async () => {
-    //   if (!spaceId) return;
-    //   const response = await getChannelMsgs(spaceId, "general"); // Fetch general by default
-    //   if (response) {
-    //     setChannels(response.channels || []); // Assuming response contains a `channels` array
-    //   }
-    // };
-  
+
     const fetchSpaceName = async () => {
       if (!spaceId) return;
   
@@ -51,11 +57,56 @@ export default function ChatInterface() {
         console.log("Space not found.");
       }
     };
-  
+
+    
+
     fetchSpaces();
     // fetchChannels();
     fetchSpaceName();
   }, [spaceId]);
+
+  useEffect(() => {
+    async function fetchChannelMsgs() {
+      if (!spaceId || !channelId) return;
+      const response = await getChannelMsgs(spaceId, channelId);
+
+      const channelMsgs = response.map((msg: any) => {
+        return {
+          id: msg._id,
+          username: msg.sender.username,
+          text: msg.text,
+          timestamp: parseTimestamp(msg._id),
+        };
+      });
+
+      setMessages(channelMsgs);
+    }
+
+    fetchChannelMsgs();
+
+    socket.on(
+      "receive-message",
+      (id: string, username: string, text: string, timestamp: string) => {
+        setMessages((prev) => [...prev, { id, username, text, timestamp }]);
+      }
+    );
+
+    return () => {
+      socket.off("receive-message");
+    };
+  }, [channelId, spaceId]);
+
+  const sendMessage = () => {
+    if (!input.trim()) return;
+
+    socket.emit("send-message", {
+      text: input,
+      channelId,
+      dmUsers: null,
+    });
+
+    setInput("");
+  };
 
   const handleSpaceClick = (id: string) => {
     navigate(`/space/${id}`);

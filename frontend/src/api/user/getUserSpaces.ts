@@ -1,11 +1,11 @@
 import axios from "axios";
-import { Spaces } from "../../types/types"; // Correct import of Space
+import { UserSpace } from "../../types/types";
 
-export default async function getUserSpaces(): Promise<Spaces[] | null> {  // Corrected return type
+export default async function getUserSpaces(): Promise<UserSpace[] | null> {  // Corrected return type
   const API_URL = "api/user/spaces";
   const token = localStorage.getItem("token");
   try {
-    const userSpaces = await axios.get<{ spaces: Spaces[] }>(  // Corrected expected response type
+    const userSpaces = await axios.get<{ spaces: UserSpace[] }>(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {

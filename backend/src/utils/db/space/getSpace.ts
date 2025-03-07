@@ -1,6 +1,6 @@
 import { Space } from "../../../schema/spaceSchema";
 export default async function getSpace(spaceId: string, username: string) {
-  if (!spaceId) return;
+  if (!spaceId || !username) return;
   const space = await Space.findOne(
     {
       _id: spaceId,

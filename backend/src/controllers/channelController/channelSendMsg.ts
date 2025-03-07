@@ -33,7 +33,7 @@ export default async function channelSendMsg(
 
     const newMsg = await createMsg(user.id, text, channelId);
     if (!newMsg) {
-      res.status(401);
+      res.status(500);
       throw new Error("Message Error: Failed to create message");
     }
 

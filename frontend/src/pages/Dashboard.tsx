@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import getUserSpaces from "../api/user/getUserSpaces";
-import { Spaces, UserSpaces } from "../types/types"; // Correctly import Spaces and UserSpaces types
+import getUserInfo from "../api/user/getUserInfo";
+import { UserSpace } from "../types/types"; // Correctly import Spaces and UserSpaces types
 import { useNavigate } from "react-router-dom";
 import UserStatus from "../components/UserStatus";
 import CreateSpaceModal from "../components/CreateSpaceModal";
@@ -9,18 +10,25 @@ import logo from "../assets/logo.png"; // Import logo
 
 export default function Dashboard() {
   // Initialize spaces as an empty array of type UserSpaces (an array of Spaces objects)
-  const [spaces, setSpaces] = useState<UserSpaces>([]); // Use the UserSpaces type for the state
-
+  const [spaces, setSpaces] = useState<UserSpace[]>([]); // Use the UserSpaces type for the state
+  const [username, setUsername] = useState<string>("");
   const [showOptionsModal, setShowOptionsModal] = useState(false); // For choosing create/join
   const [modalType, setModalType] = useState<"create" | "join" | null>(null); // Type of modal
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await getUserInfo(); // Assume this fetches user info
+      if (userData) {
+        setUsername(userData.username);
+      }
+    };
+
     const fetchSpaces = async () => {
       const spacesData = await getUserSpaces();
       if (spacesData) {
         // Transform the Space[] data to UserSpaces format
-        const transformedSpaces: UserSpaces = spacesData.map((space) => ({
+        const transformedSpaces: UserSpace[] = spacesData.map((space) => ({
           name: space.name,
           spaceId: space.spaceId,
         }));
@@ -28,6 +36,7 @@ export default function Dashboard() {
       }
     };
 
+    fetchUser();
     fetchSpaces();
   }, []);
 
@@ -66,7 +75,7 @@ export default function Dashboard() {
 
       {/* Content Area */}
       <div className="content">
-        <UserStatus />
+      <UserStatus username={username} /> 
       </div>
 
       {/* Modal for choosing Create or Join */}

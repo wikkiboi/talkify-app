@@ -1,10 +1,15 @@
 import cors from "cors";
 import express, { Express } from "express";
 import helmet from "helmet";
-import { authRouter, spaceRouter, channelRouter } from "./routes/api";
+import {
+  authRouter,
+  spaceRouter,
+  channelRouter,
+  userRouter,
+} from "./routes/api";
 import { initializeSocket } from "./socket/socket";
 import { createServer } from "http";
-import userRouter from "./routes/api/user";
+
 const app: Express = express();
 const server = createServer(app);
 

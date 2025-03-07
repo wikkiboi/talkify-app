@@ -1,0 +1,147 @@
+/* Reset default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Set up color variables for easy customization */
+  :root {
+    --color-background: #ffffff;
+    --color-text: #00BD62;
+    --color-sidebar: #1b1b1b;
+    --color-chat-area: #242424;
+    --color-input: #3a3939;
+    --color-user-section: #141414;
+  }
+  
+  html,
+  body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background-color: var(--color-background);
+    color: var(--color-text);
+  }
+  
+  .chat-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    width: 200px;
+    background-color: var(--color-sidebar);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .app-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .channel-section {
+    margin-bottom: 20px;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .add-button {
+    background: none;
+    border: 1px solid var(--color-text);
+    color: var(--color-text);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 30%;
+  }
+  .add-button:hover {
+    transform: scale(1.1); /* Expands the button */
+    transition: transform 0.2s ease-in-out;
+    color: white;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .channel-list {
+    list-style-type: none;
+  }
+  
+  .channel-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  .channel-item:hover {
+    color: white;
+    transition: color 0.2s ease-in-out;
+  }
+  /* While in channel */
+  .channel-item.active {
+    color: white;
+    font-weight: bold;
+  }
+  
+  .channel-icon {
+    margin-right: 5px;
+  }
+  
+  .user-section {
+    margin-top: auto;
+    background-color: var(--color-user-section);
+    color: var(--color-background);
+    padding: 10px;
+  }
+  
+  /* Chat Area Styles */
+  .chat-area {
+    flex-grow: 1;
+    background-color: var(--color-chat-area);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .chat-header {
+    padding: 10px;
+    border-bottom: 1px solid var(--color-text);
+  }
+  
+  .chat-messages {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+  }
+  
+  .message-input-container {
+    padding: 10px;
+  }
+  
+  .message-input {
+    width: 100%;
+    padding: 8px;
+    background-color: var(--color-input);
+    border: none;
+    color: var(--color-text);
+    border-radius: 9px;
+    padding: 10px;
+  }
+  
+  .message-input::placeholder {
+    color: #949494;
+  }
+  
+  
