@@ -54,6 +54,14 @@ const SpaceSchema = new Schema<ISpace>(
         },
       },
     ],
+    invites: [
+      {
+        code: { type: String, required: true, unique: true },
+        expiresAt: { type: Date, required: true },
+        maxUses: { type: Number },
+        uses: { type: Number, default: 0 },
+      },
+    ],
   },
   { timestamps: true }
 );

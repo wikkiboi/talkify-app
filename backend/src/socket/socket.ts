@@ -19,4 +19,6 @@ export const initializeSocket = (server: HTTPServer) => {
     handleTyping(io, socket);
     handleUserStatus(io, socket);
   });
+
+  return io;
 };

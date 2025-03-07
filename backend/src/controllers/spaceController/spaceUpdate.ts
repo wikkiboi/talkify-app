@@ -14,12 +14,12 @@ export default async function spaceUpdate(
   const { name, color } = req.body;
   try {
     if (!name && !color) {
-      res.status(401);
+      res.status(400);
       throw new Error("Nothing passed in to update space");
     }
 
     if (color && !isHexColor(color)) {
-      res.status(401);
+      res.status(400);
       throw new Error("Not a valid hex color");
     }
 
@@ -31,7 +31,7 @@ export default async function spaceUpdate(
 
     const space = await getSpaceAdmin(spaceId, user.id);
     if (!space) {
-      res.status(402);
+      res.status(401);
       throw new Error("User is not an admin of this space");
     }
 
@@ -50,7 +50,7 @@ export default async function spaceUpdate(
       spaceColor
     );
     if (!updatedUser) {
-      res.status(401);
+      res.status(500);
       throw new Error("Failed to update space name in User object");
     }
 

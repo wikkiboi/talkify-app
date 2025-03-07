@@ -14,11 +14,11 @@ export default async function channelDelete(
   const { username } = req.auth?.user;
   try {
     if (!spaceId || !channelId) {
-      res.status(401);
+      res.status(400);
       throw new Error("No space or channel id found in params");
     }
     if (!name) {
-      res.status(401);
+      res.status(400);
       throw new Error("Please pass in a name");
     }
 

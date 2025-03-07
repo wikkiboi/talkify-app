@@ -13,6 +13,7 @@ export default async function spaceCreate(
   const { username } = req.auth?.user;
   try {
     if (!name) {
+      res.status(400);
       throw new Error("Please add a name for the Space");
     }
 
@@ -30,9 +31,10 @@ export default async function spaceCreate(
 
     const channel = await createChannel("general", space.id);
     if (!channel) {
-      res.status(401);
+      res.status(500);
       throw new Error(`Create Channel Error`);
     }
+
     await addUserSpace(user.id, space.id, space.name);
 
     return res.status(201).json({ space, user });
