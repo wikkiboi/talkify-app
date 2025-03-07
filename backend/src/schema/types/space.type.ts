@@ -12,5 +12,13 @@ export default interface ISpace extends Document {
       status: "online" | "idle" | "offline";
     }
   ];
+  invites: [
+    {
+      code: string;
+      expiresAt: Date;
+      maxUses: number;
+      uses: number;
+    }
+  ];
   createdAt: Date;
 }
