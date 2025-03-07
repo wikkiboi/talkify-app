@@ -1,8 +1,7 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { addUserSpace, getUser } from "../../utils/db/user";
-import findInviteCode from "../../utils/db/space/findInviteCode";
-import addSpaceMember from "../../utils/db/space/addSpaceMember";
+import { addSpaceMember, findInviteCode } from "../../utils/db/space";
 
 export default async function spaceJoin(
   req: Request,

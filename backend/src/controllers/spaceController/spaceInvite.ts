@@ -1,8 +1,7 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { getUser } from "../../utils/db/user";
-import getSpaceAdmin from "../../utils/db/space/getSpaceAdmin";
-import createInviteCode from "../../utils/db/space/createInviteCode";
+import { getSpaceAdmin, createInviteCode } from "../../utils/db/space";
 
 export default async function spaceInvite(
   req: Request,
