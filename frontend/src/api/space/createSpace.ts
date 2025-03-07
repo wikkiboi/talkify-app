@@ -15,6 +15,7 @@ export default async function createSpace(name: string) {
       }
     );
 
+    console.log("Raw API Response:", createdSpace.data); // Log full response
     return createdSpace.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {

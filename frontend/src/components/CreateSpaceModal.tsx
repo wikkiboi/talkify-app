@@ -15,24 +15,49 @@ export default function CreateSpaceModal({
 }: CreateSpaceModalProps) {
   const [spaceName, setSpaceName] = useState("");
 
+  // const handleCreateSpace = async () => {
+  //   if (!spaceName) {
+  //     alert("Please enter a space name");
+  //     return;
+  //   }
+
+  //   try {
+  //     // Assuming the createSpace API returns the newly created space
+  //     const newSpace = await createSpace(spaceName);
+  //     if (newSpace) {
+  //       setShowModal(false); // Close the create/join options modal
+  //       setShowOptionsModal(false); // Close the right-side options tab
+  //       navigate(`/dashboard`); // Navigate to the newly created space's page (or the dashboard)
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating space:", error);
+  //   }
+  // };
+
+
+
   const handleCreateSpace = async () => {
     if (!spaceName) {
       alert("Please enter a space name");
       return;
     }
-
+  
     try {
-      // Assuming the createSpace API returns the newly created space
       const newSpace = await createSpace(spaceName);
-      if (newSpace) {
-        setShowModal(false); // Close the create/join options modal
-        setShowOptionsModal(false); // Close the right-side options tab
-        navigate(`/dashboard`); // Navigate to the newly created space's page (or the dashboard)
+      console.log("Create Space Response:", newSpace); // Log the entire response to check if the ID is correct
+  
+      if (newSpace?.space?.spaceId) {
+        console.log("Correct Space ID:", newSpace.space.spaceId); // Check if the ID is correct
+        setShowModal(false);
+        setShowOptionsModal(false);
+        navigate(`/dashboard`); // Navigate to the newly created space
+      } else {
+        console.error("Failed to retrieve correct space ID");
       }
     } catch (error) {
       console.error("Error creating space:", error);
     }
-  };
+  };  
 
   return (
     <div className="modal-overlay">
