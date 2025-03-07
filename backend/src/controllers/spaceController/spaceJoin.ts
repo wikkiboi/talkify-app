@@ -9,7 +9,7 @@ export default async function spaceJoin(
   next: NextFunction
 ): Promise<any> {
   const { username } = req.auth?.user;
-  const { code } = req.body;
+  const { inviteCode } = req.body ?? req.params;
 
   try {
     const user = await getUser(username);
@@ -18,7 +18,7 @@ export default async function spaceJoin(
       throw new Error("User not found");
     }
 
-    const spaceInfo = await findInviteCode(code);
+    const spaceInfo = await findInviteCode(inviteCode);
     if (!spaceInfo || !spaceInfo.invite) {
       res.status(401);
       throw new Error("Could not find matching space invite code");
@@ -43,7 +43,7 @@ export default async function spaceJoin(
 
     const updatedSpace = await addSpaceMember(
       space.id,
-      code,
+      inviteCode,
       user.id,
       user.username,
       user?.status
@@ -65,7 +65,10 @@ export default async function spaceJoin(
       members: space.members,
     });
 
-    return res.status(200).json({ message: "Joined the space successfully" });
+    return res.status(200).json({
+      space: updatedSpace,
+      userSpaces: updatedUser.spaces,
+    });
   } catch (error) {
     next(error);
   }

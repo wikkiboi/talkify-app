@@ -6,9 +6,13 @@ export default async function addUserSpace(
   name: string
 ) {
   if (!userId || !spaceId) return null;
-  const user = User.findByIdAndUpdate(userId, {
-    $push: { spaces: { name, spaceId } },
-  });
+  const user = User.findByIdAndUpdate(
+    userId,
+    {
+      $push: { spaces: { name, spaceId } },
+    },
+    { new: true }
+  );
 
   return user;
 }
