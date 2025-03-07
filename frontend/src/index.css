@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
 body {
     background-color: #1e1e1e;
     font-family: 'Anonymous Pro', monospace;
@@ -130,20 +131,22 @@ img {
 
 .sidebar {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
   width: 50px;
   height: 100vh;
   background-color: #2c2f33;
   padding: 20px;
   position: fixed;
+  top: 0;
 }
 
 .sidebar-logo {
   width: 100px;
   height: auto;
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* Space between logo and server icons */
   position: fixed;
+  top: 20px; /* Ensure logo is at the top of the sidebar */
 }
 
 .sidebar h2 {
@@ -153,12 +156,13 @@ img {
 
 /* Space list with circular buttons */
 .space-list {
-  flex-grow: 1;
-  width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: column; /* Stack icons vertically */
+  gap: 10px; /* Space between each icon */
+  width: 100%;
   padding: 0;
+  margin-top: 100px; /* Push the space list down, below the logo */
+  position: relative;
 }
 
 /* Circular button for each space */
@@ -186,8 +190,8 @@ img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #f5f5f5;
-  color: #333;
+  background-color:  #4caf50;
+  color: #ffffff;
   font-size: 30px;
   font-weight: bold;
   border: none;
@@ -197,10 +201,11 @@ img {
   margin-top: auto; /* Push to the bottom */
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-bottom: 25px;
 }
 
 .create-space-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #45a049;
 }
 
 .content {
