@@ -313,13 +313,68 @@ img {
 }
 
 .channel-sidebar {
+  display: flex;
   width: 200px;
+  height: 100vh;
   background: #23272a;
   padding: 10px;
-  color: white;
+  flex-direction: column;
+}
+
+.channel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 5px 10px;
+  margin-bottom: 8px;
+}
+
+.channeel-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #b9bbbe
+}
+
+.channel-list {
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
+  gap: 5px;
+  width: 100%;
+}
+
+.channel-item {
+  width: 100%;
+  padding: 8px 10px;
+  text-align: center;
+  text-align: left;
+  background-color: #23272a;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+}
+.channel-item:hover {
+  background-color: #3a3f44;
+}
+
+.add-channel-btn {
+  background-color: transparent;
+  border: none;
+  color: #b9bbbe;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 5px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+.add-channel-btn:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* sidebar for spaces for chatbox page */
@@ -340,6 +395,13 @@ img {
   -ms-overflow-style: none;
   scrollbar-width: none;
   flex-shrink: 0;
+}
+
+.space-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: white;
 }
 
 .spaces-sidebar::-webkit-scrollbar { 

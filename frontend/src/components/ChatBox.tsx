@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { UserSpace } from "../types/types";
+import { Channel } from "../types/types";
 import getUserSpaces from "../api/user/getUserSpaces";
 import getSpace from "../api/space/getSpace";
+import getChannel from "../api/channel/getChannel";
 import createChannel from "../api/channel/createChannel";
 import getChannelMsgs from "../api/channel/getChannelMsgs";
 import logo from "../assets/logo.png";
@@ -10,6 +12,7 @@ import CreateSpaceModal from "../components/CreateSpaceModal";
 import JoinSpaceModal from "../components/JoinSpaceModal";
 import socket from "../socket";
 import parseTimestamp from "../helper/parseTimestamp";
+// import { buttonVariants } from "assets/ui/button";
 // import getChannelMsgs from "../api/channel/getChannelMsgs";
 // import createSpace from "../api/space/createSpace";
 // import "@/assets/styles/chatStyle.css";
@@ -23,17 +26,35 @@ interface Message {
 }
 
 export default function ChatInterface() {
-  const { spaceId, channelId } = useParams<{ spaceId: string; channelId: string }>();
+  const { spaceId = "", channelId } = useParams<{ spaceId: string; channelId: string }>();
   const [spaces, setSpaces] = useState<UserSpace[]>([]);
+  const [channels, setChannels] = useState<Channel[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   const [modalType, setModalType] = useState<"create" | "join" | null>(null);
-  const [channels, setChannels] = useState<string[]>([]);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [newChannelName, setNewChannelName] = useState("");
   const [spaceName, setSpaceName] = useState<string>("");
-  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
   const navigate = useNavigate();
+
+  const fetchChannels = async (spaceId: string) => {
+    if (!spaceId) return;
+  
+    try {
+      const spaceData = await getSpace(spaceId); // Fetch both space & channels
+  
+      if (spaceData && spaceData.channels) {
+        console.log("Fetched channels:", spaceData.channels); // Debugging log
+        setChannels(spaceData.channels); // Set channels from API response
+      } else {
+        console.error("No channels found for this space.");
+      }
+    } catch (error) {
+      console.error("Error fetching channels:", error);
+    }
+  };
+  
 
   useEffect(() => {
     const fetchSpaces = async () => {
@@ -57,13 +78,11 @@ export default function ChatInterface() {
         console.log("Space not found.");
       }
     };
-
     
-
     fetchSpaces();
-    // fetchChannels();
     fetchSpaceName();
-  }, [spaceId]);
+    fetchChannels(spaceId);
+  }, [spaceId, channelId]);
 
   useEffect(() => {
     async function fetchChannelMsgs() {
@@ -112,26 +131,30 @@ export default function ChatInterface() {
     navigate(`/space/${id}`);
   };
 
+  const handleChannelClick = (id: string) => {
+    navigate(`/channels/${spaceId}/${id}`);
+  };
+
   const handleCreateChannel = async () => {
     if (!newChannelName.trim() || !spaceId) {
       console.error("Channel name is empty or spaceId is missing.");
       return;
     }
   
-    console.log("Creating channel:", newChannelName); // Log the channel name to console
-    const newChannel = await createChannel(newChannelName, spaceId);
-  
-    if (newChannel) {
-      console.log("New Channel Created:", newChannel);
-      // Optimistically update the channel list
-      setChannels((prevChannels) => [...prevChannels, newChannel.name]);
-      setShowCreateChannelModal(false); // Close the modal
-      setNewChannelName(""); // Clear input
-    } else {
-      console.error("Failed to create channel.");
+    try {
+      const newChannel = await createChannel(newChannelName, spaceId);
+      if (newChannel) {
+        setShowCreateChannelModal(false);
+        setNewChannelName(""); // Clear input
+        await fetchChannels(spaceId);  // Re-fetch channels after creation
+      } else {
+        console.error("Failed to create channel.");
+      }
+    } catch (error) {
+      console.error("Error creating channel:", error);
     }
   };
-
+  
   return (
     <div className="chat-container">
       {/* Sidebar for Spaces */}
@@ -142,44 +165,60 @@ export default function ChatInterface() {
         {/* Logo at the top */}
         <img src={logo} alt="Talkify Logo" className="sidebar-logo" />
 
-        {/* Spaces list */}
-        <div className="space-list">
-          {spaces.map((space) => (
-            <button
-              key={space.spaceId}
-              className={`space-item ${space.spaceId === spaceId ? "active" : ""}`}
-              onClick={() => handleSpaceClick(space.spaceId)}
-            >
-              {space.name.charAt(0).toUpperCase()} {/* Display the first letter of the space name */}
-            </button>
-          ))}
-        </div>
+          {/* Spaces list */}
+          <div className="space-list">
+            {spaces.map((space) => (
+              <button
+                key={space.spaceId}
+                className={`space-item ${space.spaceId === spaceId ? "active" : ""}`}
+                onClick={() => handleSpaceClick(space.spaceId)}
+              >
+                {space.name.charAt(0).toUpperCase()} {/* Display the first letter of the space name */}
+              </button>
+            ))}
+          </div>
 
-        {/* Plus button at the bottom */}
-        <button
-          className="create-space-btn"
-          onClick={() => setShowOptionsModal(true)} // Open modal to choose
-        >
-          +
-        </button>
-      </div>
+          {/* Plus button at the bottom */}
+          <button
+            className="create-space-btn"
+            onClick={() => setShowOptionsModal(true)} // Open modal to choose
+          >
+            +
+          </button>
+        </div>
       </div>
 
       {/* Channels Sidebar */}
       <div className="channel-sidebar">
-        <h3>Text Channels</h3>
-        <ul>
-          {channels.map((channel, index) => (
-          <li key={index}>#{channel}</li> // List the channels dynamically
-        ))}
-        </ul>
-        <button
-          className="create-channel-btn"
-          onClick={() => setShowCreateChannelModal(true)}
-        >
-          + Add Channel
-        </button>
+        <h3 className="space-name">{spaceName}</h3>
+                
+        {/* Text Channels title with Add Channel button on the right */}
+        <div className="channel-header">
+          <span className="channel-title">Text Channels</span>
+          <button className="add-channel-btn" onClick={() => setShowCreateChannelModal(true)}>
+            +
+          </button>
+        </div>
+                
+        {/* List of Channels */}
+        <div className="channel-list">
+          {channels && channels.length > 0 ? (
+            channels.map((channel) => (
+              <button
+                key={channel._id}
+                className={`channel-item ${channel._id === channelId ? "active" : ""}`}
+                onClick={() => handleChannelClick(channel._id)}
+              >
+                #{channel.name}
+              </button>
+            ))
+          ) : (
+            <p>No channels available</p>
+          )}
+        </div>
       </div>
+
+
 
       {/* Main Chat Area */}
       <div className="chat-box">
@@ -201,7 +240,7 @@ export default function ChatInterface() {
             <input
               type="text"
               placeholder="Enter channel name..."
-              value={newChannelName}
+              value={newChannelName ?? ""}
               onChange={(e) => setNewChannelName(e.target.value)} // Track input value
             />
             <button onClick={handleCreateChannel}>Create</button> {/* Button to create */}
