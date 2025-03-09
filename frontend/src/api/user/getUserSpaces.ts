@@ -18,7 +18,7 @@ export default async function getUserSpaces() {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Login failed:",
+        "Failed to get user spaces:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

@@ -19,7 +19,7 @@ export default async function joinSpace(inviteCode: string) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Create Space failed:",
+        "Failed to join space:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

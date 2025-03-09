@@ -17,7 +17,7 @@ export default async function getLastVisitedChannel(spaceId: string) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Login failed:",
+        "Failed to get last visited channels:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

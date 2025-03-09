@@ -20,7 +20,7 @@ export default async function deleteSpace(spaceId: string) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Delete Space failed:",
+        "Delete space failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {
