@@ -28,7 +28,9 @@ export default async function userUpdateLastVisited(
       throw new Error("Failed to updated last visited channel for space");
     }
 
-    return res.status(201).json({});
+    return res
+      .status(201)
+      .json({ message: "Successfully updated last visited channel" });
   } catch (error) {
     next(error);
   }

@@ -17,7 +17,7 @@ export default async function userGetLastVisited(
       throw new Error("User not found");
     }
 
-    const channel = getUserLastChannel(user.id, spaceId);
+    const channel = await getUserLastChannel(user.id, spaceId);
     if (!channel) {
       return res.status(201).json({
         message:

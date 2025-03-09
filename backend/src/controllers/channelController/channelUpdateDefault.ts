@@ -10,13 +10,10 @@ export default async function channelUpdateDefault(
   next: NextFunction
 ): Promise<any> {
   const { spaceId, channelId } = req.params;
-  const { channelIdInput } = req.body;
   const { username } = req.auth?.user;
 
   try {
-    const newDefaultChannelId = channelIdInput ?? channelId;
-
-    if (!newDefaultChannelId) {
+    if (!channelId) {
       res.status(400);
       throw new Error("No channel passed in to update");
     }
@@ -33,15 +30,12 @@ export default async function channelUpdateDefault(
       throw new Error("User is not the admin of this space");
     }
 
-    if (
-      space.defaultChannel &&
-      space.defaultChannel.toString() === newDefaultChannelId
-    ) {
+    if (space.defaultChannel && space.defaultChannel.toString() === channelId) {
       res.status(400);
       throw new Error("This channel is already the default channel");
     }
 
-    const channel = await getChannel(newDefaultChannelId);
+    const channel = await getChannel(channelId);
     if (!channel || channel.spaceId.toString() !== spaceId) {
       res.status(400);
       throw new Error("Invalid channel for this space");

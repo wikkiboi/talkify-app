@@ -34,8 +34,13 @@ export default async function channelCreate(
       throw new Error("Failed to create channel");
     }
 
-    if (!space.defaultChannel || defaultChannel === true) {
-      space.defaultChannel = channel.id;
+    if (
+      !space.defaultChannel ||
+      defaultChannel === true ||
+      defaultChannel === "true"
+    ) {
+      console.log("called");
+      space.defaultChannel = channel._id;
       await space.save();
     }
 

@@ -5,10 +5,13 @@ export default async function getUserLastChannel(
   spaceId: string
 ) {
   if (!userId || !spaceId) return;
-  const channel = await User.findOne({
+  const user = await User.findOne({
     _id: userId,
     "spaces.spaceId": spaceId,
-  }).select("spaces.lastVisitedChannel");
+  }).select("spaces");
 
-  return channel;
+  return (
+    user?.spaces?.find((s) => s.spaceId.toString() === spaceId)
+      ?.lastVisitedChannel || null
+  );
 }
