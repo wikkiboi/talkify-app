@@ -27,7 +27,7 @@ export default async function updateSpace(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Create Space failed:",
+        "Update space failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

@@ -21,7 +21,7 @@ export default async function getLastVisitedChannel(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Login failed:",
+        "Failed to update last visited channel:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

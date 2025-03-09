@@ -19,7 +19,7 @@ export default async function createSpace(name: string) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Create Space failed:",
+        "Create space failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

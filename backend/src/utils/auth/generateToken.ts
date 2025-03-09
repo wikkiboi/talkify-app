@@ -9,7 +9,13 @@ export default function generateToken(user: User) {
     throw new Error("JWT_SECRET missing in environment");
   }
 
-  const userInfo = { user: { username: user.username, email: user.email } };
+  const userInfo = {
+    user: {
+      id: user._id.toString(),
+      username: user.username,
+      email: user.email,
+    },
+  };
   const userJSON = JSON.stringify(userInfo);
 
   const token = jwt.sign(userJSON, process.env.JWT_SECRET);

@@ -20,7 +20,7 @@ export default async function getSpace(spaceId: string) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Get Space failed:",
+        "Get space failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

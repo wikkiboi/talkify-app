@@ -23,7 +23,7 @@ export default async function updateChannelName(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Delete Channel failed:",
+        "Update default channel failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

@@ -23,7 +23,7 @@ export default async function createSpaceInvite(
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Create Space failed:",
+        "Create space invite failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {
