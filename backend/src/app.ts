@@ -6,6 +6,7 @@ import {
   spaceRouter,
   channelRouter,
   userRouter,
+  friendRouter,
 } from "./routes/api";
 import { initializeSocket } from "./socket/socket";
 import { createServer } from "http";
@@ -28,7 +29,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRouter);
 app.use("/api/space", spaceRouter);
 app.use("/api/channel", channelRouter);
+app.use("/api/friend", friendRouter);
 app.use("/api/user", userRouter);
+
 app.get("/", (req, res) => {
   console.log("Hi");
   res.send("hello");
