@@ -5,3 +5,5 @@ export { default as createUser } from "./createUser";
 export { default as deleteUserSpace } from "./deleteUserSpace";
 export { default as getUserById } from "./getUserById";
 export { default as updateUserSpace } from "./updateUserSpace";
+export { default as updateLastVisitedChannel } from "./updateLastVisitedChannel";
+export { default as getUserLastChannel } from "./getUserLastChannel";

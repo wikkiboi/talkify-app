@@ -35,6 +35,9 @@ export default async function spaceCreate(
       throw new Error(`Create Channel Error`);
     }
 
+    space.defaultChannel = channel._id;
+    await space.save();
+
     const updatedUser = await addUserSpace(user.id, space.id, space.name);
 
     return res.status(201).json({ space, updatedUser });
