@@ -29,7 +29,7 @@ export default async function spaceCreate(
       throw new Error("Create Space Error: User ID not found");
     }
 
-    const channel = await createChannel("general", space.id, true);
+    const channel = await createChannel("general", space.id);
     if (!channel) {
       res.status(500);
       throw new Error(`Create Channel Error`);
