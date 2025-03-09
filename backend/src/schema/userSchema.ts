@@ -57,6 +57,11 @@ export const userSchema = new mongoose.Schema<IUser>(
           default: "#95a5a6",
           required: [true, "Please add a color"],
         },
+        lastVisitedChannel: {
+          type: Schema.Types.ObjectId,
+          ref: "Channel",
+          default: null,
+        },
       },
     ],
     status: {

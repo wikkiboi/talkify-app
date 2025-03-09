@@ -4,7 +4,7 @@ import { getUser } from "../../utils/db/user";
 import { getSpaceAdmin } from "../../utils/db/space";
 import { updateChannel } from "../../utils/db/channel";
 
-export default async function channelDelete(
+export default async function channelUpdateName(
   req: Request,
   res: Response,
   next: NextFunction

@@ -1,25 +1,27 @@
 import axios from "axios";
 
-export default async function getChannelMsgs(
+export default async function getLastVisitedChannel(
   spaceId: string,
   channelId: string
 ) {
-  const API_URL = `api/channel/${spaceId}/${channelId}`;
+  const API_URL = `api/user/${spaceId}/lastVisited`;
   const token = localStorage.getItem("token");
-
   try {
-    const space = await axios.get(`http://localhost:3000/${API_URL}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const channel = await axios.put<{ channel: string }>(
+      `http://localhost:3000/${API_URL}`,
+      { channelId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    return space.data;
+    return channel.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Get Channel Msgs failed:",
+        "Login failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {
