@@ -14,6 +14,11 @@ export const ChannelSchema = new Schema<IChannel>(
       required: true,
       unique: false,
     },
+    defaultChannel: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   { timestamps: true }
 );
