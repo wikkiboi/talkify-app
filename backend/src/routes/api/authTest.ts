@@ -1,5 +1,3 @@
-import request from "supertest";
-import app from "../../app";
 
 describe("Auth API", () => {
   it("should register a new user", async () => {
