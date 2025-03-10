@@ -18,4 +18,5 @@ export default interface IUser extends Document {
     lastVisitedChannel: mongoose.Types.ObjectId | null;
   }[];
   status: "online" | "idle" | "offline";
+  createdAt: Date;
 }

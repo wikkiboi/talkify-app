@@ -1,10 +1,11 @@
 import axios from "axios";
+import { UserStatus } from "../../types/types";
 
-export default async function getLastVisitedChannel(spaceId: string) {
-  const API_URL = `api/user/${spaceId}/lastVisited`;
+export default async function getUserStatus() {
+  const API_URL = "api/user/status";
   const token = localStorage.getItem("token");
   try {
-    const channel = await axios.get<{ channel: string | null }>(
+    const userStatus = await axios.get<{ status: UserStatus }>(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {
@@ -13,11 +14,11 @@ export default async function getLastVisitedChannel(spaceId: string) {
       }
     );
 
-    return channel.data;
+    return userStatus.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Failed to get last visited channels:",
+        "Failed to get user spaces:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

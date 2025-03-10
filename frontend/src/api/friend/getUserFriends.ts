@@ -1,10 +1,11 @@
 import axios from "axios";
+import { UserFriend } from "../../types/types";
 
 export default async function getUserFriends() {
   const API_URL = `api/friend/me`;
   const token = localStorage.getItem("token");
   try {
-    const userFriendsList = await axios.get(
+    const userFriendsList = await axios.get<{ userFriends: UserFriend[] }>(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {

@@ -5,13 +5,7 @@ import getChannelMsgs from "../api/channel/getChannelMsgs";
 import parseTimestamp from "../helper/parseTimestamp";
 import "@/assets/styles/chatStyle.css";
 import "@/assets/styles/chatColors.css";
-
-interface Message {
-  id: string;
-  username: string;
-  text: string;
-  timestamp: string;
-}
+import { Message } from "../types/types";
 
 export default function ChatBox() {
   const { spaceId, channelId, groupId } = useParams();
@@ -24,12 +18,14 @@ export default function ChatBox() {
       const response = await getChannelMsgs(spaceId, channelId);
 
       console.log(response);
+      // display error if response is null
 
-      const channelMsgs = response.map((msg: any) => {
+      const channelMsgs = response.map((msg: Message) => {
         return {
           id: msg._id,
           username: msg.sender.username,
           text: msg.text,
+          channelId,
           timestamp: parseTimestamp(msg._id),
         };
       });
@@ -39,12 +35,9 @@ export default function ChatBox() {
 
     fetchChannelMsgs();
 
-    socket.on(
-      "receive-message",
-      (id: string, username: string, text: string, timestamp: string) => {
-        setMessages((prev) => [...prev, { id, username, text, timestamp }]);
-      }
-    );
+    socket.on("receive-message", (message: Message) => {
+      setMessages((prev) => [...prev, message]);
+    });
 
     return () => {
       socket.off("receive-message");
@@ -70,7 +63,7 @@ export default function ChatBox() {
       <div className="h-64 overflow-y-auto border-b p-2 mb-2">
         {messages.map((msg, index) => (
           <div key={index} className="p-1 border-b">
-            <strong>{msg.username}: </strong>
+            <strong>{msg.sender.username}: </strong>
             {msg.text} ({msg.timestamp})
           </div>
         ))}

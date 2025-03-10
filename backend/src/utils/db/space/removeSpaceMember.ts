@@ -9,6 +9,9 @@ export default async function removeSpaceMember(
     spaceId,
     {
       $pull: {
+        admins: {
+          userId,
+        },
         members: {
           userId,
         },

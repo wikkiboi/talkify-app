@@ -42,7 +42,7 @@ export default async function channelSendMsg(
     const io = req.app.get("io");
     io.to(channelId).emit("newMessage", user.username, newMsg.text, timestamp);
 
-    return res.status(201).json(newMsg);
+    return res.status(201).json({ newMsg });
   } catch (error) {
     return next(error);
   }

@@ -40,14 +40,19 @@ export default function handleMessages(io: Server, socket: Socket) {
       const timestamp = await parseTimestamp(newMsg.id);
 
       if (targetRoom) {
-        socket.join(channelId);
-        io.to(targetRoom).emit(
-          "receive-message",
-          newMsg.id,
-          socket.user.username,
+        socket.join(targetRoom);
+        io.to(targetRoom).emit("receive-message", {
+          _id: newMsg.id,
+          sender: {
+            username: socket.user.username,
+            userId: socket.user._id.toString(),
+          },
           text,
-          timestamp
-        );
+          timestamp,
+          channelId: targetRoom === channelId ? targetRoom : null,
+          groupId: targetRoom === groupId ? targetRoom : null,
+          dmUsers: [],
+        });
       }
     } catch (error) {
       console.error("Error sending message: ", error);
