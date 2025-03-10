@@ -9,7 +9,7 @@ export default async function friendAdd(
   next: NextFunction
 ): Promise<any> {
   const { friendId } = req.params;
-  const { id, username } = req.auth?.user;
+  const { id } = req.auth?.user;
 
   try {
     const friend = await findFriend(id, friendId);

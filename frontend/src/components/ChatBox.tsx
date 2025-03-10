@@ -26,7 +26,7 @@ export default function ChatBox() {
           username: msg.sender.username,
           text: msg.text,
           channelId,
-          timestamp: parseTimestamp(msg._id),
+          timestamp: msg.timestamp ?? parseTimestamp(msg._id),
         };
       });
 

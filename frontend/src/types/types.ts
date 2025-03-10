@@ -77,5 +77,5 @@ export type Message = {
   channelId: string | null;
   groupId: string | null;
   dmUsers: [];
-  timestamp: string;
+  timestamp?: string;
 };

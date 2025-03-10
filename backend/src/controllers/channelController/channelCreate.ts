@@ -39,7 +39,6 @@ export default async function channelCreate(
       defaultChannel === true ||
       defaultChannel === "true"
     ) {
-      console.log("called");
       space.defaultChannel = channel._id;
       await space.save();
     }

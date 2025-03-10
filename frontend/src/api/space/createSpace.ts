@@ -1,13 +1,13 @@
 import axios from "axios";
-import { Space, User } from "../../types/types";
+import { HexColor, Space, User } from "../../types/types";
 
-export default async function createSpace(name: string) {
+export default async function createSpace(name: string, color?: HexColor) {
   const API_URL = "api/space/create";
   const token = localStorage.getItem("token");
   try {
     const createdSpace = await axios.post<{ space: Space; updatedUser: User }>(
       `http://localhost:3000/${API_URL}`,
-      { name },
+      { name, color },
       {
         headers: {
           Authorization: `Bearer ${token}`,
