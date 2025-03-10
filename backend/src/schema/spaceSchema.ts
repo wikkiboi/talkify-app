@@ -23,6 +23,11 @@ const SpaceSchema = new Schema<ISpace>(
       default: "#95a5a6",
       required: [true, "Please add a color"],
     },
+    defaultChannel: {
+      type: Schema.Types.ObjectId,
+      ref: "Channel",
+      default: null,
+    },
     admins: [
       {
         userId: {

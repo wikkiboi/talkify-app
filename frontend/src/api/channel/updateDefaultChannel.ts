@@ -1,24 +1,29 @@
 import axios from "axios";
-import { UserSpace } from "../../types/types";
+import { Channel } from "../../types/types";
 
-export default async function getUserSpaces(): Promise<UserSpace[] | null> {  // Corrected return type
-  const API_URL = "api/user/spaces";
+export default async function updateChannelName(
+  spaceId: string,
+  channelId: string
+) {
+  const API_URL = `api/channel/${spaceId}/${channelId}/update/default`;
   const token = localStorage.getItem("token");
+
   try {
-    const userSpaces = await axios.get<{ spaces: UserSpace[] }>(
+    const newDefaultChannel = await axios.put<{ channel: Channel }>(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       }
     );
 
-    return userSpaces.data.spaces; // Return an array of Space objects
+    return newDefaultChannel.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Failed to get user spaces:",
+        "Update default channel failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

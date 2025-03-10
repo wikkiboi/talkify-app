@@ -5,3 +5,5 @@ export { default as getChannelMsgs } from "./getChannelMsgs";
 export { default as deleteChannel } from "./deleteChannel";
 export { default as pushMsgToChannel } from "./pushMsgToChannel";
 export { default as updateChannel } from "./updateChannel";
+export { default as getChannel } from "./getChannel";
+export { default as findChannelInSpace } from "./findChannelInSpace";

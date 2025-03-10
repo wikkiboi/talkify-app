@@ -1,18 +1,11 @@
 import axios from "axios";
-import { Channel } from "../../types/types";
 
-export default async function deleteChannel(
-  spaceId: string,
-  channelId: string,
-  name: string
-) {
-  const API_URL = `api/channel/${spaceId}/${channelId}/update`;
+export default async function getUserFriends() {
+  const API_URL = `api/friend/me`;
   const token = localStorage.getItem("token");
-
   try {
-    const updatedChannel = await axios.put<{ channel: Channel }>(
+    const userFriendsList = await axios.get(
       `http://localhost:3000/${API_URL}`,
-      { name },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -21,11 +14,11 @@ export default async function deleteChannel(
       }
     );
 
-    return updatedChannel.data;
+    return userFriendsList.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Delete Channel failed:",
+        "Failed to get user friends:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

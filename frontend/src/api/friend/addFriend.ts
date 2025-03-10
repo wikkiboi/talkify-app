@@ -1,24 +1,24 @@
 import axios from "axios";
-import { UserSpace } from "../../types/types";
 
-export default async function getUserSpaces(): Promise<UserSpace[] | null> {  // Corrected return type
-  const API_URL = "api/user/spaces";
+export default async function addFriend(friendId: string) {
+  const API_URL = `api/friend/${friendId}/add`;
   const token = localStorage.getItem("token");
   try {
-    const userSpaces = await axios.get<{ spaces: UserSpace[] }>(
+    const updatedFriendsList = await axios.put(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       }
     );
 
-    return userSpaces.data.spaces; // Return an array of Space objects
+    return updatedFriendsList.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Failed to get user spaces:",
+        "Failed to add friend:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

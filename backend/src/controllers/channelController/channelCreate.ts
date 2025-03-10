@@ -8,7 +8,7 @@ export default async function channelCreate(
   next: NextFunction
 ): Promise<any> {
   const { spaceId } = req.params;
-  const { name } = req.body;
+  const { name, defaultChannel } = req.body;
   const { username } = req.auth?.user;
   try {
     if (!name) {
@@ -28,7 +28,21 @@ export default async function channelCreate(
       throw new Error("Channel already exists");
     }
 
-    const channel = await createChannel(name, spaceId);
+    const channel = await createChannel(name, space.id);
+    if (!channel) {
+      res.status(500);
+      throw new Error("Failed to create channel");
+    }
+
+    if (
+      !space.defaultChannel ||
+      defaultChannel === true ||
+      defaultChannel === "true"
+    ) {
+      console.log("called");
+      space.defaultChannel = channel._id;
+      await space.save();
+    }
 
     return res.status(201).json(channel);
   } catch (error) {

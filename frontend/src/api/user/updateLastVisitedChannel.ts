@@ -1,12 +1,15 @@
 import axios from "axios";
-import { UserSpace } from "../../types/types";
 
-export default async function getUserSpaces(): Promise<UserSpace[] | null> {  // Corrected return type
-  const API_URL = "api/user/spaces";
+export default async function getLastVisitedChannel(
+  spaceId: string,
+  channelId: string
+) {
+  const API_URL = `api/user/${spaceId}/lastVisited`;
   const token = localStorage.getItem("token");
   try {
-    const userSpaces = await axios.get<{ spaces: UserSpace[] }>(
+    const channel = await axios.put<{ channel: string }>(
       `http://localhost:3000/${API_URL}`,
+      { channelId },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -14,11 +17,11 @@ export default async function getUserSpaces(): Promise<UserSpace[] | null> {  //
       }
     );
 
-    return userSpaces.data.spaces; // Return an array of Space objects
+    return channel.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Failed to get user spaces:",
+        "Failed to update last visited channel:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {
