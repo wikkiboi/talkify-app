@@ -8,17 +8,11 @@ export default async function spaceInvite(
   res: Response,
   next: NextFunction
 ) {
-  const { username } = req.auth?.user;
+  const { id } = req.auth?.user;
   const { spaceId } = req.params;
   const { expiration, maxUses } = req?.body;
 
   try {
-    const user = await getUser(username);
-    if (!user) {
-      res.status(401);
-      throw new Error("User not found");
-    }
-
     if (
       (expiration && typeof expiration !== "number") ||
       (maxUses && typeof maxUses !== "number")
@@ -27,7 +21,7 @@ export default async function spaceInvite(
       throw new Error("Invalid expiration or use limit");
     }
 
-    const space = await getSpaceAdmin(spaceId, user.id);
+    const space = await getSpaceAdmin(spaceId, id);
     if (!space) {
       res.status(401);
       throw new Error("User is not an admin of the space");

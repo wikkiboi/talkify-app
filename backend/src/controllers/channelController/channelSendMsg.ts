@@ -12,14 +12,9 @@ export default async function channelSendMsg(
 ): Promise<any> {
   const { channelId } = req.params;
   const { text } = req.body;
-  const { username } = req.auth?.user;
+  const { id } = req.auth?.user;
 
   try {
-    const user = await getUser(username);
-    if (!user) {
-      res.status(404);
-      throw new Error("Channel Msg Send Error: User not found");
-    }
     if (!text) {
       res.status(400);
       throw new Error("Channel Msg Send Error: No text body");
@@ -31,7 +26,7 @@ export default async function channelSendMsg(
       throw new Error("Channel Error: Channel not found");
     }
 
-    const newMsg = await createMsg(user.id, text, channelId);
+    const newMsg = await createMsg(id, text, channelId);
     if (!newMsg) {
       res.status(500);
       throw new Error("Message Error: Failed to create message");
@@ -40,7 +35,18 @@ export default async function channelSendMsg(
     const timestamp = await parseTimestamp(newMsg.id);
 
     const io = req.app.get("io");
-    io.to(channelId).emit("newMessage", user.username, newMsg.text, timestamp);
+    io.to(channelId).emit("receive-message", {
+      _id: newMsg.id,
+      sender: {
+        username: newMsg.sender.username,
+        userId: newMsg.sender.userId.toString(),
+      },
+      text: newMsg.text,
+      timestamp,
+      channelId,
+      groupId: null,
+      dmUsers: [],
+    });
 
     return res.status(201).json({ newMsg });
   } catch (error) {
