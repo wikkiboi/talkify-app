@@ -1,10 +1,11 @@
 import axios from "axios";
+import { UserFriend } from "../../types/types";
 
 export default async function addFriend(friendId: string) {
   const API_URL = `api/friend/${friendId}/add`;
   const token = localStorage.getItem("token");
   try {
-    const updatedFriendsList = await axios.put(
+    const updatedFriendsList = await axios.put<{ userFriends: UserFriend[] }>(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {

@@ -1,18 +1,18 @@
 import axios from "axios";
+import { UserFriend } from "../../types/types";
 
 export default async function removeFriend(friendId: string) {
   const API_URL = `api/friend/${friendId}/remove`;
   const token = localStorage.getItem("token");
   try {
-    const updatedFriendsList = await axios.delete(
-      `http://localhost:3000/${API_URL}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const updatedFriendsList = await axios.delete<{
+      userFriends: UserFriend[];
+    }>(`http://localhost:3000/${API_URL}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     return updatedFriendsList.data;
   } catch (error) {

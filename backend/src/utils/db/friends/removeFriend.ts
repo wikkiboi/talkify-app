@@ -23,13 +23,15 @@ export default async function removeFriend(
     {
       $pull: {
         friends: {
-          userId: user?._id,
+          userId: user?.id,
           username: user?.username,
         },
       },
     },
     { new: true }
   );
+
+  console.log(friend);
 
   return { user, friend };
 }
