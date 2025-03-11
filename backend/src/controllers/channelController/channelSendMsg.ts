@@ -1,8 +1,7 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
-import createMsg from "../../utils/db/createMsg";
+import { createMsg } from "../../utils/db/message";
 import { findChannelById } from "../../utils/db/channel";
-import { getUser } from "../../utils/db/user";
 import parseTimestamp from "../../utils/parseTimestamp";
 
 export default async function channelSendMsg(
@@ -12,7 +11,7 @@ export default async function channelSendMsg(
 ): Promise<any> {
   const { channelId } = req.params;
   const { text } = req.body;
-  const { id } = req.auth?.user;
+  const { id, username } = req.auth?.user;
 
   try {
     if (!text) {
@@ -23,10 +22,10 @@ export default async function channelSendMsg(
     const channelExists = await findChannelById(channelId);
     if (!channelExists) {
       res.status(404);
-      throw new Error("Channel Error: Channel not found");
+      throw new Error("Channel not found");
     }
 
-    const newMsg = await createMsg(id, text, channelId);
+    const newMsg = await createMsg(username, id, text, channelId);
     if (!newMsg) {
       res.status(500);
       throw new Error("Message Error: Failed to create message");
@@ -43,9 +42,6 @@ export default async function channelSendMsg(
       },
       text: newMsg.text,
       timestamp,
-      channelId,
-      groupId: null,
-      dmUsers: [],
     });
 
     return res.status(201).json({ newMsg });

@@ -74,8 +74,24 @@ export type Message = {
     username: string;
   };
   text: string;
-  channelId: string | null;
-  groupId: string | null;
-  dmUsers: [];
+  conversationId: string;
   timestamp?: string;
+};
+
+export type PrivateDM = {
+  _id: string;
+  participants: [
+    { _id: string; username: string },
+    { _id: string; username: string }
+  ];
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type GroupDm = {
+  name: string;
+  participants: { _id: string; username: string }[];
+  owner: string;
+  createdAt: Date;
+  updatedAt: Date;
 };

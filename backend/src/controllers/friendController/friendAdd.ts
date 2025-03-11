@@ -1,6 +1,7 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { addFriend, findFriendRequest } from "../../utils/db/friends";
+import { createDm } from "../../utils/db/dm";
 
 export default async function friendAdd(
   req: Request,
@@ -32,9 +33,16 @@ export default async function friendAdd(
       throw new Error("Friend failed to receive accept");
     }
 
+    const dm = await createDm(id, friendId);
+    if (!dm) {
+      res.status(500);
+      throw new Error("Failed to create DM");
+    }
+
     return res.status(201).json({
       message: `Successfully add ${updatedFriend.username} as a friend`,
       userFriends: updatedUser.friends,
+      dm,
     });
   } catch (error) {
     next(error);

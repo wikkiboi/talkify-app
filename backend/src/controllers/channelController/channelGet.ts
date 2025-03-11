@@ -24,7 +24,7 @@ export default async function channelGetMsgs(
       throw new Error("Invalid channel for this space");
     }
 
-    return res.status(201).json({ channel });
+    return res.status(200).json({ channel });
   } catch (error) {
     return next(error);
   }
