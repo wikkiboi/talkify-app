@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { UserSpace } from "../types/types";
 import { Channel } from "../types/types";
@@ -6,7 +6,6 @@ import getUserSpaces from "../api/user/getUserSpaces";
 import getSpace from "../api/space/getSpace";
 import createChannel from "../api/channel/createChannel";
 import getChannelMsgs from "../api/channel/getChannelMsgs";
-import deleteChannel from "../api/channel/deleteChannel";
 import logo from "../assets/logo.png";
 import CreateSpaceModal from "./CreateSpaceModal";
 import JoinSpaceModal from "./JoinSpaceModal";
@@ -20,13 +19,10 @@ interface Message {
   timestamp: string;
 }
 
-export default function ChatInterface() {
+export default function ServerSpace() {
   const { spaceId = "", channelId } = useParams<{ spaceId: string; channelId: string }>();
   const [spaces, setSpaces] = useState<UserSpace[]>([]);
   const [channels, setChannels] = useState<Channel[]>([]);
-  const [showDropdown, setShowDropdown] = useState<string | null>(null);
-  const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
-const dropdownRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   const [modalType, setModalType] = useState<"create" | "join" | null>(null);
@@ -112,23 +108,6 @@ const dropdownRef = useRef<HTMLDivElement>(null);
     };
   }, [channelId, spaceId]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement | null; // Ensure it's an HTMLElement
-      if (
-        showDropdown &&
-        target &&
-        !target.closest(".dropdown-menu") && // Check if the click is outside the dropdown
-        !target.closest(".ellipsis-btn") // Also exclude the ellipsis button
-      ) {
-        setShowDropdown(null);
-      }
-    };
-  
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [showDropdown]);
-
   const sendMessage = () => {
     if (!input.trim()) return;
 
@@ -166,40 +145,6 @@ const dropdownRef = useRef<HTMLDivElement>(null);
       }
     } catch (error) {
       console.error("Error creating channel:", error);
-    }
-  };
-
-  const toggleDropdown = (event: React.MouseEvent, channelId: string) => {
-    event.stopPropagation();
-    
-    // Get the position of the clicked element
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    
-    // Calculate the dropdown position
-    setDropdownPosition({
-      top: rect.bottom + 5, // Position below the ellipsis button
-      left: rect.left + rect.width + 5, // Position to the right of the button
-    });
-  
-    // Toggle dropdown visibility based on the channelId
-    setShowDropdown((prev) => (prev === channelId ? null : channelId));
-  };
-
-  const handleEditChannel = (channelId: string) => {
-    console.log("Editing channel:", channelId);
-    setShowDropdown(null);
-    // Implement your edit logic here (e.g., open a modal)
-  };
-  
-  const handleDeleteChannel = async (channelId: string) => {
-    console.log("Deleting channel:", channelId);
-    setShowDropdown(null);
-  
-    try {
-      await deleteChannel(spaceId, channelId); // Implement this API call
-      await fetchChannels(spaceId); // Refresh channel list after deletion
-    } catch (error) {
-      console.error("Error deleting channel:", error);
     }
   };
   
@@ -252,52 +197,19 @@ const dropdownRef = useRef<HTMLDivElement>(null);
         <div className="channel-list">
           {channels && channels.length > 0 ? (
             channels.map((channel) => (
-              <div key={channel._id} className="channel-item-container">
-                {/* Channel Name */}
-                <div
-                  className={`channel-name ${channel._id === channelId ? "active" : ""}`}
-                  onClick={() => handleChannelClick(channel._id)}
-                >
-                  # {channel.name}
-                </div>
-            
-                {/* Ellipsis Button */}
-                <div className="ellipsis-container">
-                  <button
-                    className="ellipsis-btn"
-                    onClick={(e) => {
-                      e.stopPropagation(); // Prevents channel click
-                      toggleDropdown(e, channel._id);
-                    }}
-                  >
-                    ⋮
-                  </button>
-                </div>
-              </div>
+              <button
+                key={channel._id}
+                className={`channel-item ${channel._id === channelId ? "active" : ""}`}
+                onClick={() => handleChannelClick(channel._id)}
+              >
+                # {channel.name}
+              </button>
             ))
           ) : (
             <p>No channels available</p>
           )}
         </div>
-      
-        {/* Dropdown Menu - Positioned Outside Sidebar */}
-        {showDropdown && (
-          <div
-            ref={dropdownRef}
-            className="dropdown-menu"
-            style={{
-              top: `${dropdownPosition.top}px`,
-              left: `${dropdownPosition.left}px`,
-              position: "absolute", // Ensures the dropdown is positioned relative to the container
-            }}
-          >
-            <div className="arrow-up"></div> {/* Little arrow */}
-            <button onClick={() => handleEditChannel(showDropdown)}>Edit</button>
-            <button onClick={() => handleDeleteChannel(showDropdown)}>Delete</button>
-            <button onClick={() => setShowDropdown(null)}>Cancel</button> 
-          </div>
-        )}
-    </div>
+      </div>
 
       {/* Main Chat Area */}
       <div className="chat-box">

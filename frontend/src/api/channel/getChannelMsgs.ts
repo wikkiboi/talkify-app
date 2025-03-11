@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default async function getSpace(spaceId: string, channelId: string) {
+export default async function getChannelMsgs(spaceId: string, channelId: string) {
   const API_URL = `api/channel/${spaceId}/${channelId}`;
   const token = localStorage.getItem("token");
 
