@@ -12,13 +12,7 @@ import CreateSpaceModal from "./CreateSpaceModal";
 import JoinSpaceModal from "./JoinSpaceModal";
 import socket from "../socket";
 import parseTimestamp from "../helper/parseTimestamp";
-
-interface Message {
-    id: string;
-    username: string;
-    text: string;
-    timestamp: string;
-}
+import { Message } from "../types/types
 
 export default function ChatInterface() {
     const { spaceId = "", channelId } = useParams<{ spaceId: string; channelId: string }>();
@@ -86,7 +80,7 @@ export default function ChatInterface() {
             if (!spaceId || !channelId) return;
             const response = await getChannelMsgs(spaceId, channelId);
 
-        const channelMsgs = response.map((msg: any) => {
+        const channelMsgs = response.map((msg: Message) => {
             return {
                 id: msg._id,
                 username: msg.sender.username,
@@ -102,8 +96,8 @@ export default function ChatInterface() {
 
         socket.on(
             "receive-message",
-            (id: string, username: string, text: string, timestamp: string) => {
-                setMessages((prev) => [...prev, { id, username, text, timestamp }]);
+            (message: Message) => {
+                setMessages((prev) => [...prev, message]);
             }
         );
 

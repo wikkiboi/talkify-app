@@ -1,31 +1,24 @@
 import axios from "axios";
-import { Channel } from "../../types/types";
+import { GroupDm } from "../../types/types";
 
-export default async function deleteChannel(
-  spaceId: string,
-  channelId: string,
-  name: string
-) {
-  const API_URL = `api/channel/${spaceId}/${channelId}/update`;
+export default async function deleteGroupDM(groupId: string) {
+  const API_URL = `api/dm/${groupId}/create`;
   const token = localStorage.getItem("token");
-
   try {
-    const updatedChannel = await axios.put<{ channel: Channel }>(
+    const groupDM = await axios.delete<GroupDm>(
       `http://localhost:3000/${API_URL}`,
-      { name },
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       }
     );
 
-    return updatedChannel.data;
+    return groupDM.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Delete Channel failed:",
+        "Failed add user to group DM:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

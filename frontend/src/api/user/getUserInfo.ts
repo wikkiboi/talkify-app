@@ -1,17 +1,5 @@
 import axios from "axios";
-
-export interface User {
-  status: string;
-  _id: string;
-  username: string;
-  email: string;
-  password: string;
-  friends: [];
-  spaces: [];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
+import { User } from "../../types/types";
 
 export default async function getUserInfo() {
   const API_URL = "api/user/me";
@@ -27,7 +15,7 @@ export default async function getUserInfo() {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Login failed:",
+        "Failed to get user info:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

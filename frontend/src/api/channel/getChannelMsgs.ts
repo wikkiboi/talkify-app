@@ -1,16 +1,24 @@
 import axios from "axios";
+import { Message } from "../../types/types";
 
-export default async function getChannelMsgs(spaceId: string, channelId: string) {
+
+export default async function getChannelMsgs(
+  spaceId: string,
+  channelId: string
+) {
   const API_URL = `api/channel/${spaceId}/${channelId}`;
   const token = localStorage.getItem("token");
 
   try {
-    const space = await axios.get(`http://localhost:3000/${API_URL}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const space = await axios.get<{ channelMsgs: Message[] }>(
+      `http://localhost:3000/${API_URL}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     return space.data;
   } catch (error) {

@@ -3,27 +3,26 @@ import { Request } from "express-jwt";
 import { createSpace } from "../../utils/db/space";
 import { getUser, addUserSpace } from "../../utils/db/user";
 import { createChannel } from "../../utils/db/channel";
+import isHexColor from "../../utils/isHexColor";
 
 export default async function spaceCreate(
   req: Request,
   res: Response,
   next: NextFunction
 ): Promise<any> {
-  const { name } = req.body;
-  const { username } = req.auth?.user;
+  const { name, color } = req.body;
+  const { id, username } = req.auth?.user;
   try {
     if (!name) {
       res.status(400);
       throw new Error("Please add a name for the Space");
     }
-
-    const user = await getUser(username);
-    if (!user) {
-      res.status(404);
-      throw new Error("Create Space Error: User not found");
+    if (color && !isHexColor(color)) {
+      res.status(400);
+      throw new Error("Not a valid hex color");
     }
 
-    const space = await createSpace(name, user._id, user.username);
+    const space = await createSpace(name, id, username, color);
     if (!space) {
       res.status(401);
       throw new Error("Create Space Error: User ID not found");
@@ -35,9 +34,12 @@ export default async function spaceCreate(
       throw new Error(`Create Channel Error`);
     }
 
-    await addUserSpace(user.id, space.id, space.name);
+    space.defaultChannel = channel._id;
+    await space.save();
 
-    return res.status(201).json({ space, user });
+    const updatedUser = await addUserSpace(id, space.id, space.name);
+
+    return res.status(201).json({ space, updatedUser });
   } catch (error) {
     return next(error);
   }
