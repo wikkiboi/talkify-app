@@ -1,12 +1,13 @@
 import axios from "axios";
 import { GroupDm } from "../../types/types";
 
-export default async function addToGroupDm(groupId: string) {
+export default async function addToGroupDm(groupId: string, userId: string) {
   const API_URL = `api/dm/${groupId}/add`;
   const token = localStorage.getItem("token");
   try {
     const updatedGroupDM = await axios.put<GroupDm>(
       `http://localhost:3000/${API_URL}`,
+      { userId },
       {
         headers: {
           Authorization: `Bearer ${token}`,
