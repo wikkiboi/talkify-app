@@ -8,7 +8,7 @@ import "@/assets/styles/chatColors.css";
 import { Message } from "../types/types";
 
 export default function ChatBox() {
-  const { spaceId, channelId, groupId } = useParams();
+  const { spaceId, channelId } = useParams();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
 
@@ -25,7 +25,7 @@ export default function ChatBox() {
           id: msg._id,
           username: msg.sender.username,
           text: msg.text,
-          channelId,
+          conversationId: channelId,
           timestamp: msg.timestamp ?? parseTimestamp(msg._id),
         };
       });
@@ -49,9 +49,7 @@ export default function ChatBox() {
 
     socket.emit("send-message", {
       text: input,
-      channelId,
-      groupId,
-      dmUsers: null,
+      conversationId: channelId,
     });
 
     setInput("");
