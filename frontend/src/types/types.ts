@@ -39,6 +39,7 @@ export type UserFriend = {
 export type Space = {
   _id: string;
   name: string;
+  icon: string;
   owner: string;
   admins: Admins[];
   members: Members[];
