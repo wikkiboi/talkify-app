@@ -8,10 +8,11 @@ const GroupDMSchema = new Schema<IGroupDM>(
       type: [Schema.Types.ObjectId],
       ref: "User",
       required: true,
-      validate: [
-        (val: Schema.Types.ObjectId[]) => val.length > 2,
-        "Group DM must have at least 3 users",
-      ],
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
   { timestamps: true }

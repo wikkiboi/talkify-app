@@ -1,10 +1,9 @@
 import { DirectMessage } from "../../../schema/directMessageSchema";
 
-export default async function getDm(dmId: string, userId: string) {
-  const dm = await DirectMessage.findOne({
-    _id: dmId,
+export default async function getUserDms(userId: string) {
+  const dms = await DirectMessage.find({
     participants: userId,
   }).populate("participants", "username");
 
-  return dm;
+  return dms;
 }

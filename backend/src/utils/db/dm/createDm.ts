@@ -1,4 +1,4 @@
-import { DirectMessage } from "../../../schema/DirectMessageSchema";
+import { DirectMessage } from "../../../schema/directMessageSchema";
 
 export default async function createDm(userId1: string, userId2: string) {
   const dm = await DirectMessage.create({

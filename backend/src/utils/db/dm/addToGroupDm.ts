@@ -4,10 +4,10 @@ export default async function addToGroupDm(groupId: string, userId: string) {
   const groupDm = await GroupDM.findByIdAndUpdate(
     groupId,
     {
-      $push: { participants: userId },
+      $addToSet: { participants: userId },
     },
     { new: true }
-  );
+  ).populate("participants", "username");
 
   return groupDm;
 }

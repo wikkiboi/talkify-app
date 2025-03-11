@@ -24,7 +24,7 @@ export default async function channelGetMsgs(
       throw new Error("Channel not found");
     }
 
-    return res.status(201).json({ channelMsgs });
+    return res.status(200).json({ channelMsgs });
   } catch (error) {
     return next(error);
   }
