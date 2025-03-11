@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IMessage } from "./types";
 
 export const MessageSchema = new Schema<IMessage>(
@@ -8,15 +8,9 @@ export const MessageSchema = new Schema<IMessage>(
       required: true,
     },
     sender: {
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-      },
-      username: {
-        type: String,
-        required: true,
-      },
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     text: {
       type: String,

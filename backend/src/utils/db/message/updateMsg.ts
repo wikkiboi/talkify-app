@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 import { Message } from "../../../schema/messageSchema";
 
 export default async function updateMsg(
-  conversationId: string,
+  msgId: string,
   userId: mongoose.Types.ObjectId | string,
   text: string
 ) {
   const message = await Message.findOneAndUpdate(
     {
-      conversationId,
-      "sender.userId": userId,
+      _id: msgId,
+      sender: userId,
     },
     {
       $set: { text },
@@ -17,5 +17,11 @@ export default async function updateMsg(
     { new: true }
   );
 
-  return message;
+  if (!message) return null;
+
+  const populatedMessage = await message.populate<{
+    sender: { _id: string; username: string };
+  }>("sender", "username");
+
+  return populatedMessage;
 }
