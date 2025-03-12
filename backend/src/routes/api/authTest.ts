@@ -1,3 +1,6 @@
+import request from "supertest";
+import {server} from "./app";
+import "jest";
 
 describe("Auth API", () => {
   it("should register a new user", async () => {
