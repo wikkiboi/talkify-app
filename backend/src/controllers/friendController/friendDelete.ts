@@ -3,7 +3,7 @@ import { Request } from "express-jwt";
 import { getUser, getUserById } from "../../utils/db/user";
 import { findFriend, removeFriend } from "../../utils/db/friends";
 
-export default async function friendAdd(
+export default async function friendDelete(
   req: Request,
   res: Response,
   next: NextFunction

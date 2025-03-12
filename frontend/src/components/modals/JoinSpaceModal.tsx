@@ -1,16 +1,21 @@
 import { useState } from "react";
 
 interface JoinSpaceModalProps {
-  setShowModal: (show: boolean) => void;
+  setModalType: React.Dispatch<React.SetStateAction<string | null>>;
+  setShowOptionsModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function JoinSpaceModal({ setShowModal }: JoinSpaceModalProps) {
+export default function JoinSpaceModal({
+  setModalType,
+  setShowOptionsModal,
+}: JoinSpaceModalProps) {
   const [serverId, setServerId] = useState("");
 
   const handleJoin = () => {
     console.log(`Joining server with ID: ${serverId}`);
     // API call to join server goes here
-    setShowModal(false);
+    setModalType(null);
+    setShowOptionsModal(false);
   };
 
   return (
@@ -25,8 +30,12 @@ export default function JoinSpaceModal({ setShowModal }: JoinSpaceModalProps) {
           className="input-field"
         />
         <div className="modal-buttons">
-          <button onClick={handleJoin} className="btn-primary">Join</button>
-          <button onClick={() => setShowModal(false)} className="btn-secondary">Cancel</button>
+          <button onClick={handleJoin} className="btn-primary">
+            Join
+          </button>
+          <button onClick={() => setModalType(null)} className="btn-secondary">
+            Cancel
+          </button>
         </div>
       </div>
     </div>

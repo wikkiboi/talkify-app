@@ -5,7 +5,7 @@ export default async function getPrivateDmMsgs(dmId: string) {
   const API_URL = `api/dm/${dmId}/msgs`;
   const token = localStorage.getItem("token");
   try {
-    const dmMsgs = await axios.get<Message[]>(
+    const dmMsgs = await axios.get<{ messages: Message[] }>(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {

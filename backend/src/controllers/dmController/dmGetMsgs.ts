@@ -20,7 +20,7 @@ export default async function dmGetMsgs(
 
     const dmMsgs = await getDmMsgs(dmId);
 
-    return res.status(200).json({ dmMsgs });
+    return res.status(200).json({ messages: dmMsgs });
   } catch (error) {
     next(error);
   }

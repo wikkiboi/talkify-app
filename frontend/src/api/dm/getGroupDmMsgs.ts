@@ -5,7 +5,7 @@ export default async function getGroupDmMsgs(groupId: string) {
   const API_URL = `api/dm/${groupId}/group/msgs`;
   const token = localStorage.getItem("token");
   try {
-    const dmMsgs = await axios.get<Message[]>(
+    const dmMsgs = await axios.get<{ messages: Message[] }>(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {

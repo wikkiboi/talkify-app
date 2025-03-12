@@ -1,7 +1,8 @@
 import axios from "axios";
 import { UserSpace } from "../../types/types";
 
-export default async function getUserSpaces(): Promise<UserSpace[] | null> {  // Corrected return type
+export default async function getUserSpaces(): Promise<UserSpace[] | null> {
+  // Corrected return type
   const API_URL = "api/user/spaces";
   const token = localStorage.getItem("token");
   try {

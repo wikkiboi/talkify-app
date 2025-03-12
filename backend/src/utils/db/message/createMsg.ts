@@ -1,19 +1,21 @@
 import { Message } from "../../../schema/messageSchema";
-import mongoose from "mongoose";
 
 export default async function createMsg(
-  username: string,
-  userId: mongoose.Types.ObjectId | string,
+  userId: string,
   text: string,
   conversationId: string
 ) {
   if (!conversationId) return;
 
-  const message = Message.create({
+  const message = await Message.create({
     conversationId,
-    sender: { userId, username },
+    sender: userId,
     text,
   });
 
-  return message;
+  const populatedMessage = await message.populate<{
+    sender: { _id: string; username: string };
+  }>("sender", "username");
+
+  return populatedMessage;
 }

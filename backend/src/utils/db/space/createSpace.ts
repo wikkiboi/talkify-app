@@ -8,7 +8,7 @@ export default async function createSpace(
   ownerName: string,
   color: string
 ) {
-  if (!name || !ownerId || !isHexColor(color)) return null;
+  if (!name || !ownerId || (color && !isHexColor(color))) return null;
   const space = await Space.create({
     name,
     owner: ownerId,
