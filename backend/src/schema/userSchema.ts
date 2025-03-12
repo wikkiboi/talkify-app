@@ -27,12 +27,17 @@ export const userSchema = new mongoose.Schema<IUser>(
         },
         username: {
           type: String,
-          required: true,
         },
         status: {
           type: String,
           enum: ["online", "idle", "offline"],
           default: "offline",
+          required: true,
+        },
+        friendStatus: {
+          type: String,
+          enum: ["accepted", "pending", "requested"],
+          required: true,
         },
       },
     ],
@@ -56,6 +61,11 @@ export const userSchema = new mongoose.Schema<IUser>(
           },
           default: "#95a5a6",
           required: [true, "Please add a color"],
+        },
+        lastVisitedChannel: {
+          type: Schema.Types.ObjectId,
+          ref: "Channel",
+          default: null,
         },
       },
     ],

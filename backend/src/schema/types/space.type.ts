@@ -4,6 +4,7 @@ export default interface ISpace extends Document {
   name: string;
   owner: mongoose.Types.ObjectId;
   color: string;
+  defaultChannel: mongoose.Types.ObjectId | null;
   admins: [{ userId: mongoose.Types.ObjectId; username: string }];
   members: [
     {

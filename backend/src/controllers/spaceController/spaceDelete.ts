@@ -9,15 +9,9 @@ export default async function spaceDelete(
   next: NextFunction
 ): Promise<any> {
   const { spaceId } = req.params;
-  const { username } = req.auth?.user;
+  const { id } = req.auth?.user;
   try {
-    const user = await getUser(username);
-    if (!user) {
-      res.status(404);
-      throw new Error("Create Space Error: User not found");
-    }
-
-    const space = await getSpaceOwner(spaceId, user.id);
+    const space = await getSpaceOwner(spaceId, id);
     if (!space) {
       res.status(401);
       throw new Error("User is not the owner of this space");
@@ -25,10 +19,10 @@ export default async function spaceDelete(
 
     await space.deleteOne();
     await deleteSpaceChannels(spaceId);
-    const updatedUser = await deleteUserSpace(spaceId, user.id);
+    const updatedUser = await deleteUserSpace(spaceId, id);
     if (!updatedUser) {
-      res.status(500);
-      throw new Error("Failed to delete space in User object");
+      res.status(400);
+      throw new Error("Space deleted, but space is not found in user spaces");
     }
 
     return res.status(201).json({ spaces: updatedUser.spaces });

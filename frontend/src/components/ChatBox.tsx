@@ -8,8 +8,8 @@ import createChannel from "../api/channel/createChannel";
 import getChannelMsgs from "../api/channel/getChannelMsgs";
 import deleteChannel from "../api/channel/deleteChannel";
 import logo from "../assets/logo.png";
-import CreateSpaceModal from "./CreateSpaceModal";
-import JoinSpaceModal from "./JoinSpaceModal";
+import CreateSpaceModal from "./modals/CreateSpaceModal";
+import JoinSpaceModal from "./modals/JoinSpaceModal";
 import socket from "../socket";
 import parseTimestamp from "../helper/parseTimestamp";
 
@@ -87,7 +87,7 @@ export default function ChatInterface() {
             if (!spaceId || !channelId) return;
             const response = await getChannelMsgs(spaceId, channelId);
 
-        const channelMsgs = response.map((msg: any) => {
+        const channelMsgs = response?.messages.map((msg: any) => {
             return {
                 id: msg._id,
                 username: msg.sender.username,
@@ -96,7 +96,7 @@ export default function ChatInterface() {
             };
         });
 
-        setMessages(channelMsgs);
+        setMessages(channelMsgs ?? []);
         }
 
         fetchChannelMsgs();
@@ -212,148 +212,149 @@ export default function ChatInterface() {
                 <img src={logo} alt="Talkify Logo" className="sidebar-logo" />
                 <div className="sidebar">
 
-                {/* Logo at the top */}
-                <img src={logo} alt="Talkify Logo" className="sidebar-logo" />
+                    {/* Logo at the top */}
+                    <img src={logo} alt="Talkify Logo" className="sidebar-logo" />
 
-                {/* Spaces list */}
-                <div className="space-list">
-                    {spaces.map((space) => (
-                        <button
-                            key={space.spaceId}
-                            className={`space-item ${space.spaceId === spaceId ? "active" : ""}`}
-                            onClick={() => handleSpaceClick(space.spaceId)}
-                        >
-                            {space.name.charAt(0).toUpperCase()} {/* Display the first letter of the space name */}
-                        </button>
-                    ))}
-                </div>
-
-                {/* Plus button at the bottom */}
-                <button
-                    className="create-space-btn"
-                    onClick={() => setShowOptionsModal(true)} // Open modal to choose
-                >
-                    +
-                </button>
-            </div>
-        </div>
-
-        {/* Channels Sidebar */}
-        <div className="channel-sidebar">
-            <h3 className="space-name">{spaceName}</h3>
-
-            {/* Text Channels title with Add Channel button on the right */}
-            <div className="channel-header">
-                <span className="channel-title">Text Channels</span>
-                <button className="add-channel-btn" onClick={() => setShowCreateChannelModal(true)}>
-                    +
-                </button>
-            </div>
-
-            {/* List of Channels */}
-            <div className="channel-list">
-                {channels && channels.length > 0 ? (
-                    channels.map((channel) => (
-                        <div key={channel._id} className="channel-item-container">
-                            {/* Channel Name */}
-                            <div
-                                className={`channel-name ${channel._id === channelId ? "active" : ""}`}
-                                onClick={() => handleChannelClick(channel._id, channel.name)}
+                    {/* Spaces list */}
+                    <div className="space-list">
+                        {spaces.map((space) => (
+                            <button
+                                key={space.spaceId._id}
+                                className={`space-item ${space.spaceId._id === spaceId ? "active" : ""}`}
+                                onClick={() => handleSpaceClick(space.spaceId._id)}
                             >
-                            <div className="channel-name"># {channel.name}</div>
-            
-                            {/* Ellipsis Button */}
-                            <div className="ellipsis-container">
-                                <button
-                                    className="ellipsis-btn"
-                                    onClick={(e) => {
-                                        e.stopPropagation(); // Prevents channel click
-                                        toggleDropdown(e, channel._id);
-                                    }}
-                                >
-                                    ⋮
-                                </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <p>No channels available</p>
-                )}
-            </div>
-      
-            {/* Dropdown Menu - Positioned Outside Sidebar */}
-            {showDropdown && (
-                <div
-                    ref={dropdownRef}
-                    className="dropdown-menu"
-                    style={{
-                        top: `${dropdownPosition.top}px`,
-                        left: `${dropdownPosition.left}px`,
-                        position: "absolute", // Ensures the dropdown is positioned relative to the container
-                    }}
-                >
-                    <div className="arrow-up"></div> {/* Little arrow */}
-                    <button onClick={() => handleEditChannel(showDropdown)}>Edit</button>
-                    <button onClick={() => handleDeleteChannel(showDropdown)}>Delete</button>
-                    <button onClick={() => setShowDropdown(null)}>Cancel</button> 
-                </div>
-            )}
-        </div>
+                                {space.name.charAt(0).toUpperCase()} {/* Display the first letter of the space name */}
+                            </button>
+                        ))}
+                    </div>
 
-        {/* Main Chat Area */}
-        <div className="chat-box">
-            <h1>{ currentChannelName }</h1>
-            <div className="message-list">
-                <p>(Messages will appear here)</p>
-            </div>
-            <div className="message-input">
-                <input type="text" placeholder="Type a message..." />
-                <button>Send</button>
-            </div>
-        </div>
-
-        {/* Create Channel Modal */}
-        {showCreateChannelModal && (
-            <div className="modal">
-                <div className="modal-content">
-                    <h3>Create a New Channel</h3>
-                    <input
-                        type="text"
-                        placeholder="Enter channel name..."
-                        value={newChannelName ?? ""}
-                        onChange={(e) => setNewChannelName(e.target.value)} // Track input value
-                    />
-                    <button onClick={handleCreateChannel}>Create</button> {/* Button to create */}
-                    <button onClick={() => setShowCreateChannelModal(false)}>
-                        Cancel
+                    {/* Plus button at the bottom */}
+                    <button
+                        className="create-space-btn"
+                        onClick={() => setShowOptionsModal(true)} // Open modal to choose
+                    >
+                        +
                     </button>
                 </div>
             </div>
-        )}
 
-        {showOptionsModal && (
-            <div className="modal">
-                <div className="modal-content">
-                    <h3>Choose an option</h3>
-                    <button onClick={() => setModalType("create")}>Create a Server</button>
-                    <button onClick={() => setModalType("join")}>Join with ID</button>
-                    <button onClick={() => setShowOptionsModal(false)}>Cancel</button>
+            {/* Channels Sidebar */}
+            <div className="channel-sidebar">
+                <h3 className="space-name">{spaceName}</h3>
+
+                {/* Text Channels title with Add Channel button on the right */}
+                <div className="channel-header">
+                    <span className="channel-title">Text Channels</span>
+                    <button className="add-channel-btn" onClick={() => setShowCreateChannelModal(true)}>
+                        +
+                    </button>
+                </div>
+
+                {/* List of Channels */}
+                <div className="channel-list">
+                    {channels && channels.length > 0 ? (
+                        channels.map((channel) => (
+                            <div key={channel._id} className="channel-item-container">
+                                {/* Channel Name */}
+                                <div
+                                    className={`channel-name ${channel._id === channelId ? "active" : ""}`}
+                                    onClick={() => handleChannelClick(channel._id, channel.name)}
+                                >
+                                    <div className="channel-name"># {channel.name}</div>
+                        
+                                    {/* Ellipsis Button */}
+                                    <div className="ellipsis-container">
+                                        <button
+                                            className="ellipsis-btn"
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Prevents channel click
+                                                toggleDropdown(e, channel._id);
+                                            }}
+                                        >
+                                            ⋮
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        <p>No channels available</p>
+                    )}
+                </div>
+      
+                {/* Dropdown Menu - Positioned Outside Sidebar */}
+                {showDropdown && (
+                    <div
+                        ref={dropdownRef}
+                        className="dropdown-menu"
+                        style={{
+                            top: `${dropdownPosition.top}px`,
+                            left: `${dropdownPosition.left}px`,
+                            position: "absolute", // Ensures the dropdown is positioned relative to the container
+                        }}
+                    >
+                        <div className="arrow-up"></div> {/* Little arrow */}
+                        <button onClick={() => handleEditChannel(showDropdown)}>Edit</button>
+                        <button onClick={() => handleDeleteChannel(showDropdown)}>Delete</button>
+                        <button onClick={() => setShowDropdown(null)}>Cancel</button> 
+                    </div>
+                )}
+            </div>
+
+            {/* Main Chat Area */}
+            <div className="chat-box">
+                <h1>{ currentChannelName }</h1>
+                <div className="message-list">
+                    <p>(Messages will appear here)</p>
+                </div>
+                <div className="message-input">
+                    <input type="text" placeholder="Type a message..." />
+                    <button>Send</button>
                 </div>
             </div>
-        )}
 
-        {/* Show Create Server Modal */}
-        {modalType === "create" && (
-            <CreateSpaceModal
-                setShowModal={() => setModalType(null)} // Close Create Space Modal (by setting modalType to null)
-                navigate={navigate}
-                setShowOptionsModal={setShowOptionsModal} // Pass setShowOptionsModal to close the options modal
-            />
-        )}
+            {/* Create Channel Modal */}
+            {showCreateChannelModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>Create a New Channel</h3>
+                        <input
+                            type="text"
+                            placeholder="Enter channel name..."
+                            value={newChannelName ?? ""}
+                            onChange={(e) => setNewChannelName(e.target.value)} // Track input value
+                        />
+                        <button onClick={handleCreateChannel}>Create</button> {/* Button to create */}
+                        <button onClick={() => setShowCreateChannelModal(false)}>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
 
-        {/* Show Join Server Modal */}
-        {modalType === "join" && <JoinSpaceModal setShowModal={() => setModalType(null)} />}
-    </div>
+            {showOptionsModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>Choose an option</h3>
+                        <button onClick={() => setModalType("create")}>Create a Server</button>
+                        <button onClick={() => setModalType("join")}>Join with ID</button>
+                        <button onClick={() => setShowOptionsModal(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
+
+            {/* Show Create Server Modal */}
+            {modalType === "create" && (
+                <CreateSpaceModal
+                    setModalType={() => setModalType(null)} // Close Create Space Modal (by setting modalType to null)
+                    setShowOptionsModal={setShowOptionsModal} // Pass setShowOptionsModal to close the options modal
+                />
+            )}
+    
+            {/* Show Join Server Modal */}
+            {modalType === "join" && (
+                <JoinSpaceModal setModalType={setModalType} setShowOptionsModal={setShowOptionsModal} />
+            )}
+        </div>
     );
 }

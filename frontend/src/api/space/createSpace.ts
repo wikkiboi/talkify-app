@@ -1,12 +1,13 @@
 import axios from "axios";
+import { HexColor, Space, User } from "../../types/types";
 
-export default async function createSpace(name: string) {
+export default async function createSpace(name: string, color?: HexColor) {
   const API_URL = "api/space/create";
   const token = localStorage.getItem("token");
   try {
-    const createdSpace = await axios.post(
+    const createdSpace = await axios.post<{ space: Space; updatedUser: User }>(
       `http://localhost:3000/${API_URL}`,
-      { name },
+      { name, color },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -19,7 +20,7 @@ export default async function createSpace(name: string) {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Create Space failed:",
+        "Create space failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {

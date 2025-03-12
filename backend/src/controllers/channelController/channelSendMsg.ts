@@ -1,8 +1,7 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
-import createMsg from "../../utils/db/createMsg";
+import { createMsg } from "../../utils/db/message";
 import { findChannelById } from "../../utils/db/channel";
-import { getUser } from "../../utils/db/user";
 import parseTimestamp from "../../utils/parseTimestamp";
 
 export default async function channelSendMsg(
@@ -12,14 +11,9 @@ export default async function channelSendMsg(
 ): Promise<any> {
   const { channelId } = req.params;
   const { text } = req.body;
-  const { username } = req.auth?.user;
+  const { id, username } = req.auth?.user;
 
   try {
-    const user = await getUser(username);
-    if (!user) {
-      res.status(404);
-      throw new Error("Channel Msg Send Error: User not found");
-    }
     if (!text) {
       res.status(400);
       throw new Error("Channel Msg Send Error: No text body");
@@ -28,10 +22,10 @@ export default async function channelSendMsg(
     const channelExists = await findChannelById(channelId);
     if (!channelExists) {
       res.status(404);
-      throw new Error("Channel Error: Channel not found");
+      throw new Error("Channel not found");
     }
 
-    const newMsg = await createMsg(user.id, text, channelId);
+    const newMsg = await createMsg(username, id, text, channelId);
     if (!newMsg) {
       res.status(500);
       throw new Error("Message Error: Failed to create message");
@@ -40,9 +34,17 @@ export default async function channelSendMsg(
     const timestamp = await parseTimestamp(newMsg.id);
 
     const io = req.app.get("io");
-    io.to(channelId).emit("newMessage", user.username, newMsg.text, timestamp);
+    io.to(channelId).emit("receive-message", {
+      _id: newMsg.id,
+      sender: {
+        username: newMsg.sender.username,
+        userId: newMsg.sender.userId.toString(),
+      },
+      text: newMsg.text,
+      timestamp,
+    });
 
-    return res.status(201).json(newMsg);
+    return res.status(201).json({ newMsg });
   } catch (error) {
     return next(error);
   }
