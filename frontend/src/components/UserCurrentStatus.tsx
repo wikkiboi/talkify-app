@@ -4,30 +4,6 @@
 
 // export default function UserStatus() {
 //   const [userInfo, setUserInfo] = useState<User>();
-//   useEffect(() => {
-//     async function fetchUserInfo() {
-//       const user = await getUserInfo();
-//       if (user) {
-//         setUserInfo(user);
-//       } else {
-//         console.error("Failed to get user");
-//       }
-//     }
-
-//     fetchUserInfo();
-
-//     socket.on("userStatusUpdate", ({ username, status }) => {
-//       setUserInfo((prev) =>
-//         prev && prev.username === username && prev.status !== status
-//           ? { ...prev, status }
-//           : prev
-//       );
-//     });
-
-//     return () => {
-//       socket.off("userStatusUpdate");
-//     };
-//   }, []);
 
 //   return (
 //     <>
@@ -41,15 +17,42 @@
 //     </>
 //   );
 // }
-import { User } from "lucide-react"
-import "@/assets/styles/chatColors.css"
+import { User } from "lucide-react";
+import "@/assets/styles/chatColors.css";
+import socket from "../socket";
+import { useEffect } from "react";
+import { UserStatus } from "../types/types";
 
 interface UserStatusProps {
-  username: string
-  status?: "online" | "offline" | "away"
+  username: string;
+  status: UserStatus;
+  setUserInfo: React.Dispatch<
+    React.SetStateAction<{
+      username: string;
+      status: string;
+    }>
+  >;
 }
 
-export default function UserStatus({ username, status = "online" }: UserStatusProps) {
+export default function UserCurrentStatus({
+  username,
+  status,
+  setUserInfo,
+}: UserStatusProps) {
+  useEffect(() => {
+    socket.on("userStatusUpdate", ({ username, status }) => {
+      setUserInfo((prev) =>
+        prev && prev.username === username && prev.status !== status
+          ? { ...prev, status }
+          : prev
+      );
+    });
+
+    return () => {
+      socket.off("userStatusUpdate");
+    };
+  }, [setUserInfo]);
+
   return (
     <div className="mt-auto pt-4 border-t border-green-900">
       <div className="flex items-center">
@@ -62,6 +65,5 @@ export default function UserStatus({ username, status = "online" }: UserStatusPr
         </div>
       </div>
     </div>
-  )
+  );
 }
-

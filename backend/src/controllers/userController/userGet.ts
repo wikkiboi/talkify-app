@@ -16,14 +16,12 @@ export default async function userGet(
     }
 
     return res.status(201).json({
-      user: {
-        userId: user.id,
-        username: user.username,
-        friends: user.friends,
-        spaces: user.spaces,
-        status: user.status,
-        createdAt: user.createdAt,
-      },
+      userId: user.id,
+      username: user.username,
+      friends: user.friends,
+      spaces: user.spaces,
+      status: user.status,
+      createdAt: user.createdAt,
     });
   } catch (error) {
     next(error);

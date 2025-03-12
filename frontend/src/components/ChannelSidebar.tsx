@@ -1,25 +1,65 @@
-// import React from 'react';
+import ChannelList from "./ChannelList";
+import { Channel } from "../types/types";
+import deleteChannel from "../api/channel/deleteChannel";
+import { useParams } from "react-router-dom";
 
-// interface Channel {
-//   _id: string;
-//   name: string;
-// }
+interface ChannelSidebarProps {
+  spaceName: string;
+  channels: Channel[];
+  setChannels: React.Dispatch<React.SetStateAction<Channel[]>>;
+  showModal: (value: React.SetStateAction<boolean>) => void;
+}
 
-// interface ChannelSidebarProps {
-//   channels: Channel[];
-// }
+export default function ChannelSidebar({
+  spaceName,
+  channels,
+  setChannels,
+  showModal,
+}: ChannelSidebarProps) {
+  const { spaceId } = useParams();
 
-// const ChannelSidebar: React.FC<ChannelSidebarProps> = ({ channels }) => {
-//   return (
-//     <div>
-//       <h3>Channels</h3>
-//       <ul>
-//         {channels.map((channel) => (
-//           <li key={channel._id}>{channel.name}</li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
+  const handleEditChannel = (channelId: string) => {
+    console.log(channelId);
+    // Implement your edit logic here (e.g., open a modal)
+  };
 
-// export default ChannelSidebar;
+  const handleDeleteChannel = async (channelId: string) => {
+    try {
+      if (!spaceId) throw new Error("Space not found");
+      const deletedChannel = await deleteChannel(spaceId, channelId);
+
+      if (deletedChannel) {
+        setChannels((prev) =>
+          prev.filter((channel) => channel._id !== deletedChannel.channel._id)
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting channel:", error);
+    }
+  };
+
+  function handleInvite() {}
+
+  return (
+    <>
+      <div className="channel-sidebar">
+        <div>
+          <h3 className="space-name">{spaceName}</h3>
+          <button onClick={handleInvite}>Create Invite</button>
+        </div>
+        <div className="channel-header">
+          <span className="channel-title">Text Channels</span>
+          <button className="add-channel-btn" onClick={() => showModal(true)}>
+            +
+          </button>
+        </div>
+
+        <ChannelList
+          channels={channels}
+          onEditChannel={handleEditChannel}
+          onDeleteChannel={handleDeleteChannel}
+        />
+      </div>
+    </>
+  );
+}

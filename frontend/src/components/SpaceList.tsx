@@ -1,58 +1,33 @@
-// import { FormEvent, useEffect, useState } from "react";
-// import getUserSpaces from "../api/user/getUserSpaces";
-// import { Spaces } from "../types/types";
-// import createSpace from "../api/space/createSpace";
-// import { Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { UserSpace } from "../types/types";
 
-// export default function SpaceList() {
-//   const [userSpaces, setUserSpaces] = useState<Spaces[]>([]);
-//   const [newSpaceName, setNewSpaceName] = useState<string>("");
+export default function SpaceList({ spaces }: { spaces: UserSpace[] }) {
+  const { spaceId } = useParams<{ spaceId: string }>();
+  const navigate = useNavigate();
+  const handleSpaceClick = (spaceId: string, defaultChannel?: string) => {
+    navigate(`/channels/${spaceId}/${defaultChannel}`);
+  };
 
-//   const fetchSpaces = async () => {
-//     const spaces = await getUserSpaces();
-//     if (spaces) {
-//       setUserSpaces(spaces);
-//     } else {
-//       setUserSpaces([]);
-//       console.error("Failed to load spaces.");
-//     }
-//   };
+  if (spaces?.length === 0) return <div>Loading</div>;
 
-//   // Fetch the user's spaces on page load & store in userSpace state
-//   useEffect(() => {
-//     fetchSpaces();
-//   }, []);
-
-//   // Click submit button link to <form> element to pass in newSpaceName.
-//   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-//     e.preventDefault();
-//     const newSpace = await createSpace(newSpaceName);
-//     if (newSpace) {
-//       fetchSpaces();
-//       setNewSpaceName("");
-//     }
-//   }
-
-//   return (
-//     <div>
-//       <div>Space List</div>
-//       <ul>
-//         {userSpaces.map((space) => (
-//           <Link key={space.spaceId} to={`/channels/${space.spaceId}`}>
-//             {space.name}
-//           </Link>
-//         ))}
-//       </ul>
-
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           id="space-name"
-//           name="space-name"
-//           value={newSpaceName}
-//           onChange={(e) => setNewSpaceName(e.target.value)}
-//         />
-//         <button>Create New Space</button>
-//       </form>
-//     </div>
-//   );
-// }
+  return (
+    <div className="space-list">
+      {spaces.map((space) => (
+        <button
+          key={space.spaceId._id}
+          className={`space-item ${
+            space.spaceId._id === spaceId ? "active" : ""
+          }`}
+          onClick={() =>
+            handleSpaceClick(
+              space.spaceId._id,
+              space.lastVisitedChannel ?? space.spaceId.defaultChannel
+            )
+          }
+        >
+          {space.name.charAt(0).toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}

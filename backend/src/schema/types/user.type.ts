@@ -17,6 +17,7 @@ export default interface IUser extends Document {
     spaceId: mongoose.Types.ObjectId;
     color: string;
     lastVisitedChannel: mongoose.Types.ObjectId | null;
+    defaultChannel: string;
   }[];
   status: "online" | "idle" | "offline";
   createdAt: Date;

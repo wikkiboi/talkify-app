@@ -5,4 +5,5 @@ export default interface IMessage extends Document {
   sender: mongoose.Types.ObjectId;
   text: string;
   timestamp: string;
+  updatedAt: Date;
 }

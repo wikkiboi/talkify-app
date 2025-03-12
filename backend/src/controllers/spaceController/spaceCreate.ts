@@ -22,6 +22,8 @@ export default async function spaceCreate(
       throw new Error("Not a valid hex color");
     }
 
+    console.log(name, id, username, color);
+
     const space = await createSpace(name, id, username, color);
     if (!space) {
       res.status(401);

@@ -1,74 +1,43 @@
-// import { FormEvent, useEffect, useState } from "react";
-// import ChannelList from "../components/ChannelList";
-// import { useParams } from "react-router-dom";
-// import getSpace from "../api/space/getSpace";
-// import { Channel, Space } from "../types/types";
-// import createChannel from "../api/channel/createChannel";
-// import UserList from "../components/UserList";
-// import UserStatus from "../components/UserStatus";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Space } from "../types/types";
+import { Channel } from "../types/types";
+import getSpace from "../api/space/getSpace";
+import CurrentChannel from "../components/CurrentChannel";
 
-// export default function SpacePage() {
-//   const [spaceInfo, setSpaceInfo] = useState<{
-//     space: Space;
-//     channels: Channel[];
-//   }>();
-//   const [newChannelName, setNewChannelName] = useState("");
-//   const { spaceId } = useParams();
+export default function SpacePage() {
+  const { spaceId } = useParams();
 
-//   useEffect(() => {
-//     const fetchSpaceInfo = async () => {
-//       const spaceData = await getSpace(spaceId || "");
-//       if (spaceData) {
-//         setSpaceInfo(spaceData);
-//       } else {
-//         console.error("Failed to get space info");
-//       }
-//     };
+  const [currentSpace, setCurrentSpace] = useState<{
+    space: Space;
+    channels: Channel[];
+  }>();
 
-//     fetchSpaceInfo();
-//   }, [spaceId]);
+  useEffect(() => {
+    const fetchCurrentSpace = async () => {
+      if (!spaceId) return;
+      const spaceData = await getSpace(spaceId);
+      if (spaceData) {
+        setCurrentSpace({
+          space: spaceData.space,
+          channels: spaceData.channels,
+        });
+      } else {
+        console.log("Space not found.");
+      }
+    };
 
-//   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-//     e.preventDefault();
-//     const newChannel: Channel = await createChannel(
-//       newChannelName,
-//       spaceId || ""
-//     );
-//     console.log(newChannel);
-//     if (newChannel) {
-//       setSpaceInfo((prev) => {
-//         if (prev) {
-//           return {
-//             space: prev.space,
-//             channels: [...prev.channels, newChannel],
-//           };
-//         }
-//       });
+    fetchCurrentSpace();
+  }, [spaceId]);
 
-//       setNewChannelName("");
-//     }
-//   }
-
-//   return (
-//     <div>
-//       {spaceInfo?.space.name}
-//       {spaceInfo && (
-//         <>
-//           <ChannelList channels={spaceInfo.channels} />{" "}
-//           <UserList users={spaceInfo.space.members} />
-//         </>
-//       )}
-
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           id="channel-name"
-//           name="channel-name"
-//           value={newChannelName}
-//           onChange={(e) => setNewChannelName(e.target.value)}
-//         />
-//         <button>Create New Channel</button>
-//       </form>
-//       <UserStatus />
-//     </div>
-//   );
-// }
+  return (
+    <div className="chat-container">
+      {currentSpace && (
+        <CurrentChannel
+          spaceName={currentSpace.space.name}
+          spaceChannels={currentSpace.channels}
+        />
+      )}
+    </div>
+  );
+}
