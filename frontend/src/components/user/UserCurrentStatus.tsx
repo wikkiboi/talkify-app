@@ -1,27 +1,8 @@
-// import { useEffect, useState } from "react";
-// import getUserInfo, { User } from "../api/user/getUserInfo";
-// import socket from "../socket";
-
-// export default function UserStatus() {
-//   const [userInfo, setUserInfo] = useState<User>();
-
-//   return (
-//     <>
-//       {userInfo && (
-//         <div>
-//           <h2>
-//             {userInfo.username}: {userInfo.status}
-//           </h2>
-//         </div>
-//       )}
-//     </>
-//   );
-// }
 import { User } from "lucide-react";
 import "@/assets/styles/chatColors.css";
-import socket from "../socket";
+import socket from "../../socket";
 import { useEffect } from "react";
-import { UserStatus } from "../types/types";
+import { UserStatus } from "../../types/types";
 
 interface UserStatusProps {
   username: string;

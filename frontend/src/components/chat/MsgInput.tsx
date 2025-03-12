@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import socket from "../socket";
 import { useState, KeyboardEvent } from "react";
+import socket from "../../socket";
 
 export default function MsgInput() {
   const [input, setInput] = useState("");

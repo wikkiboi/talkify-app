@@ -1,10 +1,11 @@
 import ChannelList from "./ChannelList";
-import { Channel } from "../types/types";
-import deleteChannel from "../api/channel/deleteChannel";
+import { Channel } from "../../types/types";
+import deleteChannel from "../../api/channel/deleteChannel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
-import CreateChannelModal from "./CreateChannelModal";
-import createChannel from "../api/channel/createChannel";
+import CreateChannelModal from "../modals/CreateChannelModal";
+import createChannel from "../../api/channel/createChannel";
+import updateChannelName from "../../api/channel/updateChannelName";
 
 interface ChannelSidebarProps {
   spaceName: string;
@@ -21,9 +22,23 @@ export default function ChannelSidebar({
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const navigate = useNavigate();
 
-  const handleEditChannel = (channelId: string) => {
-    console.log(channelId);
-    // Implement your edit logic here (e.g., open a modal)
+  const handleEditChannel = async (channelId: string, name: string) => {
+    try {
+      if (!spaceId) throw new Error("Space not found");
+      const updatedChannel = await updateChannelName(spaceId, channelId, name);
+
+      if (updatedChannel) {
+        setChannels((prevChannels) =>
+          prevChannels.map((channel) =>
+            channel.name !== updatedChannel.channel.name
+              ? { ...channel, name: updatedChannel.channel.name }
+              : channel
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error deleting channel:", error);
+    }
   };
 
   const handleCreateChannel = async (newChannelName: string) => {

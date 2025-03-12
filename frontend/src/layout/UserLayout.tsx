@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
 import { UserSpace, UserStatus } from "../types/types";
 import getUserSpaces from "../api/user/getUserSpaces";
-import Sidebar from "../components/Sidebar";
-import NewServerOptionsModal from "../components/NewServerOptionsModal";
 import getUserInfo from "../api/user/getUserInfo";
-import UserCurrentStatus from "../components/UserCurrentStatus";
+import UserSidebar from "../components/user/UserSidebar";
 
 export default function UserLayout() {
   const { spaceId } = useParams();
   const [spaces, setSpaces] = useState<UserSpace[]>([]);
-  const [showOptionsModal, setShowOptionsModal] = useState(false);
+
   const [userInfo, setUserInfo] = useState<{
     username: string;
     status: UserStatus;
@@ -42,20 +40,18 @@ export default function UserLayout() {
   return (
     <div className="container">
       <div className="spaces-sidebar">
-        <Sidebar spaces={spaces} showModal={() => setShowOptionsModal(true)} />
+        <UserSidebar spaces={spaces} />
       </div>
 
-      <UserCurrentStatus
+      {/* Uncomment to view WIP UserStatus. Correctly displays username and online status. Should display in a similar location to Discord. */}
+      {/* <UserCurrentStatus
         username={userInfo.username}
         status={userInfo.status}
         setUserInfo={() => setUserInfo}
-      />
+      /> */}
       <main>
         <Outlet />
       </main>
-      {showOptionsModal && (
-        <NewServerOptionsModal showModal={() => setShowOptionsModal(false)} />
-      )}
     </div>
   );
 }

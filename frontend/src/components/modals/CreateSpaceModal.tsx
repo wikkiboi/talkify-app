@@ -1,5 +1,5 @@
 import { useState } from "react";
-import createSpace from "../api/space/createSpace"; // Import createSpace from the space directory
+import createSpace from "../../api/space/createSpace"; // Import createSpace from the space directory
 import { useNavigate } from "react-router-dom";
 
 interface CreateSpaceModalProps {

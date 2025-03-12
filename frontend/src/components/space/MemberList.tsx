@@ -4,7 +4,7 @@ interface UserListProps {
   users: Members[];
 }
 
-export default function UserList({ users }: UserListProps) {
+export default function MemberList({ users }: UserListProps) {
   const userList = users.map((user) => {
     return (
       <li key={user.userId}>

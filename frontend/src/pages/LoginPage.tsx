@@ -5,29 +5,41 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 export default function LoginPage() {
-  const [loginInfo, setLoginInfo] = useState({ usernameOrEmail: "", password: "" });
-  const [registerInfo, setRegisterInfo] = useState({ username: "", email: "", registerPassword: "" });
+  const [loginInfo, setLoginInfo] = useState({
+    usernameOrEmail: "",
+    password: "",
+  });
+  const [registerInfo, setRegisterInfo] = useState({
+    username: "",
+    email: "",
+    registerPassword: "",
+  });
   const [successMessage, setSuccessMessage] = useState<string | null>(null); // Success message state
   const [errorMessage, setErrorMessage] = useState<string | null>(null); // Error message state
   const navigate = useNavigate();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    
+
     // Ensure submitter is an HTMLButtonElement before accessing value
-    const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
-    const action = submitter?.value; 
-  
+    const submitter = (e.nativeEvent as SubmitEvent)
+      .submitter as HTMLButtonElement | null;
+    const action = submitter?.value;
+
     if (!action) return; // Prevent errors if submitter is null
-  
+
     const isLogin = action === "login";
     const token = isLogin
       ? await login(loginInfo.usernameOrEmail, loginInfo.password)
-      : await register(registerInfo.username, registerInfo.email, registerInfo.registerPassword);
-  
+      : await register(
+          registerInfo.username,
+          registerInfo.email,
+          registerInfo.registerPassword
+        );
+
     if (token) {
       localStorage.setItem("token", token);
-      
+
       // Show success message
       setSuccessMessage("Login Successful!");
       setErrorMessage(null); // Clear error message, if any
@@ -72,7 +84,10 @@ export default function LoginPage() {
           marginRight: "auto",
         }}
       />
-      <h1 className="text-3xl font-bold" style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+      <h1
+        className="text-3xl font-bold"
+        style={{ textAlign: "center", marginBottom: "1.5rem" }}
+      >
         Welcome to Talkify
       </h1>
 
@@ -112,7 +127,10 @@ export default function LoginPage() {
         </div>
       )}
 
-      <div className="login_register" style={{ width: "100%", gap: "1rem", textAlign: "center" }}>
+      <div
+        className="login_register"
+        style={{ width: "100%", gap: "1rem", textAlign: "center" }}
+      >
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="form-container">
           <h3 className="form-title">Login</h3>

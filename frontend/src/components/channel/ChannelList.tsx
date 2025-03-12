@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { Channel } from "../types/types";
+import { Channel } from "../../types/types";
 import ChannelDropdown from "./ChannelDropdown";
 
 interface ChannelListProps {
   channels: Channel[];
-  onEditChannel: (channelId: string) => void;
+  onEditChannel: (channelId: string, name: string) => void;
   onDeleteChannel: (channelId: string) => Promise<void>;
 }
 

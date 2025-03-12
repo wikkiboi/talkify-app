@@ -9,7 +9,7 @@ export default async function getChannelMsgs(
   const token = localStorage.getItem("token");
 
   try {
-    const response = await axios.get<{ channelMsgs: Message[] }>(
+    const response = await axios.get<{ messages: Message[] }>(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {

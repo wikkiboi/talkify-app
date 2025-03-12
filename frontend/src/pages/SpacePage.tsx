@@ -3,9 +3,8 @@ import { useParams } from "react-router-dom";
 import { Space } from "../types/types";
 import { Channel } from "../types/types";
 import getSpace from "../api/space/getSpace";
-import CurrentChannel from "../components/CurrentChannel";
-import ChannelSidebar from "../components/ChannelSidebar";
-import ChatArea from "../components/ChatArea";
+import ChannelSidebar from "../components/channel/ChannelSidebar";
+import ChatArea from "../components/chat/ChatArea";
 
 export default function SpacePage() {
   const { spaceId, channelId } = useParams();
@@ -44,7 +43,7 @@ export default function SpacePage() {
             setChannels={setSpaceChannels}
           />
 
-          <ChatArea currentChannel={currentChannel} />
+          <ChatArea currentChat={currentChannel} />
         </>
       )}
     </div>

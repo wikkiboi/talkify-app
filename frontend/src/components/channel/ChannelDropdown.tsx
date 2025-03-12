@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 
 interface ChannelDropdownProps {
   channelId: string;
-  onEdit: (channelId: string) => void;
+  onEdit: (channelId: string, name: string) => void;
   onDelete: (channelId: string) => Promise<void>;
 }
+
+// Edit functionality WIP
 
 export default function ChannelDropdown({
   channelId,
@@ -75,7 +77,7 @@ export default function ChannelDropdown({
           }}
         >
           <div className="arrow-up"></div>
-          <button onClick={() => onEdit(channelId)}>Edit</button>
+          <button onClick={() => setEditModal(true)}>Edit</button>
           <button onClick={() => onDelete(channelId)}>Delete</button>
           <button onClick={() => setShowDropdown(null)}>Cancel</button>
         </div>
