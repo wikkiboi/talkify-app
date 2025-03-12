@@ -1,5 +1,6 @@
 import request from "supertest";
 import {server} from "./app";
+import "jest";
 
 describe("Space API", () => {
   let spaceId: string;
