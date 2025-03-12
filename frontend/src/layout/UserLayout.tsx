@@ -23,8 +23,10 @@ export default function UserLayout() {
     const fetchUser = async () => {
       const userData = await getUserInfo();
       if (userData) {
-        setUserInfo({ username: userData.username, status: userData.status });
-        console.log(userInfo);
+        setUserInfo({
+          username: userData.username,
+          status: userData.status,
+        });
       }
     };
     const fetchSpaces = async () => {

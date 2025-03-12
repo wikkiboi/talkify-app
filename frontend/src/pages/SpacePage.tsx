@@ -4,23 +4,27 @@ import { Space } from "../types/types";
 import { Channel } from "../types/types";
 import getSpace from "../api/space/getSpace";
 import CurrentChannel from "../components/CurrentChannel";
+import ChannelSidebar from "../components/ChannelSidebar";
+import ChatArea from "../components/ChatArea";
 
 export default function SpacePage() {
-  const { spaceId } = useParams();
-
-  const [currentSpace, setCurrentSpace] = useState<{
-    space: Space;
-    channels: Channel[];
-  }>();
+  const { spaceId, channelId } = useParams();
+  const [currentSpace, setCurrentSpace] = useState<Space>();
+  const [spaceChannels, setSpaceChannels] = useState<Channel[]>([]);
+  const [currentChannel, setCurrentChannel] = useState<string>("");
 
   useEffect(() => {
     const fetchCurrentSpace = async () => {
       if (!spaceId) return;
       const spaceData = await getSpace(spaceId);
       if (spaceData) {
-        setCurrentSpace({
-          space: spaceData.space,
-          channels: spaceData.channels,
+        setCurrentSpace(spaceData.space);
+        setSpaceChannels(spaceData.channels);
+
+        spaceData.channels.filter((channel) => {
+          if (channel._id === channelId) {
+            setCurrentChannel(channel.name);
+          }
         });
       } else {
         console.log("Space not found.");
@@ -28,15 +32,20 @@ export default function SpacePage() {
     };
 
     fetchCurrentSpace();
-  }, [spaceId]);
+  }, [spaceId, channelId]);
 
   return (
     <div className="chat-container">
       {currentSpace && (
-        <CurrentChannel
-          spaceName={currentSpace.space.name}
-          spaceChannels={currentSpace.channels}
-        />
+        <>
+          <ChannelSidebar
+            spaceName={currentSpace.name}
+            channels={spaceChannels}
+            setChannels={setSpaceChannels}
+          />
+
+          <ChatArea currentChannel={currentChannel} />
+        </>
       )}
     </div>
   );
