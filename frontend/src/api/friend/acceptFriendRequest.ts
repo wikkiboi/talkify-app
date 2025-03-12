@@ -1,7 +1,7 @@
 import axios from "axios";
 import { UserFriend } from "../../types/types";
 
-export default async function addFriend(friendId: string) {
+export default async function acceptFriendRequest(friendId: string) {
   const API_URL = `api/friend/${friendId}/add`;
   const token = localStorage.getItem("token");
   try {

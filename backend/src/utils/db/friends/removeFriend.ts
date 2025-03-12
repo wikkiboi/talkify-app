@@ -11,7 +11,6 @@ export default async function removeFriend(
       $pull: {
         friends: {
           userId: friendId,
-          username: friendName,
         },
       },
     },
@@ -23,8 +22,7 @@ export default async function removeFriend(
     {
       $pull: {
         friends: {
-          userId: user?.id,
-          username: user?.username,
+          userId,
         },
       },
     },
