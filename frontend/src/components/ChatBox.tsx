@@ -24,6 +24,7 @@ export default function ChatInterface() {
     const { spaceId = "", channelId } = useParams<{ spaceId: string; channelId: string }>();
     const [spaces, setSpaces] = useState<UserSpace[]>([]);
     const [channels, setChannels] = useState<Channel[]>([]);
+    const [currentChannelName, setCurrentChannelName] = useState("General");
     const [showDropdown, setShowDropdown] = useState<string | null>(null);
     const [dropdownPosition, setDropdownPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -145,7 +146,8 @@ export default function ChatInterface() {
         navigate(`/space/${id}`);
     };
 
-    const handleChannelClick = (id: string) => {
+    const handleChannelClick = (id: string, name: string) => {
+        setCurrentChannelName(name);
         navigate(`/channels/${spaceId}/${id}`);
     };
 
@@ -256,7 +258,7 @@ export default function ChatInterface() {
                             {/* Channel Name */}
                             <div
                                 className={`channel-name ${channel._id === channelId ? "active" : ""}`}
-                                onClick={() => handleChannelClick(channel._id)}
+                                onClick={() => handleChannelClick(channel._id, channel.name)}
                             >
                             <div className="channel-name"># {channel.name}</div>
             
@@ -301,7 +303,7 @@ export default function ChatInterface() {
 
         {/* Main Chat Area */}
         <div className="chat-box">
-            <h1>Chat for Space: {spaceName}</h1>
+            <h1>{ currentChannelName }</h1>
             <div className="message-list">
                 <p>(Messages will appear here)</p>
             </div>
