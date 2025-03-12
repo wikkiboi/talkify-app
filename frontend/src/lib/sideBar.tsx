@@ -1,5 +1,6 @@
 import type React from "react";
 import "@/assets/styles/chatStyle.css";
+import { useNavigate } from "react-router-dom";
 
 type Channel = {
   id: string;
@@ -23,6 +24,8 @@ const Sidebar: React.FC<SidebarProps> = ({
   onAddTextChannel,
   onAddVoiceChannel,
 }) => {
+  const navigate = useNavigate();
+
   const handleAddChannel = (isVoice: boolean) => {
     const channelName = prompt(
       `Enter new ${isVoice ? "voice" : "text"} channel name:`
@@ -36,8 +39,21 @@ const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
+  const handleLogoClick = () => {
+    console.log("Logo clicked! Navigating to dashboard...");
+    navigate("/dashboard"); // This should take you to /dashboard
+  };
+
   return (
     <div className="sidebar">
+      <button className="logo-button" onClick={handleLogoClick}>
+        <img
+          src="/path-to-your-logo.png" // Replace with the actual path to your logo
+          alt="Logo"
+          className="logo-image"
+        />
+      </button>
+
       <h1 className="app-title">Talkify</h1>
 
       <div className="channel-section">

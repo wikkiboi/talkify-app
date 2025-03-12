@@ -2,21 +2,17 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { UserSpace } from "../types/types";
 import { Channel } from "../types/types";
+import { Members } from "../types/types";
 import getUserSpaces from "../api/user/getUserSpaces";
-import getSpace from "../api/space/getSpace";
-import getChannel from "../api/channel/getChannel";
 import createChannel from "../api/channel/createChannel";
+import getSpace from "../api/space/getSpace";
 import getChannelMsgs from "../api/channel/getChannelMsgs";
 import logo from "../assets/logo.png";
 import CreateSpaceModal from "../components/CreateSpaceModal";
 import JoinSpaceModal from "../components/JoinSpaceModal";
+import LogoutModal from "../components/LogoutModal"; // Import LogoutModal
 import socket from "../socket";
 import parseTimestamp from "../helper/parseTimestamp";
-// import { buttonVariants } from "assets/ui/button";
-// import getChannelMsgs from "../api/channel/getChannelMsgs";
-// import createSpace from "../api/space/createSpace";
-// import "@/assets/styles/chatStyle.css";
-// import "@/assets/styles/chatColors.css";
 
 interface Message {
   id: string;
@@ -30,8 +26,9 @@ export default function ChatInterface() {
   const [spaces, setSpaces] = useState<UserSpace[]>([]);
   const [channels, setChannels] = useState<Channel[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [members, setMembers] = useState<Members[]>([]); // New state for members
   const [showOptionsModal, setShowOptionsModal] = useState(false);
-  const [modalType, setModalType] = useState<"create" | "join" | null>(null);
+  const [modalType, setModalType] = useState<"create" | "join" | "logout" | null>(null); // Added "logout" option
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [newChannelName, setNewChannelName] = useState("");
   const [spaceName, setSpaceName] = useState<string>("");
@@ -43,10 +40,9 @@ export default function ChatInterface() {
   
     try {
       const spaceData = await getSpace(spaceId); // Fetch both space & channels
-  
       if (spaceData && spaceData.channels) {
-        console.log("Fetched channels:", spaceData.channels); // Debugging log
         setChannels(spaceData.channels); // Set channels from API response
+        setMembers(spaceData.space.members); // Set members from API response
       } else {
         console.error("No channels found for this space.");
       }
@@ -54,7 +50,6 @@ export default function ChatInterface() {
       console.error("Error fetching channels:", error);
     }
   };
-  
 
   useEffect(() => {
     const fetchSpaces = async () => {
@@ -67,15 +62,11 @@ export default function ChatInterface() {
     const fetchSpaceName = async () => {
       if (!spaceId) return;
   
-      console.log("Fetching space with ID:", spaceId);  // Log the spaceId being used
       const spaceData = await getSpace(spaceId);
-  
-      console.log("Fetched space data:", spaceData);  // Log the response data
   
       if (spaceData) {
         setSpaceName(spaceData.space.name);
-      } else {
-        console.log("Space not found.");
+        setMembers(spaceData.space.members);  // Set members here
       }
     };
     
@@ -154,53 +145,51 @@ export default function ChatInterface() {
       console.error("Error creating channel:", error);
     }
   };
-  
+
   return (
     <div className="chat-container">
       {/* Sidebar for Spaces */}
       <div className="spaces-sidebar">
-        <img src={logo} alt="Talkify Logo" className="sidebar-logo" />
-        <div className="sidebar">
-
-        {/* Logo at the top */}
-        <img src={logo} alt="Talkify Logo" className="sidebar-logo" />
-
-          {/* Spaces list */}
-          <div className="space-list">
-            {spaces.map((space) => (
-              <button
-                key={space.spaceId}
-                className={`space-item ${space.spaceId === spaceId ? "active" : ""}`}
-                onClick={() => handleSpaceClick(space.spaceId)}
-              >
-                {space.name.charAt(0).toUpperCase()} {/* Display the first letter of the space name */}
-              </button>
-            ))}
-          </div>
-
-          {/* Plus button at the bottom */}
-          <button
-            className="create-space-btn"
-            onClick={() => setShowOptionsModal(true)} // Open modal to choose
-          >
-            +
-          </button>
+        <img 
+          src={logo} 
+          alt="Talkify Logo" 
+          onClick={() => navigate('/dashboard')} 
+          style={{
+            width: "70px", 
+            height: "auto", 
+            cursor: "pointer", 
+            display: "block", 
+            margin: "10px auto"
+          }} 
+        />
+        <div className="space-list">
+          {spaces.map((space) => (
+            <button
+              key={space.spaceId}
+              className={`space-item ${space.spaceId === spaceId ? "active" : ""}`}
+              onClick={() => handleSpaceClick(space.spaceId)}
+            >
+              {space.name.charAt(0).toUpperCase()}
+            </button>
+          ))}
         </div>
+        <button
+          className="create-space-btn"
+          onClick={() => setShowOptionsModal(true)}
+        >
+          ⚙
+        </button>
       </div>
 
-      {/* Channels Sidebar */}
+      {/* Channel Sidebar */}
       <div className="channel-sidebar">
         <h3 className="space-name">{spaceName}</h3>
-                
-        {/* Text Channels title with Add Channel button on the right */}
         <div className="channel-header">
           <span className="channel-title">Text Channels</span>
           <button className="add-channel-btn" onClick={() => setShowCreateChannelModal(true)}>
             +
           </button>
         </div>
-                
-        {/* List of Channels */}
         <div className="channel-list">
           {channels && channels.length > 0 ? (
             channels.map((channel) => (
@@ -216,9 +205,25 @@ export default function ChatInterface() {
             <p>No channels available</p>
           )}
         </div>
+
+    <div className="members-sidebar">
+      <h3 className="members-header">Space Members</h3>
+      <div className="members-list">
+        {members.length > 0 ? (
+          members.map((member) => (
+            <button
+              key={member._id}
+              className="member-item"
+            >
+              {member.username}
+            </button>
+          ))
+        ) : (
+          <p>No members in this space</p>
+        )}
       </div>
-
-
+    </div>
+  </div>
 
       {/* Main Chat Area */}
       <div className="chat-box">
@@ -227,12 +232,12 @@ export default function ChatInterface() {
           <p>(Messages will appear here)</p>
         </div>
         <div className="message-input">
-          <input type="text" placeholder="Type a message..." />
-          <button>Send</button>
+          <input type="text" placeholder="Type a message..." value={input} onChange={(e) => setInput(e.target.value)} />
+          <button onClick={sendMessage}>Send</button>
         </div>
       </div>
 
-      {/* Create Channel Modal */}
+      {/* Modals */}
       {showCreateChannelModal && (
         <div className="modal">
           <div className="modal-content">
@@ -241,9 +246,9 @@ export default function ChatInterface() {
               type="text"
               placeholder="Enter channel name..."
               value={newChannelName ?? ""}
-              onChange={(e) => setNewChannelName(e.target.value)} // Track input value
+              onChange={(e) => setNewChannelName(e.target.value)}
             />
-            <button onClick={handleCreateChannel}>Create</button> {/* Button to create */}
+            <button onClick={handleCreateChannel}>Create</button>
             <button onClick={() => setShowCreateChannelModal(false)}>
               Cancel
             </button>
@@ -257,22 +262,22 @@ export default function ChatInterface() {
             <h3>Choose an option</h3>
             <button onClick={() => setModalType("create")}>Create a Server</button>
             <button onClick={() => setModalType("join")}>Join with ID</button>
+            <button onClick={() => setModalType("logout")}>Logout</button>
             <button onClick={() => setShowOptionsModal(false)}>Cancel</button>
           </div>
         </div>
       )}
 
-      {/* Show Create Server Modal */}
       {modalType === "create" && (
         <CreateSpaceModal
-          setShowModal={() => setModalType(null)} // Close Create Space Modal (by setting modalType to null)
+          setShowModal={() => setModalType(null)}
           navigate={navigate}
-          setShowOptionsModal={setShowOptionsModal} // Pass setShowOptionsModal to close the options modal
+          setShowOptionsModal={setShowOptionsModal}
         />
       )}
 
-      {/* Show Join Server Modal */}
       {modalType === "join" && <JoinSpaceModal setShowModal={() => setModalType(null)} />}
+      {modalType === "logout" && <LogoutModal setShowModal={() => setModalType(null)} />}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import LoginPage from "../pages/LoginPage";
 // import SpacePage from "../pages/SpacePage";
 import ChatInterface from "../components/ChatBox";
 import Dashboard from "../pages/Dashboard";
+import Friends from "../pages/Friends";
 // import ChatAreaHome from "../pages/chatAreaPage";
 
 const AppRoutes = () => (
@@ -16,6 +17,7 @@ const AppRoutes = () => (
     {/* <Route path="/channels/:spaceId/:channelId" element={<ChatInterface />} /> */}
     <Route path="/channels/:spaceId/:channelId" element={<ChatInterface />} />
     {/* <Route path="/chatArea" element={<ChatAreaHome />} /> */}
+    <Route path="/friends" element={<Friends />} />
   </Routes>
 );
 

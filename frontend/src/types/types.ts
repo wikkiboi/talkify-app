@@ -32,3 +32,8 @@ export type Members = {
   username: string;
   status: "online" | "idle" | "offline";
 };
+
+export interface UserFriend {
+  id: string;
+  username: string;
+}
