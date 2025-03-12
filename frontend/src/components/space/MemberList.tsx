@@ -1,4 +1,4 @@
-import { Members } from "../types/types";
+import { Members } from "../../types/types";
 
 interface UserListProps {
   users: Members[];
