@@ -13,7 +13,7 @@ export default async function friendRequest(
   res: Response,
   next: NextFunction
 ): Promise<any> {
-  const { friendId } = req.params;
+  const { friendId } = req.body;
   const { id, username } = req.auth?.user;
 
   try {
@@ -29,7 +29,7 @@ export default async function friendRequest(
     }
 
     const pendingRequest = await findPendingRequest(id, friendId);
-    if (!pendingRequest) {
+    if (pendingRequest) {
       res.status(400);
       throw new Error("Pending request already exists with this user");
     }

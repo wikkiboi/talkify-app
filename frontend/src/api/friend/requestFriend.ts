@@ -4,10 +4,11 @@ import { UserFriend } from "../../types/types";
 export default async function requestFriend(friendId: string) {
   const API_URL = `api/friend/${friendId}/request`;
   const token = localStorage.getItem("token");
-  
+
   try {
     const updatedFriendsList = await axios.post<{ userFriends: UserFriend[] }>(
       `http://localhost:3000/${API_URL}`,
+      { friendId },
       {
         headers: {
           Authorization: `Bearer ${token}`,
