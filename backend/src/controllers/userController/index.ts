@@ -3,3 +3,4 @@ export { default as userGetSpaces } from "./userGetSpaces";
 export { default as userGetStatus } from "./userGetStatus";
 export { default as userGetLastVisited } from "./userGetLastVisited";
 export { default as userUpdateLastVisited } from "./userUpdateLastVisited";
+export { default as userFind } from "./userFind";

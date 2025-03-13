@@ -214,8 +214,12 @@ img {
 }
 
 .friends-page {
-  display: flex; /* Enables side-by-side layout */
-  height: 100vh; /* Full page height */
+  display: flex;
+  height: 100vh;  /* Full height of the viewport */
+  width: 100%;    /* Full width of the viewport */
+  justify-content: space-between;
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .sidebar {
@@ -224,27 +228,27 @@ img {
   padding: 10px;
 }
 
-.all-friends-sidebar {
-  width: 350px; /* Width for both All Friends & Online Friends */
-  background-color: #35393e;
-  padding: 15px;
-  padding-left: 115px;
-  border-left: 1px solid #444;
-}
-
-.friends-sidebar {
-  width: 370px; /* Width for both All Friends & Online Friends */
-  background-color: #35393e;
-  padding: 15px;
-  border-left: 1px solid #444;
-}
-
+.all-friends-sidebar,
+.friends-sidebar, 
 .pending-requests-sidebar {
-  width: 370px; /* Width for both All Friends & Online Friends */
+  display: flex;          /* Enable Flexbox */
+  flex-direction: column; /* Align content vertically */
+  justify-content: flex-start; /* Align items from the top */
+  align-items: stretch;   /* Stretch columns to take full height */
+  height: 100%;           /* Full height of the container */
+  width: auto;
+  flex-grow: 1;
+  flex-basis: 0;
   background-color: #35393e;
   padding: 15px;
-  padding-left: 15px;
   border-left: 1px solid #444;
+  box-sizing: border-box;
+}
+.no-friend-messages {
+  color: #888;
+  font-style: italic;
+  text-align: center; /* Center the message below the title */
+  margin-top: 10px; /* Add some space between the title and the message */
 }
 
 .friends-title {
@@ -260,7 +264,7 @@ img {
 }
 
 .friend-item {
-  background-color: #40444b;
+  background-color: #23272a;
   padding: 10px;
   border-radius: 5px;
   color: white;
@@ -269,23 +273,27 @@ img {
   transition: background 0.2s;
 }
 
-.friend-item:hover {
-  background-color: #50555c;
+.friend-item:hover, 
+.friend-item.active {
+  background-color: #3a3f44;
 }
 
-.pending-requests-sidebar .add-friend-section {
+.add-friend-section {
   margin-top: 20px;
   padding-top: 400px;
   background-color: #35393e;
 }
 
 .add-friend-section h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center everything */
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .search-input {
-  width: 80%;
+  width: 200px;
   padding: 8px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -951,4 +959,29 @@ img {
 }
 .createInvite-btn:hover {
   background-color: #327237;
+}
+
+.DM-sidebar {
+  display: flex;
+  width: 250px;
+  height: 100vh;
+  background: #23272a;
+  padding: 10px;
+  flex-direction: column;
+}
+
+.DM-sidebar-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 105%;
+  padding: 5px 10px;
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+.DM-friend-list {
+  font-size: 15px;
+  font-weight: bold;
+  background: #23272a;
 }

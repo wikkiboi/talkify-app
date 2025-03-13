@@ -1,29 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import getUserSpaces from "../api/user/getUserSpaces";
-import getUserFriends from "../api/friend/getUserFriends";
 import removeFriend from "../api/friend/removeFriend";
 import requestFriend from "../api/friend/requestFriend";
-import { UserSpace, UserFriend } from "../types/types";
-import logo from "../assets/logo.png";
-
-import LogoutModal from "../components/LogoutModal"; // Import LogoutModal
+import { UserFriend } from "../types/types";
 import acceptFriendRequest from "../api/friend/acceptFriendRequest";
-import CreateSpaceModal from "../components/modals/CreateSpaceModal";
-import JoinSpaceModal from "../components/modals/JoinSpaceModal";
+import findUser from "../api/user/findUser";
+import getUserFriends from "../api/friend/getUserFriends";
 
 const FriendsPage = () => {
-  const [spaces, setSpaces] = useState<UserSpace[]>([]);
   const [friends, setFriends] = useState<UserFriend[]>([]);
   const [onlineFriends, setOnlineFriends] = useState<UserFriend[]>([]);
   const [pendingRequests, setPendingRequests] = useState<UserFriend[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [notification, setNotification] = useState<string>("");
-  const [showOptionsModal, setShowOptionsModal] = useState(false);
-  const [modalType, setModalType] = useState<
-    "create" | "join" | "logout" | null
-  >(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (notification) {
@@ -36,39 +24,48 @@ const FriendsPage = () => {
   }, [notification]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await getUserFriends();
-      setFriends(response.friends);
-      setPendingRequests(response.pendingRequests);
+    const fetchFriendsList = async () => {
+      const friendsList = await getUserFriends();
+      if (!friendsList) {
+        throw new Error("Failed to get friends list");
+      }
+
+      setFriends(
+        friendsList.userFriends.filter(
+          (friend) => friend.friendStatus === "accepted"
+        )
+      );
       setOnlineFriends(
-        response.friends.filter((friend: any) => friend.status === "online")
+        friendsList.userFriends.filter(
+          (friend) =>
+            friend.friendStatus === "accepted" && friend.status === "online"
+        )
+      );
+      setPendingRequests(
+        friendsList.userFriends.filter(
+          (friend) => friend.friendStatus === "pending"
+        )
       );
     };
 
-    const fetchSpaces = async () => {
-      const spacesData = await getUserSpaces();
-      if (spacesData) {
-        const transformedSpaces: UserSpace[] = spacesData.map((space) => ({
-          name: space.name,
-          spaceId: space.spaceId,
-          color: space.color,
-          lastVisitedChannel: space.lastVisitedChannel,
-        }));
-        setSpaces(transformedSpaces);
-      }
-    };
+    fetchFriendsList();
+  }, [friends]);
 
-    fetchData();
-    fetchSpaces();
-  }, []);
-
-  const handleSpaceClick = (spaceId: string) => {
-    navigate(`/space/${spaceId}`);
-  };
-
-  const handleFriendsClick = () => {
-    navigate("/friends");
-  };
+  function updateFriendsList(updatedList: UserFriend[]) {
+    console.log("called");
+    setFriends(
+      updatedList.filter((friend) => friend.friendStatus === "accepted")
+    );
+    setOnlineFriends(
+      updatedList.filter(
+        (friend) =>
+          friend.friendStatus === "accepted" && friend.status === "online"
+      )
+    );
+    setPendingRequests(
+      updatedList.filter((friend) => friend.friendStatus === "pending")
+    );
+  }
 
   const handleAddFriend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,14 +76,21 @@ const FriendsPage = () => {
     }
 
     try {
-      // Send friend request using either username or friendId
-      const result = await requestFriend(searchTerm);
+      const user = await findUser(searchTerm);
+      console.log(searchTerm);
+      if (!user) {
+        setNotification("User not found");
+        return;
+      }
 
-      if (result) {
+      const updatedList = await requestFriend(user._id);
+
+      if (updatedList) {
+        updateFriendsList(updatedList.userFriends);
         setNotification("Friend request sent successfully!");
-        setSearchTerm(""); // Clear input after sending the request
+        setSearchTerm("");
       } else {
-        setNotification("User not found.");
+        setNotification("User already received request or is already a friend");
       }
     } catch (error) {
       console.error("Error adding friend:", error);
@@ -94,26 +98,19 @@ const FriendsPage = () => {
     }
   };
 
-  const handleAcceptRequest = async (friendId: string) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("No token found, unable to accept friend request.");
-      return;
-    }
-
-    const result = await acceptFriendRequest(friendId);
-    if (result) {
-      setPendingRequests((prevRequests) =>
-        prevRequests.filter((request) => request._id !== friendId)
-      );
-      // setFriends((prevFriends) => [...prevFriends, result.userFriends]);
+  const handleAcceptRequest = async (friendId: string, friendName: string) => {
+    const updatedList = await acceptFriendRequest(friendId);
+    if (updatedList) {
+      updateFriendsList(updatedList.userFriends);
+      setNotification(`Now friends with ${friendName}`);
     }
   };
 
-  const handleRemoveFriend = async (friendId: string) => {
-    const result = await removeFriend(friendId);
-    if (result) {
-      setFriends(friends.filter((friend) => friend._id !== friendId));
+  const handleRemoveFriend = async (friendId: string, friendName: string) => {
+    const updatedList = await removeFriend(friendId);
+    if (updatedList) {
+      updateFriendsList(updatedList.userFriends);
+      setNotification(`Removed ${friendName} from friends list`);
     }
   };
 
@@ -128,7 +125,9 @@ const FriendsPage = () => {
               <div key={friend._id} className="friend-item">
                 {friend.username}
                 <button
-                  onClick={() => handleRemoveFriend(friend._id)}
+                  onClick={() =>
+                    handleRemoveFriend(friend.userId, friend.username)
+                  }
                   className="remove-friend-btn"
                 >
                   X
@@ -136,7 +135,7 @@ const FriendsPage = () => {
               </div>
             ))
           ) : (
-            <p>No friends found.</p>
+            <p className="no-friend-messages">No friends found.</p>
           )}
         </div>
       </div>
@@ -152,7 +151,7 @@ const FriendsPage = () => {
               </div>
             ))
           ) : (
-            <p>No online friends.</p>
+            <p className="no-friend-messages">No online friends.</p>
           )}
         </div>
       </div>
@@ -166,7 +165,9 @@ const FriendsPage = () => {
               <div key={friend._id} className="friend-item">
                 <span>{friend.username}</span>
                 <button
-                  onClick={() => handleAcceptRequest(friend._id)}
+                  onClick={() =>
+                    handleAcceptRequest(friend.userId, friend.username)
+                  }
                   className="accept-request-btn"
                 >
                   ✔
@@ -174,7 +175,7 @@ const FriendsPage = () => {
               </div>
             ))
           ) : (
-            <p>No pending requests.</p>
+            <p className="no-friend-messages">No pending requests.</p>
           )}
         </div>
 

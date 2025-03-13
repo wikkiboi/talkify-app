@@ -1,21 +1,33 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { UserFriend } from "../types/types";
+import getUserFriends from "../api/friend/getUserFriends";
+import DirectMessageSidebar from "../components/DM/DMSidebar";
+import ChatArea from "../components/chat/ChatArea";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
+  const { friendId } = useParams();
+  const [friends, setFriends] = useState<UserFriend[]>([]);
+  const [currentFriend, setCurrentFriend] = useState<string>("");
 
-  const handleFriendsClick = () => {
-    navigate("/friends");
-  };
+  useEffect(() => {
+    const fetchFriends = async () => {
+      const { userFriends } = await getUserFriends();
+      setFriends(userFriends);
+
+      const selectedFriend = userFriends.find((friend) => friend._id === friendId);
+      if (selectedFriend) {
+        setCurrentFriend(selectedFriend.username);
+      }
+    };
+
+    fetchFriends();
+  }, [friendId]);
 
   return (
-    <div className="dashboard-container">
-      <div className="direct-messages-sidebar">
-        <h3 className="direct-messages-title">Direct Messages</h3>
-        {/* List out list of private dms/group dms here */}
-        <button className="friends-btn" onClick={handleFriendsClick}>
-          Friends
-        </button>
-      </div>
+    <div className="chat-container">
+      <DirectMessageSidebar />
+      <ChatArea currentChat={currentFriend} />
     </div>
   );
 }
