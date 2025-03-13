@@ -1,11 +1,12 @@
 import axios from "axios";
+import { Channel } from "../../types/types";
 
 export default async function createChannel(name: string, spaceId: string) {
   const API_URL = `api/channel/${spaceId}/create`;
   const token = localStorage.getItem("token");
 
   try {
-    const createdChannel = await axios.post(
+    const createdChannel = await axios.post<{ channel: Channel }>(
       `http://localhost:3000/${API_URL}`,
       { name, spaceId },
       {

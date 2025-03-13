@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 export default interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
+  id: string;
   username: string;
   email: string;
   password: string;
@@ -16,6 +17,8 @@ export default interface IUser extends Document {
     spaceId: mongoose.Types.ObjectId;
     color: string;
     lastVisitedChannel: mongoose.Types.ObjectId | null;
+    defaultChannel: string;
   }[];
   status: "online" | "idle" | "offline";
+  createdAt: Date;
 }

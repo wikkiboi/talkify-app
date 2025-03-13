@@ -1,6 +1,7 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { getUser } from "../../utils/db/user";
+import getUserSpaces from "../../utils/db/user/getUserSpaces";
 
 export default async function userGetSpaces(
   req: Request,
@@ -8,8 +9,8 @@ export default async function userGetSpaces(
   next: NextFunction
 ): Promise<any> {
   try {
-    const { username } = req.auth?.user;
-    const user = await getUser(username);
+    const { id } = req.auth?.user;
+    const user = await getUserSpaces(id);
     if (!user) {
       res.status(404);
       throw new Error("Create Space Error: User not found");

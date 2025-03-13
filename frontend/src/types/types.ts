@@ -21,9 +21,9 @@ export type User = {
 
 export type UserSpace = {
   name: string;
-  spaceId: string;
+  spaceId: { _id: string; defaultChannel: string };
   color: HexColor;
-  lastVisitedChannel: string | null;
+  lastVisitedChannel?: string | null;
 };
 
 export type UserStatus = "online" | "offline" | "idle";
@@ -44,6 +44,7 @@ export type Space = {
   admins: Admins[];
   members: Members[];
   color: HexColor;
+  defaultChannel: string;
   invites: SpaceInvite[];
 };
 

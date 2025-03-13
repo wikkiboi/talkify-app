@@ -4,6 +4,7 @@ import { authenticate } from "../../middleware/auth/authenticator";
 import {
   friendAdd,
   friendDelete,
+  friendDeny,
   friendGet,
   friendGetAll,
   friendRequest,
@@ -16,5 +17,6 @@ friendRouter.get("/:friendId", authenticate, friendGet);
 friendRouter.post("/:friendId/request", authenticate, friendRequest);
 friendRouter.put("/:friendId/add", authenticate, friendAdd);
 friendRouter.delete("/:friendId/remove", authenticate, friendDelete);
+friendRouter.delete("/:friendId/deny", authenticate, friendDeny);
 
 export default friendRouter;

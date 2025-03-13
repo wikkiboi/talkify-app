@@ -11,7 +11,7 @@ export default async function channelUpdateName(
 ): Promise<any> {
   const { spaceId, channelId } = req.params;
   const { name } = req.body;
-  const { username } = req.auth?.user;
+  const { id } = req.auth?.user;
   try {
     if (!spaceId || !channelId) {
       res.status(400);
@@ -22,13 +22,7 @@ export default async function channelUpdateName(
       throw new Error("Please pass in a name");
     }
 
-    const user = await getUser(username);
-    if (!user) {
-      res.status(404);
-      throw new Error("Create Space Error: User not found");
-    }
-
-    const space = await getSpaceAdmin(spaceId, user.id);
+    const space = await getSpaceAdmin(spaceId, id);
     if (!space) {
       res.status(401);
       throw new Error("User is not the admin of this space");

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { SpaceInvite } from "../../types/types";
 
 export default async function createSpaceInvite(
   spaceId: string,
@@ -8,7 +9,7 @@ export default async function createSpaceInvite(
   const API_URL = `api/space/${spaceId}/invite`;
   const token = localStorage.getItem("token");
   try {
-    const updatedSpace = await axios.post(
+    const updatedSpace = await axios.post<{ invite: SpaceInvite }>(
       `http://localhost:3000/${API_URL}`,
       { expiration, maxUses },
       {

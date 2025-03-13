@@ -4,7 +4,7 @@ export default async function getLastVisitedChannel(spaceId: string) {
   const API_URL = `api/user/${spaceId}/lastVisited`;
   const token = localStorage.getItem("token");
   try {
-    const channel = await axios.get<{ channel: string }>(
+    const channel = await axios.get<{ channel: string | null }>(
       `http://localhost:3000/${API_URL}`,
       {
         headers: {

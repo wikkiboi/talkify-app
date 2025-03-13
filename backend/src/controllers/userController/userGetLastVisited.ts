@@ -22,6 +22,7 @@ export default async function userGetLastVisited(
       return res.status(201).json({
         message:
           "Last visited channel not found for space, direct to space default channel",
+        channel: null,
       });
     }
 

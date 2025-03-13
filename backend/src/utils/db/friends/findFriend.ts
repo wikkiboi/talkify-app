@@ -5,7 +5,10 @@ export default async function findFriend(userId: string, friendId: string) {
   const friend = await User.findOne({
     _id: friendId,
     friends: {
-      $elemMatch: { userId },
+      $elemMatch: {
+        userId,
+        friendStatus: "accepted",
+      },
     },
   })
     .select("_id username status")

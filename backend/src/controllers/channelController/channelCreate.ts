@@ -9,14 +9,14 @@ export default async function channelCreate(
 ): Promise<any> {
   const { spaceId } = req.params;
   const { name, defaultChannel } = req.body;
-  const { username } = req.auth?.user;
+  const { id } = req.auth?.user;
   try {
     if (!name) {
       res.status(400);
       throw new Error("Please add a name to channel");
     }
 
-    const space = await getSpace(spaceId, username);
+    const space = await getSpace(spaceId, id);
     if (!space) {
       res.status(404);
       throw new Error("Space not found");
@@ -39,12 +39,11 @@ export default async function channelCreate(
       defaultChannel === true ||
       defaultChannel === "true"
     ) {
-      console.log("called");
       space.defaultChannel = channel._id;
       await space.save();
     }
 
-    return res.status(201).json(channel);
+    return res.status(201).json({ channel });
   } catch (error) {
     return next(error);
   }

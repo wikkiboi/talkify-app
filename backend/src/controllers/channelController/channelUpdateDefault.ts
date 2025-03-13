@@ -44,9 +44,7 @@ export default async function channelUpdateDefault(
     space.defaultChannel = channel._id;
     await space.save();
 
-    return res
-      .status(201)
-      .json({ message: "Successfully updated default channel", channel });
+    return res.status(201).json({ channel });
   } catch (error) {
     return next(error);
   }

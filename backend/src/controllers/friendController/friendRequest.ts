@@ -1,7 +1,12 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { getUser, getUserById } from "../../utils/db/user";
-import { findFriend, sendFriendRequest } from "../../utils/db/friends";
+import {
+  findFriend,
+  findFriendRequest,
+  findPendingRequest,
+  sendFriendRequest,
+} from "../../utils/db/friends";
 
 export default async function friendRequest(
   req: Request,
@@ -20,9 +25,19 @@ export default async function friendRequest(
     const existingFriend = await findFriend(id, friendId);
     if (existingFriend) {
       res.status(400);
-      throw new Error(
-        "Already friends or friend request already sent/received from user"
-      );
+      throw new Error("Already friends with this user");
+    }
+
+    const pendingRequest = await findPendingRequest(id, friendId);
+    if (!pendingRequest) {
+      res.status(400);
+      throw new Error("Pending request already exists with this user");
+    }
+
+    const existingRequest = await findFriendRequest(id, friendId);
+    if (existingRequest) {
+      res.status(400);
+      throw new Error("Already sent friend request to this user");
     }
 
     const { user: updatedUser, friend: updatedFriend } =

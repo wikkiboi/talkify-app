@@ -1,6 +1,6 @@
 import { User } from "../../../schema/userSchema";
 
-export default async function deleteUserSpace(spaceId: string, userId: string) {
+export default async function deleteUserSpace(userId: string, spaceId: string) {
   if (!spaceId || !userId) return;
   const user = await User.findByIdAndUpdate(
     userId,

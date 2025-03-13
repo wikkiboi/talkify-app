@@ -22,6 +22,7 @@ export default async function socketAuth(
       next(new Error("Authentication error: User not found"));
     } else {
       socket.user = user;
+      // socket.user.id = user.id;
     }
 
     next();
