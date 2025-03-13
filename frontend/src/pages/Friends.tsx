@@ -135,7 +135,7 @@ const FriendsPage = () => {
               </div>
             ))
           ) : (
-            <p>No friends found.</p>
+            <p className="no-friend-messages">No friends found.</p>
           )}
         </div>
       </div>
@@ -151,7 +151,7 @@ const FriendsPage = () => {
               </div>
             ))
           ) : (
-            <p>No online friends.</p>
+            <p className="no-friend-messages">No online friends.</p>
           )}
         </div>
       </div>
@@ -175,7 +175,7 @@ const FriendsPage = () => {
               </div>
             ))
           ) : (
-            <p>No pending requests.</p>
+            <p className="no-friend-messages">No pending requests.</p>
           )}
         </div>
 
@@ -190,10 +190,10 @@ const FriendsPage = () => {
               placeholder="Enter username"
               className="search-input"
             />
-            <button type="submit" className="add-friend-btn">
-              Add
-            </button>
           </form>
+          <button type="submit" className="add-friend-btn">
+            Add
+          </button>
 
           {notification && (
             <div className="notification-popup">{notification}</div>

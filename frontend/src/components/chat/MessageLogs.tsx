@@ -14,6 +14,7 @@ export default function MessageLogs() {
   const { userInfo } = useUserContext();
   const [messages, setMessages] = useState<Message[]>([]);
   const { spaceId, channelId, dmId, groupId } = useParams();
+  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; messageId: string } | null>(null);
 
   useEffect(() => {
     async function fetchMessages() {
@@ -91,16 +92,19 @@ export default function MessageLogs() {
     socket.emit("delete-message", { messageId });
   };
 
+  const handleRightClick = (event: React.MouseEvent, messageId: string) => {
+    event.preventDefault();
+    setContextMenu({ x: event.clientX, y: event.clientY, messageId });
+  };
+
   return (
-    <div className="message-list">
+    <div className="message-list" onClick={() => setContextMenu(null)}>
       {messages.map((message, index) => (
-        <div key={message._id}>
+        <div key={message._id} className="message" onContextMenu={(e) => handleRightClick(e, message._id)}>
           {clusterMessages(index) && (
-            <p>
-              <strong>
-                {message.sender.username}{" "}
-                {`${message.timestamp ?? parseTimestamp(message._id)}`}
-              </strong>
+            <p className="message-header">
+              <strong className="username">{message.sender.username}</strong>{" "}
+              <span className="timestamp">{message.timestamp ?? parseTimestamp(message._id)}</span>
             </p>
           )}
 
@@ -111,26 +115,21 @@ export default function MessageLogs() {
               setEditingMessageId={setEditingMessageId}
             />
           ) : (
-            <>
-              {message.text}{" "}
-              {userInfo.username === message.sender.username && (
-                <>
-                  <button
-                    onClick={() => {
-                      setEditingMessageId(message._id);
-                    }}
-                  >
-                    Update
-                  </button>
-                  <button onClick={() => handleDeleteMessage(message._id)}>
-                    Delete
-                  </button>
-                </>
-              )}
-            </>
+            <p className="message-text">{message.text}</p>
+         
           )}
         </div>
       ))}
+
+      {contextMenu && (
+        <div
+          className="context-menu"
+          style={{ top: `${contextMenu.y}px`, left: `${contextMenu.x}px` }}
+        >
+          <button onClick={() => setEditingMessageId(contextMenu.messageId)}>Edit</button>
+          <button onClick={() => handleDeleteMessage(contextMenu.messageId)}>Delete</button>
+        </div>
+      )}
     </div>
   );
 }
