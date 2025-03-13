@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import getUserSpaces from "../api/user/getUserSpaces";
 import getUserFriends from "../api/friend/getUserFriends";
-import addFriend from "../api/friend/addFriend";
 import removeFriend from "../api/friend/removeFriend";
-import requestFriend from "../api/friend/requestFriend"; 
+import requestFriend from "../api/friend/requestFriend";
 import { UserSpace, UserFriend } from "../types/types";
 import logo from "../assets/logo.png";
-import CreateSpaceModal from "../components/CreateSpaceModal";
-import JoinSpaceModal from "../components/JoinSpaceModal";
+
 import LogoutModal from "../components/LogoutModal"; // Import LogoutModal
+import acceptFriendRequest from "../api/friend/acceptFriendRequest";
+import CreateSpaceModal from "../components/modals/CreateSpaceModal";
+import JoinSpaceModal from "../components/modals/JoinSpaceModal";
 
 const FriendsPage = () => {
   const [spaces, setSpaces] = useState<UserSpace[]>([]);
@@ -19,7 +20,9 @@ const FriendsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [notification, setNotification] = useState<string>("");
   const [showOptionsModal, setShowOptionsModal] = useState(false);
-  const [modalType, setModalType] = useState<"create" | "join" | "logout" | null>(null);
+  const [modalType, setModalType] = useState<
+    "create" | "join" | "logout" | null
+  >(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +40,9 @@ const FriendsPage = () => {
       const response = await getUserFriends();
       setFriends(response.friends);
       setPendingRequests(response.pendingRequests);
-      setOnlineFriends(response.friends.filter((friend: any) => friend.status === "online"));
+      setOnlineFriends(
+        response.friends.filter((friend: any) => friend.status === "online")
+      );
     };
 
     const fetchSpaces = async () => {
@@ -67,16 +72,16 @@ const FriendsPage = () => {
 
   const handleAddFriend = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!searchTerm.trim()) {
       setNotification("Please enter a username.");
       return;
     }
-  
-    try {  
+
+    try {
       // Send friend request using either username or friendId
       const result = await requestFriend(searchTerm);
-  
+
       if (result) {
         setNotification("Friend request sent successfully!");
         setSearchTerm(""); // Clear input after sending the request
@@ -87,7 +92,7 @@ const FriendsPage = () => {
       console.error("Error adding friend:", error);
       setNotification("An error occurred while sending the friend request.");
     }
-  };    
+  };
 
   const handleAcceptRequest = async (friendId: string) => {
     const token = localStorage.getItem("token");
@@ -96,19 +101,19 @@ const FriendsPage = () => {
       return;
     }
 
-    const result = await addFriend(friendId);
+    const result = await acceptFriendRequest(friendId);
     if (result) {
       setPendingRequests((prevRequests) =>
         prevRequests.filter((request) => request._id !== friendId)
       );
-      setFriends((prevFriends) => [...prevFriends, result]);
+      // setFriends((prevFriends) => [...prevFriends, result.userFriends]);
     }
   };
 
   const handleRemoveFriend = async (friendId: string) => {
     const result = await removeFriend(friendId);
     if (result) {
-      setFriends(friends.filter(friend => friend._id !== friendId));
+      setFriends(friends.filter((friend) => friend._id !== friendId));
     }
   };
 
@@ -122,18 +127,6 @@ const FriendsPage = () => {
           className="sidebar-logo cursor-pointer"
           onClick={() => navigate("/dashboard")}
         />
-
-        <div className="space-list">
-          {spaces.map((space) => (
-            <button
-              key={space.spaceId}
-              className="space-item"
-              onClick={() => handleSpaceClick(space.spaceId)}
-            >
-              {space.name.charAt(0).toUpperCase()}
-            </button>
-          ))}
-        </div>
 
         {/* Settings Button */}
         <button
@@ -214,13 +207,13 @@ const FriendsPage = () => {
               placeholder="Enter username"
               className="search-input"
             />
-            <button type="submit" className="add-friend-btn">Add</button>
+            <button type="submit" className="add-friend-btn">
+              Add
+            </button>
           </form>
 
           {notification && (
-            <div className="notification-popup">
-              {notification}
-            </div>
+            <div className="notification-popup">{notification}</div>
           )}
         </div>
       </div>
@@ -230,7 +223,9 @@ const FriendsPage = () => {
         <div className="modal">
           <div className="modal-content">
             <h3>Choose an option</h3>
-            <button onClick={() => setModalType("create")}>Create a Server</button>
+            <button onClick={() => setModalType("create")}>
+              Create a Server
+            </button>
             <button onClick={() => setModalType("join")}>Join with ID</button>
             <button onClick={() => setModalType("logout")}>Logout</button>
             <button onClick={() => setShowOptionsModal(false)}>Cancel</button>
@@ -248,10 +243,14 @@ const FriendsPage = () => {
       )}
 
       {/* Show Join Server Modal */}
-      {modalType === "join" && <JoinSpaceModal setShowModal={() => setModalType(null)} />}
+      {modalType === "join" && (
+        <JoinSpaceModal setShowModal={() => setModalType(null)} />
+      )}
 
       {/* Show Logout Modal */}
-      {modalType === "logout" && <LogoutModal setShowModal={() => setModalType(null)} />}
+      {modalType === "logout" && (
+        <LogoutModal setShowModal={() => setModalType(null)} />
+      )}
     </div>
   );
 };

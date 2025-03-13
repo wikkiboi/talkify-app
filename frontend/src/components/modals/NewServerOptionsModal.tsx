@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CreateSpaceModal from "./CreateSpaceModal";
 import JoinSpaceModal from "./JoinSpaceModal";
+import LogoutModal from "../LogoutModal";
 
 interface OptionsModalProps {
   showModal: (value: React.SetStateAction<boolean>) => void;
@@ -14,6 +15,7 @@ export default function NewServerOptionsModal({
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
     setModalType(e.currentTarget.value);
   }
+
   return (
     <>
       <div className="modal-overlay">
@@ -24,6 +26,7 @@ export default function NewServerOptionsModal({
               Create a Server
             </button>
             <button onClick={() => setModalType("join")}>Join with ID</button>
+            <button onClick={() => setModalType("logout")}>Logout</button>
             <button onClick={() => showModal(false)}>Cancel</button>
           </div>
         </div>
@@ -38,6 +41,13 @@ export default function NewServerOptionsModal({
 
       {modalType === "join" && (
         <JoinSpaceModal
+          setModalType={setModalType}
+          setShowOptionsModal={() => showModal(false)}
+        />
+      )}
+
+      {modalType === "logout" && (
+        <LogoutModal
           setModalType={setModalType}
           setShowOptionsModal={() => showModal(false)}
         />
