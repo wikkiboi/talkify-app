@@ -119,24 +119,6 @@ const FriendsPage = () => {
 
   return (
     <div className="friends-page flex">
-      {/* Sidebar for Spaces */}
-      <div className="sidebar">
-        <img
-          src={logo}
-          alt="Talkify Logo"
-          className="sidebar-logo cursor-pointer"
-          onClick={() => navigate("/dashboard")}
-        />
-
-        {/* Settings Button */}
-        <button
-          className="create-space-btn"
-          onClick={() => setShowOptionsModal(true)}
-        >
-          ⚙
-        </button>
-      </div>
-
       {/* Sidebar for All Friends */}
       <div className="all-friends-sidebar">
         <h2 className="friends-title">All Friends</h2>
@@ -217,40 +199,6 @@ const FriendsPage = () => {
           )}
         </div>
       </div>
-
-      {/* Options Modal for Create, Join, or Logout */}
-      {showOptionsModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h3>Choose an option</h3>
-            <button onClick={() => setModalType("create")}>
-              Create a Server
-            </button>
-            <button onClick={() => setModalType("join")}>Join with ID</button>
-            <button onClick={() => setModalType("logout")}>Logout</button>
-            <button onClick={() => setShowOptionsModal(false)}>Cancel</button>
-          </div>
-        </div>
-      )}
-
-      {/* Show Create Server Modal */}
-      {modalType === "create" && (
-        <CreateSpaceModal
-          setShowModal={() => setModalType(null)}
-          navigate={navigate}
-          setShowOptionsModal={setShowOptionsModal}
-        />
-      )}
-
-      {/* Show Join Server Modal */}
-      {modalType === "join" && (
-        <JoinSpaceModal setShowModal={() => setModalType(null)} />
-      )}
-
-      {/* Show Logout Modal */}
-      {modalType === "logout" && (
-        <LogoutModal setShowModal={() => setModalType(null)} />
-      )}
     </div>
   );
 };
