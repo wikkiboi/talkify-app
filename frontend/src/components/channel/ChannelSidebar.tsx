@@ -7,7 +7,7 @@ import CreateChannelModal from "../modals/CreateChannelModal";
 import CreateInviteModal from "../modals/CreateInviteModal";
 import createChannel from "../../api/channel/createChannel";
 import updateChannelName from "../../api/channel/updateChannelName";
-import deleteSpace from "../../api/space/leaveSpace";
+import leaveSpace from "../../api/space/leaveSpace";
 
 interface ChannelSidebarProps {
   spaceName: string;
@@ -89,13 +89,12 @@ export default function ChannelSidebar({
       console.error("Space ID is missing or invalid.");
       return;
     }
-    
+
     try {
-      const result = await deleteSpace(spaceId);
-      if (result) {
-        // Handle successful space leaving
+      const updatedSpaces = await leaveSpace(spaceId);
+      if (updatedSpaces) {
         console.log("Successfully left the space.");
-        // Optionally, navigate away or update state
+        setSpaces(updatedSpaces.userSpaces);
       }
     } catch (error) {
       console.error("Error leaving space", error);
@@ -103,7 +102,7 @@ export default function ChannelSidebar({
   };
 
   const handleInvite = () => {
-    setShowCreateInviteModal(true); // Open the Create Invite modal
+    setShowCreateInviteModal(true);
   };
 
   return (
@@ -111,7 +110,9 @@ export default function ChannelSidebar({
       <div className="channel-sidebar">
         <div>
           <h3 className="space-name">{spaceName}</h3>
-          <button className="createInvite-btn" onClick={handleInvite}>Create Invite</button>
+          <button className="createInvite-btn" onClick={handleInvite}>
+            Create Invite
+          </button>
         </div>
         <div className="channel-header">
           <span className="channel-title">Text Channels</span>
