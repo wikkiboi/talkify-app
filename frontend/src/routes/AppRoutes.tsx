@@ -10,9 +10,8 @@ const AppRoutes = () => (
     <Route path="/" element={<LoginPage />} />
     <Route element={<UserLayout />}>
       <Route path="/dashboard/" element={<Dashboard />} />
-      <Route path="/direct/:friendId" element={<Dashboard />} />
+      <Route path="/direct/:friendId/:dmId" element={<Dashboard />} />
       <Route path="/channels/:spaceId/:channelId" element={<SpacePage />} />
-      path="channels/:"
       <Route path="/friends" element={<Friends />} />
     </Route>
   </Routes>

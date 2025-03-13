@@ -15,7 +15,11 @@ export default function Dashboard() {
       const { userFriends } = await getUserFriends();
       setFriends(userFriends);
 
-      const selectedFriend = userFriends.find((friend) => friend._id === friendId);
+      console.log(userFriends);
+
+      const selectedFriend = userFriends.find(
+        (friend) => friend.userId === friendId
+      );
       if (selectedFriend) {
         setCurrentFriend(selectedFriend.username);
       }
@@ -23,6 +27,8 @@ export default function Dashboard() {
 
     fetchFriends();
   }, [friendId]);
+
+  console.log(currentFriend);
 
   return (
     <div className="chat-container">
