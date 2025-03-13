@@ -5,7 +5,13 @@ import UserSpaceList from "./UserSpaceList";
 import logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 
-export default function UserSidebar({ spaces }: { spaces: UserSpace[] }) {
+export default function UserSidebar({
+  spaces,
+  setSpaces,
+}: {
+  spaces: UserSpace[];
+  setSpaces: React.Dispatch<React.SetStateAction<UserSpace[]>>;
+}) {
   const [showOptionsModal, setShowOptionsModal] = useState(false);
   const navigate = useNavigate();
   return (
@@ -26,7 +32,10 @@ export default function UserSidebar({ spaces }: { spaces: UserSpace[] }) {
         </button>
       </div>
       {showOptionsModal && (
-        <NewServerOptionsModal showModal={() => setShowOptionsModal(false)} />
+        <NewServerOptionsModal
+          showModal={() => setShowOptionsModal(false)}
+          setSpaces={setSpaces}
+        />
       )}
     </>
   );

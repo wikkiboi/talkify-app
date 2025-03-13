@@ -7,9 +7,11 @@ import getChannelMsgs from "../../api/channel/getChannelMsgs";
 import getPrivateDmMsgs from "../../api/dm/getPrivateDmMsgs";
 import getGroupDmMsgs from "../../api/dm/getGroupDmMsgs";
 import UpdateMsgInput from "./UpdateMsgInput";
+import { useUserContext } from "../../helper/UserContext";
 
 export default function MessageLogs() {
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const { userInfo } = useUserContext();
   const [messages, setMessages] = useState<Message[]>([]);
   const { spaceId, channelId, dmId, groupId } = useParams();
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number; messageId: string } | null>(null);
@@ -114,6 +116,7 @@ export default function MessageLogs() {
             />
           ) : (
             <p className="message-text">{message.text}</p>
+         
           )}
         </div>
       ))}

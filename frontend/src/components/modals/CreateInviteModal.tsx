@@ -1,56 +1,63 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import getSpaceInvites from "../../api/space/getSpaceInvites";
+import { SpaceInvite } from "../../types/types";
+import createSpaceInvite from "../../api/space/createSpaceInvite";
 
 interface CreateInviteModalProps {
   setModalType: React.Dispatch<React.SetStateAction<boolean>>;
-  setShowOptionsModal: React.Dispatch<React.SetStateAction<boolean>>; // Add setShowOptionsModal prop to close the options modal
-  setShowModal?: React.Dispatch<React.SetStateAction<boolean>>; // Optional prop to hide the modal
 }
 
 export default function CreateInviteModal({
   setModalType,
-  setShowOptionsModal,
-  setShowModal,
 }: CreateInviteModalProps) {
-  const [searchTerm, setSearchTerm] = useState(""); // For the search input
-  const [friends, setFriends] = useState([]); // Placeholder for friends list
-  const navigate = useNavigate();
+  const { spaceId } = useParams<{ spaceId: string }>();
+  const [validInvites, setValidInvites] = useState<SpaceInvite[]>([]);
 
-  // Simulating a friend request with a dummy function
-  const handleSendInvite = (friendId: string) => {
-    console.log(`Sending invite to friend with ID: ${friendId}`);
-    // Here you would call an API to send the invite
-  };
+  useEffect(() => {
+    async function fetchInvites() {
+      if (!spaceId) return;
+      const invites = await getSpaceInvites(spaceId);
+      if (!invites) {
+        throw new Error("Failed to get invites");
+      }
+
+      setValidInvites(invites.invites);
+      console.log(invites);
+    }
+
+    fetchInvites();
+  }, [spaceId]);
+
+  async function handleCreateInvite() {
+    console.log("called");
+    if (!spaceId) return;
+    const updatedInviteList = await createSpaceInvite(spaceId);
+    if (!updatedInviteList) {
+      throw new Error("Failed to create invite code");
+    }
+    setValidInvites((prev) => [
+      ...prev,
+      updatedInviteList.invite[updatedInviteList.invite.length - 1],
+    ]);
+  }
 
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Create an Invite</h3>
-        
-        {/* Search Bar */}
-        <input
-          type="text"
-          placeholder="Search Friends"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        
-        {/* Friends List */}
+        <h3>Valid invite codes</h3>
+
+        {/* Invite List */}
         <div className="friends-list">
-          {/* Dummy placeholder for the list of friends */}
-          <p>List of friends go here</p>
-          {/* Here you can map through the friends and display them, like: */}
-          {/* friends.filter(friend => friend.username.includes(searchTerm)).map(friend => (
-            <div key={friend._id} className="friend-item">
-              {friend.username}
-              <button onClick={() => handleSendInvite(friend._id)}>Send Invite</button>
-            </div>
-          )) */}
+          {validInvites &&
+            validInvites.map((invite) => (
+              <div key={invite._id} className="">
+                {invite.code}
+              </div>
+            ))}
         </div>
 
-        {/* Cancel and Submit Buttons */}
-        <button onClick={() => console.log("Invite sent!")}>Send Invite</button>
+        <button onClick={handleCreateInvite}>Create New Invite Code</button>
         <button onClick={() => setModalType(false)}>Cancel</button>
       </div>
     </div>

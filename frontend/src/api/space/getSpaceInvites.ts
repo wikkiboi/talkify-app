@@ -1,14 +1,13 @@
 import axios from "axios";
-import { Space, UserSpace } from "../../types/types";
+import { SpaceInvite } from "../../types/types";
 
-export default async function leaveSpace(spaceId: string) {
-  const API_URL = `api/space/${spaceId}/leave`;
+export default async function getSpaceInvites(spaceId: string) {
+  const API_URL = `api/space/${spaceId}/invites`;
   const token = localStorage.getItem("token");
 
   try {
-    const space = await axios.delete<{
-      updatedSpace: Space;
-      userSpaces: UserSpace[];
+    const invites = await axios.get<{
+      invites: SpaceInvite[];
     }>(`http://localhost:3000/${API_URL}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -16,11 +15,11 @@ export default async function leaveSpace(spaceId: string) {
       },
     });
 
-    return space.data;
+    return invites.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error(
-        "Delete space failed:",
+        "Get space failed:",
         error.response?.data?.message || error.message
       );
     } else if (error instanceof Error) {
