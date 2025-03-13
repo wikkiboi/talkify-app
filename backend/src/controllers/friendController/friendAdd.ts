@@ -1,7 +1,7 @@
 import { NextFunction, Response } from "express";
 import { Request } from "express-jwt";
 import { addFriend, findFriendRequest } from "../../utils/db/friends";
-import { createDm } from "../../utils/db/dm";
+import { createDm, findUserDm } from "../../utils/db/dm";
 
 export default async function friendAdd(
   req: Request,
@@ -33,10 +33,17 @@ export default async function friendAdd(
       throw new Error("Friend failed to receive accept");
     }
 
-    const dm = await createDm(id, friendId);
-    if (!dm) {
-      res.status(500);
-      throw new Error("Failed to create DM");
+    let dm;
+    const existingDm = await findUserDm(id, friendId);
+    if (!existingDm) {
+      const newDm = await createDm(id, friendId);
+      if (!newDm) {
+        res.status(500);
+        throw new Error("Failed to create DM");
+      }
+      dm = newDm;
+    } else {
+      dm = existingDm;
     }
 
     return res.status(201).json({

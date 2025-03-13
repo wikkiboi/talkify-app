@@ -2,6 +2,7 @@
 import { Router } from "express";
 import { authenticate } from "../../middleware/auth/authenticator";
 import {
+  userFind,
   userGet,
   userGetLastVisited,
   userGetSpaces,
@@ -14,6 +15,7 @@ const userRouter = Router();
 userRouter.get("/spaces", authenticate, userGetSpaces);
 userRouter.get("/status", authenticate, userGetStatus);
 userRouter.get("/me", authenticate, userGet);
+userRouter.get("/:username/find", authenticate, userFind);
 userRouter.get("/:spaceId/lastVisited", authenticate, userGetLastVisited);
 userRouter.put("/:spaceId/lastVisited", authenticate, userUpdateLastVisited);
 

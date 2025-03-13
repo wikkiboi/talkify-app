@@ -10,3 +10,4 @@ export { default as getUserLastChannel } from "./getUserLastChannel";
 export { default as userExists } from "./userExists";
 export { default as getUserDms } from "./getUserDms";
 export { default as getUserGroupDms } from "./getUserGroupDms";
+export { default as findUser } from "./findUser";

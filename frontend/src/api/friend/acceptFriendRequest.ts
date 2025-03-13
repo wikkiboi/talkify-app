@@ -7,6 +7,7 @@ export default async function acceptFriendRequest(friendId: string) {
   try {
     const updatedFriendsList = await axios.put<{ userFriends: UserFriend[] }>(
       `http://localhost:3000/${API_URL}`,
+      {},
       {
         headers: {
           Authorization: `Bearer ${token}`,
