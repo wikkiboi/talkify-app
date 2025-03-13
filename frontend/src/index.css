@@ -187,6 +187,9 @@ img {
 }
 
 .direct-messages-title {
+  marin-bottom: auto;
+  display: flex;
+  flex-direction: column;
   font-size: 18px;
   font-weight: bold;
   color: #ffffff;
@@ -564,7 +567,7 @@ img {
 .chat-container {
   display: flex;
   height: 100vh;
-  width: 65em;
+  width: 100vm;
 }
 
 .container {
@@ -574,7 +577,7 @@ img {
 
 .channel-sidebar {
   display: flex;
-  width: 200px;
+  width: 250px;
   height: 100vh;
   background: #23272a;
   padding: 10px;
@@ -686,26 +689,60 @@ img {
 }
 
 .chat-box {
-  flex-grow: 1;
+  height: 100%;
+  width: 100%;
   background-color: #303238;
   display: flex;
   flex-direction: column;
   padding: 20px;
+  gap: 8px;
 }
 
-.message-list {
+/* .message-list {
   flex: 1;
   overflow-y: auto;
   background-color: #303238;
   padding: 10px;
+} */
+.message {
+  padding: 5px;
+  border-radius: 5px;
+}
+.message:hover {
+  background-color: #3e3f44;
+}
+.message-header {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Adds spacing between username and timestamp */
+}
+
+.username {
+  font-weight: bold;
+  color: white; /* Change to your preferred color */
+  font-family: "Roboto", sans-serif; /* Example custom font */
+  font-size: 18px; /* Make username larger */
+  padding-bottom: 5px;
+}
+
+.timestamp {
+  font-size: 12px; /* Make timestamp smaller */
+  color: #aaa;
+  padding-bottom: 5px;
+}
+
+.message-text {
+  font-size: 15px;
 }
 
 .message-input {
+  margin-top: auto;
   background-color: #3e3f44;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 95%;
   border-radius: 10px;
 }
 
@@ -723,7 +760,7 @@ img {
   color: white;
   border: none;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: auto;
 }
 .message-input button:hover {
   background-color: #327237;
@@ -789,9 +826,28 @@ img {
 }
 
 .context-menu {
-  background-color: white;
-  border: 1px solid black;
-  padding: 10px;
+  position: absolute;
+  background: #333;
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.context-menu button {
+  display: block;
+  background: none;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.context-menu button:hover {
+  background: #444;
 }
 
 .channel-options-section {
@@ -890,6 +946,9 @@ img {
   background-color: darkred;
 }
 
+.createInvite-btn {
+  align-items: center;
+}
 .createInvite-btn:hover {
   background-color: #327237;
 }
