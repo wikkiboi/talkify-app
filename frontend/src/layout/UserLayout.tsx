@@ -42,7 +42,7 @@ export default function UserLayout() {
   return (
     <div className="container">
       <div className="spaces-sidebar">
-        <UserSidebar spaces={spaces} />
+        <UserSidebar spaces={spaces} setSpaces={setSpaces} />
       </div>
 
       {/* Uncomment to view WIP UserStatus. Correctly displays username and online status. Should display in a similar location to Discord. */}

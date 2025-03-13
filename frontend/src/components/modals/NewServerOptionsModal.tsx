@@ -2,13 +2,16 @@ import { useState } from "react";
 import CreateSpaceModal from "./CreateSpaceModal";
 import JoinSpaceModal from "./JoinSpaceModal";
 import LogoutModal from "../LogoutModal";
+import { UserSpace } from "../../types/types";
 
 interface OptionsModalProps {
   showModal: (value: React.SetStateAction<boolean>) => void;
+  setSpaces: React.Dispatch<React.SetStateAction<UserSpace[]>>;
 }
 
 export default function NewServerOptionsModal({
   showModal,
+  setSpaces,
 }: OptionsModalProps) {
   const [modalType, setModalType] = useState<string | null>(null);
 
@@ -43,6 +46,7 @@ export default function NewServerOptionsModal({
         <JoinSpaceModal
           setModalType={setModalType}
           setShowOptionsModal={() => showModal(false)}
+          setSpaces={setSpaces}
         />
       )}
 

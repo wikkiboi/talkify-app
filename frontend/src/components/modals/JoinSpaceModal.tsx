@@ -1,19 +1,32 @@
 import { useState } from "react";
+import joinSpace from "../../api/user/joinSpace";
+import { UserSpace } from "../../types/types";
+import { useNavigate } from "react-router-dom";
 
 interface JoinSpaceModalProps {
-  setModalType: React.Dispatch<React.SetStateAction<"create" | "join" | null>>;
+  setModalType: React.Dispatch<React.SetStateAction<string | null>>;
   setShowOptionsModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setSpaces: React.Dispatch<React.SetStateAction<UserSpace[]>>;
 }
 
 export default function JoinSpaceModal({
   setModalType,
   setShowOptionsModal,
+  setSpaces,
 }: JoinSpaceModalProps) {
-  const [serverId, setServerId] = useState("");
+  const [inviteCode, setInviteCode] = useState("");
+  const navigate = useNavigate();
 
-  const handleJoin = () => {
-    console.log(`Joining server with ID: ${serverId}`);
-    // API call to join server goes here
+  const handleJoin = async () => {
+    const updatedSpaceList = await joinSpace(inviteCode);
+    if (!updatedSpaceList) {
+      throw new Error("Not a valid invite code");
+    }
+    setSpaces(updatedSpaceList.userSpaces);
+
+    navigate(
+      `/channels/${updatedSpaceList.space._id}/${updatedSpaceList.space.defaultChannel}`
+    );
     setModalType(null);
     setShowOptionsModal(false);
   };
@@ -24,9 +37,9 @@ export default function JoinSpaceModal({
         <h2>Join a Space</h2>
         <input
           type="text"
-          placeholder="Enter Server ID"
-          value={serverId}
-          onChange={(e) => setServerId(e.target.value)}
+          placeholder="Enter Invite Code"
+          value={inviteCode}
+          onChange={(e) => setInviteCode(e.target.value)}
           className="input-field"
         />
         <div className="modal-buttons">

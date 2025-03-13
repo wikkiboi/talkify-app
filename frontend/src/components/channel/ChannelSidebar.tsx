@@ -1,5 +1,5 @@
 import ChannelList from "./ChannelList";
-import { Channel, UserSpace } from "../../types/types";
+import { Channel } from "../../types/types";
 import deleteChannel from "../../api/channel/deleteChannel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
@@ -11,18 +11,14 @@ import leaveSpace from "../../api/space/leaveSpace";
 
 interface ChannelSidebarProps {
   spaceName: string;
-  spaceId: string;
   channels: Channel[];
   setChannels: React.Dispatch<React.SetStateAction<Channel[]>>;
-  setSpaces: React.Dispatch<React.SetStateAction<UserSpace[]>>;
 }
 
 export default function ChannelSidebar({
   spaceName,
-  // spaceId,
   channels,
   setChannels,
-  setSpaces,
 }: ChannelSidebarProps) {
   const { spaceId } = useParams();
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
@@ -94,7 +90,7 @@ export default function ChannelSidebar({
       const updatedSpaces = await leaveSpace(spaceId);
       if (updatedSpaces) {
         console.log("Successfully left the space.");
-        setSpaces(updatedSpaces.userSpaces);
+        navigate("/dashboard");
       }
     } catch (error) {
       console.error("Error leaving space", error);
@@ -143,11 +139,7 @@ export default function ChannelSidebar({
       )}
 
       {showCreateInviteModal && (
-        <CreateInviteModal
-          setModalType={setShowCreateInviteModal}
-          setShowOptionsModal={() => {}}
-          setShowModal={setShowCreateInviteModal} // Optional, can use this to hide the modal
-        />
+        <CreateInviteModal setModalType={setShowCreateInviteModal} />
       )}
     </>
   );
