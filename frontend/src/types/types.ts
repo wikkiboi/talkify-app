@@ -78,6 +78,7 @@ export type Message = {
   text: string;
   conversationId: string;
   timestamp?: string;
+  createdAt: Date;
 };
 
 export type PrivateDM = {
