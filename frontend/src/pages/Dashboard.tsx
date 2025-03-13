@@ -2,19 +2,21 @@ import { useEffect, useState } from "react";
 import getUserSpaces from "../api/user/getUserSpaces";
 import getUserInfo from "../api/user/getUserInfo";
 import { UserSpace } from "../types/types";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import UserStatus from "../components/UserStatus";
 import CreateSpaceModal from "../components/CreateSpaceModal";
-import JoinSpaceModal from "../components/JoinSpaceModal"; 
+import JoinSpaceModal from "../components/JoinSpaceModal";
 import LogoutModal from "../components/LogoutModal"; // Import LogoutModal
-import logo from "../assets/logo.png"; 
+import logo from "../assets/logo.png";
 
 export default function Dashboard() {
   const [spaces, setSpaces] = useState<UserSpace[]>([]);
   const [username, setUsername] = useState<string>("");
   const [showOptionsModal, setShowOptionsModal] = useState(false);
-  const [modalType, setModalType] = useState<"create" | "join" | "logout" | null>(null);
-  const navigate = useNavigate(); 
+  const [modalType, setModalType] = useState<
+    "create" | "join" | "logout" | null
+  >(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -46,11 +48,12 @@ export default function Dashboard() {
   };
 
   const handleFriendsClick = () => {
-    navigate("/friends"); 
+    navigate("/friends");
   };
 
   return (
     <div className="dashboard-container">
+      <div className="content">Dashboard</div>
       {/* Sidebar for Spaces */}
       <div className="sidebar">
         <img
@@ -95,7 +98,9 @@ export default function Dashboard() {
         <div className="modal">
           <div className="modal-content">
             <h3>Choose an option</h3>
-            <button onClick={() => setModalType("create")}>Create a Server</button>
+            <button onClick={() => setModalType("create")}>
+              Create a Server
+            </button>
             <button onClick={() => setModalType("join")}>Join with ID</button>
             <button onClick={() => setModalType("logout")}>Logout</button>
             <button onClick={() => setShowOptionsModal(false)}>Cancel</button>
@@ -113,10 +118,14 @@ export default function Dashboard() {
       )}
 
       {/* Show Join Server Modal */}
-      {modalType === "join" && <JoinSpaceModal setShowModal={() => setModalType(null)} />}
+      {modalType === "join" && (
+        <JoinSpaceModal setShowModal={() => setModalType(null)} />
+      )}
 
       {/* Show Logout Modal */}
-      {modalType === "logout" && <LogoutModal setShowModal={() => setModalType(null)} />}
+      {modalType === "logout" && (
+        <LogoutModal setShowModal={() => setModalType(null)} />
+      )}
     </div>
   );
 }
