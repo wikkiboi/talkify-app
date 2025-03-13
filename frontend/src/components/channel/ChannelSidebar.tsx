@@ -4,6 +4,7 @@ import deleteChannel from "../../api/channel/deleteChannel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import CreateChannelModal from "../modals/CreateChannelModal";
+import CreateInviteModal from "../modals/CreateInviteModal";
 import createChannel from "../../api/channel/createChannel";
 import updateChannelName from "../../api/channel/updateChannelName";
 import deleteSpace from "../../api/space/leaveSpace";
@@ -25,6 +26,7 @@ export default function ChannelSidebar({
 }: ChannelSidebarProps) {
   const { spaceId } = useParams();
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [showCreateInviteModal, setShowCreateInviteModal] = useState(false);
   const navigate = useNavigate();
 
   const handleEditChannel = async (channelId: string, name: string) => {
@@ -100,14 +102,16 @@ export default function ChannelSidebar({
     }
   };
 
-  function handleInvite() {}
+  const handleInvite = () => {
+    setShowCreateInviteModal(true); // Open the Create Invite modal
+  };
 
   return (
     <>
       <div className="channel-sidebar">
         <div>
           <h3 className="space-name">{spaceName}</h3>
-          <button onClick={handleInvite}>Create Invite</button>
+          <button className="createInvite-btn" onClick={handleInvite}>Create Invite</button>
         </div>
         <div className="channel-header">
           <span className="channel-title">Text Channels</span>
@@ -134,6 +138,14 @@ export default function ChannelSidebar({
         <CreateChannelModal
           handleCreateChannel={handleCreateChannel}
           showModal={() => setShowCreateChannelModal(false)}
+        />
+      )}
+
+      {showCreateInviteModal && (
+        <CreateInviteModal
+          setModalType={setShowCreateInviteModal}
+          setShowOptionsModal={() => {}}
+          setShowModal={setShowCreateInviteModal} // Optional, can use this to hide the modal
         />
       )}
     </>

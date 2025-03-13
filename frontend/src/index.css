@@ -178,16 +178,12 @@ img {
   height: 100%;
   max-height: calc(100vh - 120px); /* Adjust height for layout */
   overflow-y: auto; /* Enable scrolling when content overflows */
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
 }
 
 .space-list-container::-webkit-scrollbar {
   display: none; /* Hide scrollbar for Webkit browsers */
-}
-
-/* For Firefox */
-.space-list-container {
-  scrollbar-width: none;
-  scrollbar-color: transparent transparent;
 }
 
 .sidebar h2 {
@@ -226,9 +222,11 @@ img {
   transition: background-color 0.3s;
   flex-shrink: 0;
 }
-
 .space-item:hover {
   background-color: #327237;
+}
+.space-item.active {
+  border: 2px solid white; /* Added border with width to make it visible */
 }
 
 .create-space-btn {
@@ -634,4 +632,8 @@ img {
 
 .leave-space-btn:hover {
   background-color: darkred;
+}
+
+.createInvite-btn:hover {
+  background-color: #327237;
 }
