@@ -1,4 +1,6 @@
-
+import request from "supertest";
+import {server} from "./app";
+import "jest";
 
 describe("Channel API", () => {
   let channelId: string;
