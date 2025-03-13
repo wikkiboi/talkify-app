@@ -15,3 +15,5 @@ const generalErrorHandler = (err: any, req: Request, res: Response, next: NextFu
 
     next(err);
 };
+
+export default generalErrorHandler;
