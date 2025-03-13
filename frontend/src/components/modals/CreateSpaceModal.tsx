@@ -5,11 +5,13 @@ import { useNavigate } from "react-router-dom";
 interface CreateSpaceModalProps {
   setModalType: React.Dispatch<React.SetStateAction<string | null>>;
   setShowOptionsModal: React.Dispatch<React.SetStateAction<boolean>>; // Add setShowOptionsModal prop to close the options modal
+  setShowModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function CreateSpaceModal({
   setModalType,
   setShowOptionsModal,
+  setShowModal,
 }: CreateSpaceModalProps) {
   const [spaceName, setSpaceName] = useState("");
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ export default function CreateSpaceModal({
       if (newSpace) {
         setModalType(null);
         setShowOptionsModal(false);
+        if (setShowModal) setShowModal(false);
         navigate(
           `/channels/${newSpace.space._id}/${newSpace.space.defaultChannel}`
         );

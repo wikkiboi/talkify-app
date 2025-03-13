@@ -10,22 +10,26 @@ export default function UserSpaceList({ spaces }: { spaces: UserSpace[] }) {
 
   return (
     <div className="space-list">
-      {spaces.map((space) => (
-        <button
-          key={space.spaceId._id}
-          className={`space-item ${
-            space.spaceId._id === spaceId ? "active" : ""
-          }`}
-          onClick={() =>
-            handleSpaceClick(
-              space.spaceId._id,
-              space.lastVisitedChannel ?? space.spaceId.defaultChannel
-            )
-          }
-        >
-          {space.name.charAt(0).toUpperCase()}
-        </button>
-      ))}
+      {spaces.map((space) => {
+        // Check if spaceId is valid before rendering
+        const validSpaceId = space.spaceId?._id;
+        if (!validSpaceId) return null; // Skip rendering if spaceId is invalid
+
+        return (
+          <button
+            key={validSpaceId}
+            className={`space-item ${validSpaceId === spaceId ? "active" : ""}`}
+            onClick={() =>
+              handleSpaceClick(
+                validSpaceId,
+                space.lastVisitedChannel ?? space.spaceId?.defaultChannel
+              )
+            }
+          >
+            {space.name.charAt(0).toUpperCase()}
+          </button>
+        );
+      })}
     </div>
   );
 }

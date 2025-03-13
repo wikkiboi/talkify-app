@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface JoinSpaceModalProps {
-  setModalType: React.Dispatch<React.SetStateAction<string | null>>;
+  setModalType: React.Dispatch<React.SetStateAction<"create" | "join" | null>>;
   setShowOptionsModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

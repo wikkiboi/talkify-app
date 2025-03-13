@@ -1,25 +1,32 @@
 import ChannelList from "./ChannelList";
-import { Channel } from "../../types/types";
+import { Channel, UserSpace } from "../../types/types";
 import deleteChannel from "../../api/channel/deleteChannel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import CreateChannelModal from "../modals/CreateChannelModal";
+import CreateInviteModal from "../modals/CreateInviteModal";
 import createChannel from "../../api/channel/createChannel";
 import updateChannelName from "../../api/channel/updateChannelName";
+import deleteSpace from "../../api/space/leaveSpace";
 
 interface ChannelSidebarProps {
   spaceName: string;
+  spaceId: string;
   channels: Channel[];
   setChannels: React.Dispatch<React.SetStateAction<Channel[]>>;
+  setSpaces: React.Dispatch<React.SetStateAction<UserSpace[]>>;
 }
 
 export default function ChannelSidebar({
   spaceName,
+  // spaceId,
   channels,
   setChannels,
+  setSpaces,
 }: ChannelSidebarProps) {
   const { spaceId } = useParams();
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [showCreateInviteModal, setShowCreateInviteModal] = useState(false);
   const navigate = useNavigate();
 
   const handleEditChannel = async (channelId: string, name: string) => {
@@ -77,14 +84,34 @@ export default function ChannelSidebar({
     }
   };
 
-  function handleInvite() {}
+  const handleLeaveSpace = async () => {
+    if (!spaceId) {
+      console.error("Space ID is missing or invalid.");
+      return;
+    }
+    
+    try {
+      const result = await deleteSpace(spaceId);
+      if (result) {
+        // Handle successful space leaving
+        console.log("Successfully left the space.");
+        // Optionally, navigate away or update state
+      }
+    } catch (error) {
+      console.error("Error leaving space", error);
+    }
+  };
+
+  const handleInvite = () => {
+    setShowCreateInviteModal(true); // Open the Create Invite modal
+  };
 
   return (
     <>
       <div className="channel-sidebar">
         <div>
           <h3 className="space-name">{spaceName}</h3>
-          <button onClick={handleInvite}>Create Invite</button>
+          <button className="createInvite-btn" onClick={handleInvite}>Create Invite</button>
         </div>
         <div className="channel-header">
           <span className="channel-title">Text Channels</span>
@@ -101,12 +128,24 @@ export default function ChannelSidebar({
           onEditChannel={handleEditChannel}
           onDeleteChannel={handleDeleteChannel}
         />
+
+        <button className="leave-space-btn" onClick={handleLeaveSpace}>
+          Leave Space
+        </button>
       </div>
 
       {showCreateChannelModal && (
         <CreateChannelModal
           handleCreateChannel={handleCreateChannel}
           showModal={() => setShowCreateChannelModal(false)}
+        />
+      )}
+
+      {showCreateInviteModal && (
+        <CreateInviteModal
+          setModalType={setShowCreateInviteModal}
+          setShowOptionsModal={() => {}}
+          setShowModal={setShowCreateInviteModal} // Optional, can use this to hide the modal
         />
       )}
     </>
