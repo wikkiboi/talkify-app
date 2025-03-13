@@ -20,6 +20,10 @@ export default function DirectMessageSidebar() {
     navigate(`/direct/${friendId}`);
   };
 
+  const handleFriendsClick = () => {
+    navigate("/friends");
+  };
+
   return (
     <div className="DM-sidebar">
       <h3 className="DM-sidebar-title">Direct Messages</h3>
@@ -28,7 +32,7 @@ export default function DirectMessageSidebar() {
           friends.map((friend) => (
             <li 
               key={friend._id} 
-              className={`friend-item ${friend._id === friendId ? "active" : ""}`}
+              className={`DM-friend-item ${friend._id === friendId ? "active" : ""}`}
               onClick={() => handleSelectFriend(friend._id)}
             >
               {friend.username}
@@ -38,6 +42,12 @@ export default function DirectMessageSidebar() {
           <p className="no-friends">No friends available</p>
         )}
       </ul>
+
+      <div className="friends-btn-container">
+        <button className="friends-btn" onClick={handleFriendsClick}>
+          Friends
+        </button>
+      </div>
     </div>
   );
 }

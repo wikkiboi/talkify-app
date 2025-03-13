@@ -190,10 +190,10 @@ const FriendsPage = () => {
               placeholder="Enter username"
               className="search-input"
             />
-            <button type="submit" className="add-friend-btn">
-              Add
-            </button>
           </form>
+          <button type="submit" className="add-friend-btn">
+            Add
+          </button>
 
           {notification && (
             <div className="notification-popup">{notification}</div>
