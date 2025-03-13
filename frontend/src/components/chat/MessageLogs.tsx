@@ -7,9 +7,11 @@ import getChannelMsgs from "../../api/channel/getChannelMsgs";
 import getPrivateDmMsgs from "../../api/dm/getPrivateDmMsgs";
 import getGroupDmMsgs from "../../api/dm/getGroupDmMsgs";
 import UpdateMsgInput from "./UpdateMsgInput";
+import { useUserContext } from "../../helper/UserContext";
 
 export default function MessageLogs() {
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const { userInfo } = useUserContext();
   const [messages, setMessages] = useState<Message[]>([]);
   const { spaceId, channelId, dmId, groupId } = useParams();
 
@@ -109,21 +111,23 @@ export default function MessageLogs() {
               setEditingMessageId={setEditingMessageId}
             />
           ) : (
-            <p>
-              <span>
-                {message.text}{" "}
-                <button
-                  onClick={() => {
-                    setEditingMessageId(message._id);
-                  }}
-                >
-                  Update
-                </button>
-                <button onClick={() => handleDeleteMessage(message._id)}>
-                  Delete
-                </button>
-              </span>
-            </p>
+            <>
+              {message.text}{" "}
+              {userInfo.username === message.sender.username && (
+                <>
+                  <button
+                    onClick={() => {
+                      setEditingMessageId(message._id);
+                    }}
+                  >
+                    Update
+                  </button>
+                  <button onClick={() => handleDeleteMessage(message._id)}>
+                    Delete
+                  </button>
+                </>
+              )}
+            </>
           )}
         </div>
       ))}
