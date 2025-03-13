@@ -4,7 +4,14 @@ import { UserFriend } from "../../types/types";
 export default async function requestFriend(friendId: string) {
   const API_URL = `api/friend/${friendId}/request`;
   const token = localStorage.getItem("token");
-  
+  console.log(localStorage.getItem("token"));
+if (token) {
+    const payload = JSON.parse(atob(token.split('.')[1])); // Decode payload
+    console.log(payload);
+} else {
+    console.log("No token found in localStorage.");
+}
+
   try {
     const updatedFriendsList = await axios.post<{ userFriends: UserFriend[] }>(
       `http://localhost:3000/${API_URL}`,
