@@ -35,6 +35,8 @@ export default function UserLayout() {
     };
     fetchSpaces();
     fetchUser();
+
+    console.log("called");
   }, [spaceId]);
 
   return (
