@@ -26,9 +26,11 @@ export default function NewServerOptionsModal({
           <div className="modal-content">
             <h3>Choose an option</h3>
             <button onClick={handleClick} value="create">
-              Create a Server
+              Create a Space
             </button>
-            <button onClick={() => setModalType("join")}>Join with ID</button>
+            <button onClick={() => setModalType("join")}>
+              Join with Invite Code
+            </button>
             <button onClick={() => setModalType("logout")}>Logout</button>
             <button onClick={() => showModal(false)}>Cancel</button>
           </div>
