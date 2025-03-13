@@ -1,13 +1,13 @@
 import axios from "axios";
 
-export default async function getLastVisitedChannel(
+export default async function updateLastVisitedChannel(
   spaceId: string,
   channelId: string
 ) {
   const API_URL = `api/user/${spaceId}/lastVisited`;
   const token = localStorage.getItem("token");
   try {
-    const channel = await axios.put<{ channel: string }>(
+    const channel = await axios.put<{ channel: string | null }>(
       `http://localhost:3000/${API_URL}`,
       { channelId },
       {

@@ -10,19 +10,14 @@ export default async function channelDelete(
   next: NextFunction
 ): Promise<any> {
   const { spaceId, channelId } = req.params;
-  const { username } = req.auth?.user;
+  const { id } = req.auth?.user;
   try {
     if (!spaceId || !channelId) {
       res.status(401);
       throw new Error("No space or channel id found in params");
     }
-    const user = await getUser(username);
-    if (!user) {
-      res.status(404);
-      throw new Error("Create Space Error: User not found");
-    }
 
-    const space = await getSpaceAdmin(spaceId, user.id);
+    const space = await getSpaceAdmin(spaceId, id);
     if (!space) {
       res.status(401);
       throw new Error("User is not the admin of this space");

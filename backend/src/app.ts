@@ -7,9 +7,12 @@ import {
   channelRouter,
   userRouter,
   friendRouter,
+  dmRouter,
 } from "./routes/api";
 import { initializeSocket } from "./socket/socket";
 import { createServer } from "http";
+import authErrorHandler from "./middleware/errorHandling/authError";
+import generalErrorHandler from "./middleware/errorHandling/generalError";
 
 const app: Express = express();
 const server = createServer(app);
@@ -30,7 +33,11 @@ app.use("/api/auth", authRouter);
 app.use("/api/space", spaceRouter);
 app.use("/api/channel", channelRouter);
 app.use("/api/friend", friendRouter);
+app.use("/api/dm", dmRouter);
 app.use("/api/user", userRouter);
+
+app.use(authErrorHandler);
+app.use(generalErrorHandler);
 
 app.get("/", (req, res) => {
   console.log("Hi");

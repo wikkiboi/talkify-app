@@ -7,3 +7,6 @@ export { default as getUserById } from "./getUserById";
 export { default as updateUserSpace } from "./updateUserSpace";
 export { default as updateLastVisitedChannel } from "./updateLastVisitedChannel";
 export { default as getUserLastChannel } from "./getUserLastChannel";
+export { default as userExists } from "./userExists";
+export { default as getUserDms } from "./getUserDms";
+export { default as getUserGroupDms } from "./getUserGroupDms";

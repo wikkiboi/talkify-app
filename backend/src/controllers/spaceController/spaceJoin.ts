@@ -8,7 +8,7 @@ export default async function spaceJoin(
   res: Response,
   next: NextFunction
 ): Promise<any> {
-  const { username } = req.auth?.user;
+  const { id, username } = req.auth?.user;
   const { inviteCode } = req.body ?? req.params;
 
   try {
@@ -36,7 +36,7 @@ export default async function spaceJoin(
       throw new Error("Invite code has reached max uses");
     }
 
-    if (space.members.some((m) => m.userId.toString() === user.id)) {
+    if (space.members.some((m) => m.userId.toString() === id)) {
       res.status(400);
       throw new Error("User is already a member");
     }
@@ -46,7 +46,7 @@ export default async function spaceJoin(
       inviteCode,
       user.id,
       user.username,
-      user?.status
+      user.status
     );
     if (!updatedSpace) {
       res.status(500);

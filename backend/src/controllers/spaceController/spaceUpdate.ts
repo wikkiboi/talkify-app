@@ -10,7 +10,7 @@ export default async function spaceUpdate(
   next: NextFunction
 ): Promise<any> {
   const { spaceId } = req.params;
-  const { username } = req.auth?.user;
+  const { id } = req.auth?.user;
   const { name, color } = req.body;
   try {
     if (!name && !color) {
@@ -23,13 +23,7 @@ export default async function spaceUpdate(
       throw new Error("Not a valid hex color");
     }
 
-    const user = await getUser(username);
-    if (!user) {
-      res.status(404);
-      throw new Error("Create Space Error: User not found");
-    }
-
-    const space = await getSpaceAdmin(spaceId, user.id);
+    const space = await getSpaceAdmin(spaceId, id);
     if (!space) {
       res.status(401);
       throw new Error("User is not an admin of this space");
@@ -44,7 +38,7 @@ export default async function spaceUpdate(
       throw new Error("Failed to update space name");
     }
     const updatedUser = await updateUserSpace(
-      user.id,
+      id,
       space.id,
       spaceName,
       spaceColor

@@ -1,10 +1,14 @@
 import axios from "axios";
+import { Space, UserSpace } from "../../types/types";
 
 export default async function joinSpace(inviteCode: string) {
   const API_URL = "api/space/join";
   const token = localStorage.getItem("token");
   try {
-    const joinedSpace = await axios.post(
+    const joinedSpace = await axios.post<{
+      space: Space;
+      userSpaces: UserSpace[];
+    }>(
       `http://localhost:3000/${API_URL}`,
       { inviteCode },
       {

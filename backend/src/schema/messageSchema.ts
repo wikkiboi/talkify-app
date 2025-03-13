@@ -1,44 +1,23 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IMessage } from "./types";
 
 export const MessageSchema = new Schema<IMessage>(
   {
+    conversationId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
     sender: {
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-      },
-      username: {
-        type: String,
-        required: true,
-      },
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     text: {
       type: String,
       required: true,
     },
-    // Channel ID, Group ID, or Private DM Users
-    channelId: {
-      type: Schema.Types.ObjectId,
-      ref: "Channel",
-      default: null,
-    },
-    groupId: {
-      type: Schema.Types.ObjectId,
-      ref: "GroupDM",
-      default: null,
-    },
-    dmUsers: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-        default: null,
-      },
-    ],
     timestamp: {
-      type: Date,
-      default: Date.now,
+      type: String,
     },
   },
   { timestamps: true }

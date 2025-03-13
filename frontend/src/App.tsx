@@ -2,6 +2,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
 import socket from "./socket";
 import { useEffect } from "react";
+import './index.css';
 
 function App() {
   socket.connect();

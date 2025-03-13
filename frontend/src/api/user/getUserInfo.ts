@@ -1,17 +1,5 @@
 import axios from "axios";
-
-export interface User {
-  status: string;
-  _id: string;
-  username: string;
-  email: string;
-  password: string;
-  friends: [];
-  spaces: [];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
+import { User } from "../../types/types";
 
 export default async function getUserInfo() {
   const API_URL = "api/user/me";
