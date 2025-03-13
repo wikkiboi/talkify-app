@@ -1,26 +1,21 @@
 import { useEffect, useState } from "react";
 import { Outlet, useParams } from "react-router-dom";
-import { UserSpace, UserStatus } from "../types/types";
+import { UserSpace } from "../types/types";
 import getUserSpaces from "../api/user/getUserSpaces";
 import getUserInfo from "../api/user/getUserInfo";
 import UserSidebar from "../components/user/UserSidebar";
+import { useUserContext } from "../helper/UserContext";
 
 export default function UserLayout() {
   const { spaceId } = useParams();
   const [spaces, setSpaces] = useState<UserSpace[]>([]);
-
-  const [userInfo, setUserInfo] = useState<{
-    username: string;
-    status: UserStatus;
-  }>({
-    username: "",
-    status: "offline",
-  });
+  const { userInfo, setUserInfo } = useUserContext();
 
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await getUserInfo();
       if (userData) {
+        if (userData.username === userInfo.username) return;
         setUserInfo({
           username: userData.username,
           status: userData.status,
@@ -37,7 +32,7 @@ export default function UserLayout() {
     fetchUser();
 
     console.log("called");
-  }, [spaceId]);
+  }, [spaceId, setUserInfo, userInfo.username]);
 
   return (
     <div className="container">
@@ -46,11 +41,7 @@ export default function UserLayout() {
       </div>
 
       {/* Uncomment to view WIP UserStatus. Correctly displays username and online status. Should display in a similar location to Discord. */}
-      {/* <UserCurrentStatus
-        username={userInfo.username}
-        status={userInfo.status}
-        setUserInfo={() => setUserInfo}
-      /> */}
+      {/* <UserCurrentStatus /> */}
       <main>
         <Outlet />
       </main>

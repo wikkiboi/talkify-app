@@ -2,24 +2,11 @@ import { User } from "lucide-react";
 import "@/assets/styles/chatColors.css";
 import socket from "../../socket";
 import { useEffect } from "react";
-import { UserStatus } from "../../types/types";
+import { useUserContext } from "../../helper/UserContext";
 
-interface UserStatusProps {
-  username: string;
-  status: UserStatus;
-  setUserInfo: React.Dispatch<
-    React.SetStateAction<{
-      username: string;
-      status: string;
-    }>
-  >;
-}
+export default function UserCurrentStatus() {
+  const { userInfo, setUserInfo } = useUserContext();
 
-export default function UserCurrentStatus({
-  username,
-  status,
-  setUserInfo,
-}: UserStatusProps) {
   useEffect(() => {
     socket.on("userStatusUpdate", ({ username, status }) => {
       setUserInfo((prev) =>
@@ -41,8 +28,8 @@ export default function UserCurrentStatus({
           <User size={24} className="text-white" />
         </div>
         <div className="flex flex-col">
-          <span className="text-white font-medium">{username}</span>
-          <span className="text-xs text-green-300">{status}</span>
+          <span className="text-white font-medium">{userInfo.username}</span>
+          <span className="text-xs text-green-300">{userInfo.status}</span>
         </div>
       </div>
     </div>
