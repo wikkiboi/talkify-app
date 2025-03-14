@@ -24,6 +24,6 @@ export default async function getAllUserDms() {
     } else if (error instanceof Error) {
       console.error("Unexpected error: ", error.message);
     }
-    return null;
+    return { privateDms: [], groupDms: [] };
   }
 }

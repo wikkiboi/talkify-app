@@ -222,7 +222,7 @@ img {
 
 .friends-page {
   display: flex;
-  width: 100vw;  /* Ensure it spans the full viewport width */
+  width: 97vw; /* Ensure it spans the full viewport width */
   height: 100vh; /* Ensure it spans the full viewport height */
   overflow: hidden;
 }
@@ -234,7 +234,7 @@ img {
 }
 
 .all-friends-sidebar,
-.friends-sidebar, 
+.friends-sidebar,
 .pending-requests-sidebar {
   display: flex;
   flex-direction: column;
@@ -297,7 +297,7 @@ img {
   transition: background 0.2s;
 }
 
-.DM-friend-item:hover, 
+.DM-friend-item:hover,
 .DM-friend-item.active {
   background-color: #3a3f44;
 }
@@ -328,7 +328,7 @@ img {
 .search-btn {
   padding: 8px;
   border: none;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   cursor: pointer;
 }
@@ -451,7 +451,7 @@ img {
   transition: background-color 0.2s ease-in-out;
 }
 .member-item:hover {
-  background-color:#404449; /* Hover effect */
+  background-color: #404449; /* Hover effect */
 }
 
 .member-item.active {
@@ -461,7 +461,7 @@ img {
 
 /* Space List Container */
 
-.spaces-sidebar img{
+.spaces-sidebar img {
   width: 70px;
   height: auto;
   margin-bottom: 10px;
@@ -470,7 +470,7 @@ img {
   transition: opacity 0.2s ease-in-out;
 }
 
-.spaces-sidebar img:hover{
+.spaces-sidebar img:hover {
   opacity: 0.7;
 }
 

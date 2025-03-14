@@ -7,14 +7,16 @@ import getChannelMsgs from "../../api/channel/getChannelMsgs";
 import getPrivateDmMsgs from "../../api/dm/getPrivateDmMsgs";
 import getGroupDmMsgs from "../../api/dm/getGroupDmMsgs";
 import UpdateMsgInput from "./UpdateMsgInput";
-import { useUserContext } from "../../helper/UserContext";
 
 export default function MessageLogs() {
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
-  const { userInfo } = useUserContext();
   const [messages, setMessages] = useState<Message[]>([]);
   const { spaceId, channelId, dmId, groupId } = useParams();
-  const [contextMenu, setContextMenu] = useState<{ x: number; y: number; messageId: string } | null>(null);
+  const [contextMenu, setContextMenu] = useState<{
+    x: number;
+    y: number;
+    messageId: string;
+  } | null>(null);
 
   useEffect(() => {
     async function fetchMessages() {
@@ -26,6 +28,7 @@ export default function MessageLogs() {
           setMessages(response.messages);
         } else if (dmId) {
           const response = await getPrivateDmMsgs(dmId);
+          console.log(response);
           if (!response) throw new Error("Failed to fetch messages");
 
           setMessages(response.messages);
@@ -79,8 +82,8 @@ export default function MessageLogs() {
 
     const previousMessage = messages[index - 1];
     const timeDiff =
-      new Date(currentMessage.timestamp ?? "").getTime() -
-      new Date(previousMessage.timestamp ?? "").getTime();
+      new Date(currentMessage.createdAt).getTime() -
+      new Date(previousMessage.createdAt).getTime();
 
     return (
       currentMessage.sender.userId !== previousMessage.sender.userId ||
@@ -100,11 +103,17 @@ export default function MessageLogs() {
   return (
     <div className="message-list" onClick={() => setContextMenu(null)}>
       {messages.map((message, index) => (
-        <div key={message._id} className="message" onContextMenu={(e) => handleRightClick(e, message._id)}>
+        <div
+          key={message._id}
+          className="message"
+          onContextMenu={(e) => handleRightClick(e, message._id)}
+        >
           {clusterMessages(index) && (
             <p className="message-header">
               <strong className="username">{message.sender.username}</strong>{" "}
-              <span className="timestamp">{message.timestamp ?? parseTimestamp(message._id)}</span>
+              <span className="timestamp">
+                {message.timestamp ?? parseTimestamp(message._id)}
+              </span>
             </p>
           )}
 
@@ -116,7 +125,6 @@ export default function MessageLogs() {
             />
           ) : (
             <p className="message-text">{message.text}</p>
-         
           )}
         </div>
       ))}
@@ -126,10 +134,34 @@ export default function MessageLogs() {
           className="context-menu"
           style={{ top: `${contextMenu.y}px`, left: `${contextMenu.x}px` }}
         >
-          <button onClick={() => setEditingMessageId(contextMenu.messageId)}>Edit</button>
-          <button onClick={() => handleDeleteMessage(contextMenu.messageId)}>Delete</button>
+          <button onClick={() => setEditingMessageId(contextMenu.messageId)}>
+            Edit
+          </button>
+          <button onClick={() => handleDeleteMessage(contextMenu.messageId)}>
+            Delete
+          </button>
         </div>
       )}
     </div>
   );
+}
+
+{
+  /* <>
+  {message.text}{" "}
+  {userInfo.username === message.sender.username && (
+    <>
+      <button
+        onClick={() => {
+          setEditingMessageId(message._id);
+        }}
+      >
+        Update
+      </button>
+      <button onClick={() => handleDeleteMessage(message._id)}>
+        Delete
+      </button>
+    </>
+  )}
+  </> */
 }

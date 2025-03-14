@@ -52,7 +52,6 @@ const FriendsPage = () => {
   }, [friends]);
 
   function updateFriendsList(updatedList: UserFriend[]) {
-    console.log("called");
     setFriends(
       updatedList.filter((friend) => friend.friendStatus === "accepted")
     );
@@ -170,7 +169,7 @@ const FriendsPage = () => {
                   }
                   className="accept-request-btn"
                 >
-                  ✔
+                  Accept ✔
                 </button>
               </div>
             ))
@@ -190,10 +189,10 @@ const FriendsPage = () => {
               placeholder="Enter username"
               className="search-input"
             />
+            <button type="submit" className="add-friend-btn">
+              Add
+            </button>
           </form>
-          <button type="submit" className="add-friend-btn">
-            Add
-          </button>
 
           {notification && (
             <div className="notification-popup">{notification}</div>
