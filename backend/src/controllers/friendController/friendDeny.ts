@@ -19,8 +19,7 @@ export default async function friendDeny(
 
     const { user: updatedUser, friend: updatedFriend } = await removeFriend(
       id,
-      friendId,
-      friend.username
+      friendId
     );
     if (!updatedUser) {
       res.status(500);

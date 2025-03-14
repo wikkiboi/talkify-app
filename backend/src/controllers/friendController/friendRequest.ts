@@ -14,7 +14,7 @@ export default async function friendRequest(
   next: NextFunction
 ): Promise<any> {
   const { friendId } = req.body;
-  const { id, username } = req.auth?.user;
+  const { id } = req.auth?.user;
 
   try {
     if (friendId === id) {
@@ -40,8 +40,10 @@ export default async function friendRequest(
       throw new Error("Already sent friend request to this user");
     }
 
+    console.log(friendId);
+
     const { user: updatedUser, friend: updatedFriend } =
-      await sendFriendRequest(id, username, friendId);
+      await sendFriendRequest(id, friendId);
     if (!updatedFriend) {
       res.status(404);
       throw new Error("No user to send request to");

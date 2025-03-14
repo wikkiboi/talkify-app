@@ -30,9 +30,11 @@ export type UserStatus = "online" | "offline" | "idle";
 
 export type UserFriend = {
   _id: string;
-  userId: string;
-  username: string;
-  status: UserStatus;
+  userId: {
+    _id: string;
+    username: string;
+    status: UserStatus;
+  };
   friendStatus: "accepted" | "pending" | "requested";
 };
 

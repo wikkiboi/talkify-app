@@ -38,7 +38,8 @@ const FriendsPage = () => {
       setOnlineFriends(
         friendsList.userFriends.filter(
           (friend) =>
-            friend.friendStatus === "accepted" && friend.status === "online"
+            friend.friendStatus === "accepted" &&
+            friend.userId.status === "online"
         )
       );
       setPendingRequests(
@@ -58,7 +59,8 @@ const FriendsPage = () => {
     setOnlineFriends(
       updatedList.filter(
         (friend) =>
-          friend.friendStatus === "accepted" && friend.status === "online"
+          friend.friendStatus === "accepted" &&
+          friend.userId.status === "online"
       )
     );
     setPendingRequests(
@@ -122,10 +124,13 @@ const FriendsPage = () => {
           {friends.length > 0 ? (
             friends.map((friend: UserFriend) => (
               <div key={friend._id} className="friend-item">
-                {friend.username}
+                {friend.userId.username}
                 <button
                   onClick={() =>
-                    handleRemoveFriend(friend.userId, friend.username)
+                    handleRemoveFriend(
+                      friend.userId._id,
+                      friend.userId.username
+                    )
                   }
                   className="remove-friend-btn"
                 >
@@ -146,7 +151,7 @@ const FriendsPage = () => {
           {onlineFriends.length > 0 ? (
             onlineFriends.map((friend: UserFriend) => (
               <div key={friend._id} className="friend-item">
-                {friend.username}
+                {friend.userId.username}
               </div>
             ))
           ) : (
@@ -162,10 +167,13 @@ const FriendsPage = () => {
           {pendingRequests.length > 0 ? (
             pendingRequests.map((friend: UserFriend) => (
               <div key={friend._id} className="friend-item">
-                <span>{friend.username}</span>
+                <span>{friend.userId.username}</span>
                 <button
                   onClick={() =>
-                    handleAcceptRequest(friend.userId, friend.username)
+                    handleAcceptRequest(
+                      friend.userId._id,
+                      friend.userId.username
+                    )
                   }
                   className="accept-request-btn"
                 >

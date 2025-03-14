@@ -20,9 +20,7 @@ export default async function friendAdd(
 
     const { user: updatedUser, friend: updatedFriend } = await addFriend(
       id,
-      friendId,
-      friend.username,
-      friend.status
+      friendId
     );
     if (!updatedUser) {
       res.status(500);
