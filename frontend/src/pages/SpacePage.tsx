@@ -5,6 +5,7 @@ import { Channel } from "../types/types";
 import getSpace from "../api/space/getSpace";
 import ChannelSidebar from "../components/channel/ChannelSidebar";
 import ChatArea from "../components/chat/ChatArea";
+import MemberList from "../components/space/MemberList"; // Import the MemberList component
 
 export default function SpacePage() {
   const { spaceId, channelId } = useParams();
@@ -34,18 +35,31 @@ export default function SpacePage() {
   }, [spaceId, channelId]);
 
   return (
-    <div className="chat-container">
-      {currentSpace && (
-        <>
-          <ChannelSidebar
-            spaceName={currentSpace.name}
-            channels={spaceChannels}
-            setChannels={setSpaceChannels}
-          />
+    <div className="page-container">
+      <div className="chat-container">
+        {currentSpace && (
+          <>
+            <ChannelSidebar
+              spaceName={currentSpace.name}
+              channels={spaceChannels}
+              setChannels={setSpaceChannels}
+            />
+            <ChatArea currentChat={currentChannel} />
+          </>
+        )}
+      </div>
 
-          <ChatArea currentChat={currentChannel} />
-        </>
-      )}
+      <div className="members-container">
+        {currentSpace && Array.isArray(currentSpace.members) ? (
+          currentSpace.members.length > 0 ? (
+            <MemberList users={currentSpace.members} />
+          ) : (
+            <p>No members in this space</p>
+          )
+        ) : (
+          <p>Loading members...</p>
+        )}
+      </div>
     </div>
   );
 }
