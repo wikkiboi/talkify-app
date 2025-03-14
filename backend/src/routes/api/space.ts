@@ -8,6 +8,7 @@ import {
   spaceJoin,
   spaceGetChannels,
   spaceLeave,
+  spaceGetInvite,
 } from "../../controllers/spaceController";
 import { authenticate } from "../../middleware/auth/authenticator";
 
@@ -21,6 +22,7 @@ spaceRouter.post("/:spaceId/invite", authenticate, spaceInvite);
 // GET
 spaceRouter.get("/:spaceId", authenticate, spaceGet);
 spaceRouter.get("/:spaceId/channels", authenticate, spaceGetChannels);
+spaceRouter.get("/:spaceId/invites", authenticate, spaceGetInvite);
 
 // DELETE
 spaceRouter.delete("/:spaceId/delete", authenticate, spaceDelete);

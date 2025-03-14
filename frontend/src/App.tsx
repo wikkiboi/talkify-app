@@ -2,7 +2,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
 import socket from "./socket";
 import { useEffect } from "react";
-import './index.css';
+import "./index.css";
+import { UserProvider } from "./helper/UserContext";
 
 function App() {
   socket.connect();
@@ -20,7 +21,9 @@ function App() {
 
   return (
     <Router>
-      <AppRoutes />
+      <UserProvider>
+        <AppRoutes />
+      </UserProvider>
     </Router>
   );
 }
