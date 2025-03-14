@@ -25,15 +25,6 @@ export const userSchema = new mongoose.Schema<IUser>(
           ref: "User",
           required: true,
         },
-        username: {
-          type: String,
-        },
-        status: {
-          type: String,
-          enum: ["online", "idle", "offline"],
-          default: "offline",
-          required: true,
-        },
         friendStatus: {
           type: String,
           enum: ["accepted", "pending", "requested"],

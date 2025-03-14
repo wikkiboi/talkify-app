@@ -1,10 +1,6 @@
 import { User } from "../../../schema/userSchema";
 
-export default async function removeFriend(
-  userId: string,
-  friendId: string,
-  friendName: string
-) {
+export default async function removeFriend(userId: string, friendId: string) {
   const user = await User.findByIdAndUpdate(
     userId,
     {

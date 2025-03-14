@@ -11,7 +11,10 @@ export default async function findFriendRequest(
       $elemMatch: { userId, friendStatus: "requested" },
     },
   })
-    .select("_id username status")
+    .populate({
+      path: "friends.userId",
+      select: "username status",
+    })
     .lean();
 
   return friend;

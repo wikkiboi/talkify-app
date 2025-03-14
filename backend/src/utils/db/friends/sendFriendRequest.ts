@@ -2,7 +2,6 @@ import { User } from "../../../schema/userSchema";
 
 export default async function sendFriendRequest(
   userId: string,
-  username: string,
   friendId: string
 ) {
   const friend = await User.findByIdAndUpdate(
@@ -11,13 +10,17 @@ export default async function sendFriendRequest(
       $push: {
         friends: {
           userId: userId,
-          username: username,
           friendStatus: "pending",
         },
       },
     },
     { new: true }
-  ).select("username");
+  )
+    .populate({
+      path: "friends.userId",
+      select: "username status",
+    })
+    .lean();
 
   if (!friend) {
     return { user: null, friend: null };
@@ -34,7 +37,12 @@ export default async function sendFriendRequest(
       },
     },
     { new: true }
-  );
+  )
+    .populate({
+      path: "friends.userId",
+      select: "username status",
+    })
+    .lean();
 
   return { user, friend };
 }
