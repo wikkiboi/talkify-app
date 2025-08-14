@@ -1,8 +1,7 @@
-// Authentication logic for user, making sure that the user is logged in before they perform any actions
 import { Request } from "express";
 import { expressjwt as jwt } from "express-jwt";
 
-const JWT_SECRET = "abc123"; // TODO: Move to .env when implemented
+const JWT_SECRET = process.env.JWT_SECRET ?? "abc123";
 
 export function getTokenInHeader(req: Request): string | undefined {
   // Get token from Authorization
@@ -18,6 +17,6 @@ export function getTokenInHeader(req: Request): string | undefined {
 
 export const authenticate = jwt({
   algorithms: ["HS256"],
-  secret: process.env.JWT_SECRET || JWT_SECRET,
+  secret: JWT_SECRET,
   getToken: getTokenInHeader,
 });

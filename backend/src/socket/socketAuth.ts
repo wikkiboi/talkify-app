@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Socket } from "socket.io";
-import getUserById from "../utils/db/user/getUserById";
-import getUserEmail from "../utils/db/user/getUserEmail";
+import { getUserEmail } from "../utils/db/user";
 
 export default async function socketAuth(
   socket: Socket,

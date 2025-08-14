@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authenticate } from "../../middleware/auth/authenticator";
 import {
   channelCreate,
   channelSendMsg,
@@ -7,8 +8,7 @@ import {
   channelGet,
   channelUpdateName,
   channelUpdateDefault,
-} from "../../controllers/channelController";
-import { authenticate } from "../../middleware/auth/authenticator";
+} from "../../controllers/channel.controller";
 
 const channelRouter = Router();
 
@@ -20,13 +20,6 @@ channelRouter.get("/:spaceId/:channelId", authenticate, channelGet);
 channelRouter.post("/:spaceId/create", authenticate, channelCreate);
 channelRouter.post("/:channelId/send", authenticate, channelSendMsg);
 
-// DELETE
-channelRouter.delete(
-  "/:spaceId/:channelId/delete",
-  authenticate,
-  channelDelete
-);
-
 // PUT
 channelRouter.put(
   "/:spaceId/:channelId/update/name",
@@ -37,6 +30,13 @@ channelRouter.put(
   "/:spaceId/:channelId/update/default",
   authenticate,
   channelUpdateDefault
+);
+
+// DELETE
+channelRouter.delete(
+  "/:spaceId/:channelId/delete",
+  authenticate,
+  channelDelete
 );
 
 export default channelRouter;

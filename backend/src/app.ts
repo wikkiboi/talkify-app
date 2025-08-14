@@ -23,7 +23,7 @@ app.set("io", io);
 app.use(helmet());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL ?? "http://localhost:5173",
   })
 );
 app.use(express.json());
@@ -38,10 +38,5 @@ app.use("/api/user", userRouter);
 
 app.use(authErrorHandler);
 app.use(generalErrorHandler);
-
-app.get("/", (req, res) => {
-  console.log("Hi");
-  res.send("hello");
-});
 
 export { server };

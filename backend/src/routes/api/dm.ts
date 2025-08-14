@@ -2,22 +2,24 @@ import { Router } from "express";
 import { authenticate } from "../../middleware/auth/authenticator";
 import {
   dmCreate,
-  dmGet,
+  dmGetUsers,
   dmGetAll,
   dmGetMsgs,
+} from "../../controllers/dm.controller";
+import {
   dmGroupAdd,
   dmGroupCreate,
   dmGroupDelete,
   dmGroupGet,
   dmGroupGetMsgs,
   dmGroupLeave,
-} from "../../controllers/dmController";
+} from "../../controllers/groupdm.controller.ts";
 
 const dmRouter = Router();
 
 // GET
 dmRouter.get("/me", authenticate, dmGetAll);
-dmRouter.get("/:dmId/private", authenticate, dmGet);
+dmRouter.get("/:dmId/private", authenticate, dmGetUsers);
 dmRouter.get("/:dmId/msgs", authenticate, dmGetMsgs);
 dmRouter.get("/:groupId/group", authenticate, dmGroupGet);
 dmRouter.get("/:groupId/group/msgs", authenticate, dmGroupGetMsgs);

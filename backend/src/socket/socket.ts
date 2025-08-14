@@ -1,14 +1,16 @@
 import { Server } from "socket.io";
 import { Server as HTTPServer } from "http";
 import socketAuth from "./socketAuth";
-import handleMessages from "./handleMessages";
-import handleTyping from "./handleTyping";
-import handleUserStatus from "./handleUserStatus";
-import handleChat from "./handleChat";
+import {
+  handleChat,
+  handleMessages,
+  handleTyping,
+  handleUserStatus,
+} from "./modules";
 
 export const initializeSocket = (server: HTTPServer) => {
   const io = new Server(server, {
-    cors: { origin: "http://localhost:5173" },
+    cors: { origin: process.env.FRONTEND_URL ?? "http://localhost:5173" },
   });
 
   io.use(socketAuth);

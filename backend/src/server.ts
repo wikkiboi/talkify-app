@@ -2,8 +2,7 @@ import { server } from "./app";
 import connectDB from "./config/connectDB";
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3001;
-// Temporarily hard-coded JWT_SECRET for authentication, remove once .env is setup
-const JWT_SECRET = "abc123";
+
 connectDB();
 
 server.listen(PORT, function () {

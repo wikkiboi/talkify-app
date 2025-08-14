@@ -1,4 +1,4 @@
-export { default as createMsg } from "./createMsg";
-export { default as deleteMsg } from "./deleteMsg";
-export { default as updateMsg } from "./updateMsg";
-export { default as deleteConversationMsgs } from "./deleteConversationMsgs";
+export { default as createMsg } from "./mutations/create";
+export { default as deleteMsg } from "./mutations/delete";
+export { default as updateMsg } from "./mutations/update";
+export { default as deleteConversationMsgs } from "./mutations/deleteConversation";

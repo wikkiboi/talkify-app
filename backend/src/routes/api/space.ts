@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authenticate } from "../../middleware/auth/authenticator";
 import {
   spaceCreate,
   spaceGet,
@@ -9,8 +10,7 @@ import {
   spaceGetChannels,
   spaceLeave,
   spaceGetInvite,
-} from "../../controllers/spaceController";
-import { authenticate } from "../../middleware/auth/authenticator";
+} from "../../controllers/space.controller";
 
 const spaceRouter = Router();
 

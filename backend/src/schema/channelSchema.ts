@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { IChannel } from "./types";
 
 export const ChannelSchema = new Schema<IChannel>(

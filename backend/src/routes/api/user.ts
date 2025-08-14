@@ -1,4 +1,3 @@
-// User profile, settings, bio, etc. routes
 import { Router } from "express";
 import { authenticate } from "../../middleware/auth/authenticator";
 import {
@@ -8,13 +7,13 @@ import {
   userGetSpaces,
   userGetStatus,
   userUpdateLastVisited,
-} from "../../controllers/userController";
+} from "../../controllers/user.controller";
 
 const userRouter = Router();
 
-userRouter.get("/spaces", authenticate, userGetSpaces);
-userRouter.get("/status", authenticate, userGetStatus);
 userRouter.get("/me", authenticate, userGet);
+userRouter.get("/status", authenticate, userGetStatus);
+userRouter.get("/spaces", authenticate, userGetSpaces);
 userRouter.get("/:username/find", authenticate, userFind);
 userRouter.get("/:spaceId/lastVisited", authenticate, userGetLastVisited);
 userRouter.put("/:spaceId/lastVisited", authenticate, userUpdateLastVisited);
