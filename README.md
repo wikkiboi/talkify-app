@@ -1,17 +1,10 @@
 # Talkify
 
-A real-time chat application featuring:
+Talkify is a real-time chat application built with Express, TypeScript, React, MongoDB, and Socket.IO. Users can chat in public or private communities, send direct messages, manage friends, and collaborate with minimal delay.
 
-- **Frontend**: React, TypeScript
-- **Backend**: Node.js, Express, MongoDB
-- **Other**: Socket.IO for real-time features, REST API for data
+![screenshot](./frontend/src/assets/logo.png)
 
-## Repo Structure
-
-- `frontend/` → React + TypeScript frontend
-- `backend/` → Express + MongoDB backend
-
-## ✨ Features
+## Features
 
 - **User Accounts**
 
@@ -23,8 +16,7 @@ A real-time chat application featuring:
   - Create and manage chat servers, called **Spaces**, where members can chat, collaborate, or hang out.
   - Invite users to join a space via a reusable invite code.
   - Space creators/owners can assign admin privileges to members for better space management.
-  - Chat channels can be created, renamed, or deleted by the space admins or owner.
-  - Users can move between chat channels and follow different conversations in real-time
+  - Users can move between different chat channels that can be created by the space admins or owner.
   - Members of the space will see a list of all other members and their current status
 
 - **Direct Messaging (DM)**
@@ -37,15 +29,17 @@ A real-time chat application featuring:
   - Group conversations can be made with multiple friends.
   - Group DM participants can add or remove others and also choose to leave the group DM.
 
-- **Database Abstraction Layer**
+## Tools and Technologies
 
-  - Feature-specific database helper functions to keep controller logic clean.
-  - Centralized logic for querying and mutating MongoDB via Mongoose models.
-  - Reusable DB functions for different features.
+- **Frontend**: React, TypeScript, Vite
+- **Backend**: Node.js, Express, MongoDB, tsx
+- **Authentication**: JSON Web Token w/ bcrypt hashing
+- **Other**: Socket.IO, REST API, Helmet
 
-- **Error Handling**
-  - Error-handling middleware for authentication and API routes.
-  - Consistent response format for client error handling.
+## Repo Structure
+
+- `frontend/` → React + TypeScript frontend
+- `backend/` → Express + MongoDB backend
 
 ## API Endpoint Reference
 
